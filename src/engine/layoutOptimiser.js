@@ -5,6 +5,12 @@ import { storage } from '../services/storage'
 const MIN_TAPS = 20
 const DAYS_WINDOW = 30
 const SESSION_KEY = 'layout_optimised_session_'
+const DECAY_LAMBDA = 0.1  // tap from 10 days ago ≈ 37% weight; 30 days ≈ 5%
+
+function decayWeight(timestamp) {
+  const daysAgo = (Date.now() - new Date(timestamp).getTime()) / 86_400_000
+  return Math.exp(-DECAY_LAMBDA * daysAgo)
+}
 
 export async function runLayoutOptimiser(profileId) {
   // Only run once per session
@@ -25,12 +31,12 @@ export async function runLayoutOptimiser(profileId) {
   const recentTaps = allTaps.filter(t => new Date(t.timestamp) > cutoff)
   if (recentTaps.length < MIN_TAPS) return
 
-  // Count frequency per board per symbol
+  // Sum decay-weighted scores per board per symbol
   const freqMap = {}
   recentTaps.forEach(tap => {
     if (!freqMap[tap.boardId]) freqMap[tap.boardId] = {}
     freqMap[tap.boardId][tap.label] =
-      (freqMap[tap.boardId][tap.label] || 0) + 1
+      (freqMap[tap.boardId][tap.label] || 0) + decayWeight(tap.timestamp)
   })
 
   // Apply optimised layout to each board

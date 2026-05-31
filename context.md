@@ -395,8 +395,11 @@ Defined in `defaultBoards.js` as `WORD_TYPES`:
 - **File:** `src/engine/layoutOptimiser.js`
 - Runs once per session on profile load
 - Requires minimum 20 taps before first adaptation
-- Counts tap frequency per board per symbol over last 30 days
-- Repositions symbols by frequency, most-used → most accessible positions
+- Uses **exponential time-decay weighting** per tap: `weight = e^(-0.1 × daysAgo)`
+  - Tap from today = 1.0 weight · 10 days ago ≈ 0.37 · 30 days ago ≈ 0.05
+  - Symbols are ranked by sum of decay-weighted scores, not raw counts
+  - Layout adapts quickly when usage patterns shift (e.g. child stops using "school")
+- Repositions symbols by weighted score, most-used → most accessible positions
 - Respects `settings.adaptiveLayoutEnabled`
 
 ### 3. Vocabulary Gap Detection (on-device)
