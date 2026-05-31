@@ -20,7 +20,7 @@ export default function SymbolCard({ symbol, onTap, symbolSize = 'medium' }) {
 
   const displayUrl = resolvedUrl || primaryUrl
 
-  // If primary URL fails, search ARASAAC by label
+  // Fallback: if primary image 404s, resolve correct ID via ARASAAC search
   useEffect(() => {
     if (imgError && !symbol.isCustom && symbol.label) {
       resolveSymbolId(symbol.label).then(id => {
