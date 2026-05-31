@@ -1,0 +1,131 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --symbol-font-size: 12px;
+  --color-primary: #2D9B83;
+  --color-primary-hover: #238A72;
+  --color-bg: #FAFAF8;
+  --color-card: #FFFFFF;
+  --color-border: #E8E6E1;
+  --color-text-primary: #2C2A26;
+  --color-text-secondary: #6B6860;
+}
+
+html, body, #root {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* High contrast mode */
+body.high-contrast {
+  --color-bg: #000000;
+  --color-card: #1a1a1a;
+  --color-border: #ffffff;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #cccccc;
+}
+
+body.high-contrast .symbol-card {
+  background: #1a1a1a !important;
+  border-color: #ffffff !important;
+}
+
+body.high-contrast .symbol-card span {
+  color: #ffffff !important;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #E8E6E1;
+  border-radius: 999px;
+}
+
+/* Symbol tap animation */
+@keyframes symbolTap {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(0.93); }
+  100% { transform: scale(1); }
+}
+
+.symbol-tap {
+  animation: symbolTap 0.15s ease-out forwards;
+}
+
+/* Sentence chip slide-in */
+@keyframes chipIn {
+  from { opacity: 0; transform: translateX(-6px) scale(0.95); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+.chip-in {
+  animation: chipIn 0.15s ease-out forwards;
+}
+
+/* Fade up for cards */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-up {
+  animation: fadeUp 0.2s ease-out forwards;
+}
+
+/* Speaking pulse */
+@keyframes speakPulse {
+  0%, 100% { opacity: 1; transform: scaleY(1); }
+  50%       { opacity: 0.6; transform: scaleY(0.5); }
+}
+
+.speak-bar {
+  animation: speakPulse 0.6s ease-in-out infinite;
+}
+
+@media print {
+  body * { visibility: hidden; }
+  .journal-content,
+  .journal-content * { visibility: visible; }
+  .journal-content {
+    position: absolute;
+    left: 0; top: 0;
+    width: 100%;
+    padding: 2rem;
+  }
+  nav, header, button { display: none !important; }
+}
+
+@media print {
+  body * { visibility: hidden; }
+  .who-i-am-print,
+  .who-i-am-print * { visibility: visible; }
+  .who-i-am-print {
+    position: absolute;
+    left: 0; top: 0;
+    width: 100%;
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "I": { "want": 42, "like": 18, "feel": 14, "need": 10, "see": 6 },
+  "want": { "to": 38, "more": 22, "go": 15, "eat": 12, "play": 10 },
+  "I want": { "to": 30, "more": 20, "juice": 8, "food": 7, "that": 6 },
+  "like": { "that": 16, "this": 12, "more": 10, "to": 8 },
+  "go": { "home": 28, "to": 20, "school": 14, "outside": 10, "play": 8 },
+  "eat": { "more": 18, "food": 14, "apple": 8, "bread": 7, "cookie": 6 },
+  "drink": { "water": 24, "juice": 18, "milk": 14 },
+  "feel": { "happy": 20, "sad": 16, "tired": 12, "angry": 10, "hurt": 8 },
+  "no": { "more": 18, "stop": 14, "that": 10 },
+  "more": { "please": 16, "food": 12, "water": 10, "play": 8 },
+  "help": { "me": 20, "please": 14 },
+  "yes": { "please": 22, "more": 12, "that": 8 }
+}

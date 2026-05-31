@@ -1,0 +1,8 @@
+{
+  "feelings": ["frustrated", "excited", "worried", "proud", "calm", "surprised", "lonely", "bored", "nervous", "confused"],
+  "home": ["sleep", "bath", "outside", "TV", "music", "hug", "walk", "sit", "stand", "wait"],
+  "school": ["help", "done", "again", "question", "bathroom", "lunch", "play", "sit", "stand", "quiet"],
+  "food": ["hot", "cold", "sweet", "more", "finished", "yummy", "yucky", "please", "snack", "drink"],
+  "emergency": ["pain", "sick", "scared", "hot", "cold", "tired", "wait", "come", "doctor", "call"],
+  "custom": ["more", "help", "yes", "no", "please", "finished", "want", "like", "go", "come"]
+}

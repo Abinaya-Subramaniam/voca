@@ -1,0 +1,151 @@
+import { useState } from 'react'
+import { useApp } from '../../context/AppContext'
+import { createProfile } from '../../store/profileStore'
+
+const COLORS = [
+  '#2D9B83', '#E8534A', '#7B8FF5',
+  '#F5A623', '#4CAF7D', '#E07B9A',
+]
+
+export default function ProfileSelector() {
+  const { state, dispatch } = useApp()
+  const [creating, setCreating] = useState(false)
+  const [name, setName]         = useState('')
+  const [color, setColor]       = useState(COLORS[0])
+
+  function handleSelect(profileId) {
+    dispatch({ type: 'SET_ACTIVE_PROFILE', profileId })
+  }
+
+  function handleCreate() {
+    if (!name.trim()) return
+    const profile = createProfile(name.trim(), color)
+    dispatch({ type: 'REFRESH_PROFILES' })
+    dispatch({ type: 'SET_ACTIVE_PROFILE', profileId: profile.id })
+    setCreating(false)
+    setName('')
+  }
+
+  if (state.profiles.length === 0 || creating) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4"
+        style={{ background: 'var(--color-bg)' }}>
+        <div className="bg-white rounded-2xl shadow-raised p-8 w-full max-w-sm border border-warm-200">
+
+          <div className="w-12 h-12 rounded-xl bg-teal-500 flex items-center justify-center mb-4 shadow-subtle">
+            <span className="text-white font-display font-bold text-xl">V</span>
+          </div>
+
+          <h2 className="font-display font-bold text-warm-900 text-2xl mb-1">
+            {state.profiles.length === 0 ? 'Welcome to Voca' : 'New profile'}
+          </h2>
+          <p className="font-sans text-warm-500 text-sm mb-6">
+            {state.profiles.length === 0
+              ? 'Create a profile to get started.'
+              : 'Who are we adding?'}
+          </p>
+
+          <input
+            className="w-full border border-warm-200 rounded-xl px-4 py-3 font-sans text-warm-900 text-base mb-4 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent placeholder:text-warm-400"
+            placeholder="Name (e.g. Layla)"
+            value={name}
+            onChange={e => setName(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && handleCreate()}
+            autoFocus
+          />
+
+          <div className="mb-6">
+            <div className="font-sans text-warm-500 text-xs mb-2">Choose a colour</div>
+            <div className="flex gap-2">
+              {COLORS.map(c => (
+                <button
+                  key={c}
+                  onClick={() => setColor(c)}
+                  className="w-9 h-9 rounded-full transition-all hover:scale-110 flex items-center justify-center"
+                  style={{ backgroundColor: c }}
+                >
+                  {color === c && (
+                    <span className="text-white text-sm font-bold">✓</span>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex gap-2">
+            {state.profiles.length > 0 && (
+              <button
+                onClick={() => setCreating(false)}
+                className="flex-1 py-3 rounded-xl border border-warm-200 font-sans font-500 text-warm-600 hover:bg-warm-100 transition-colors"
+              >
+                Cancel
+              </button>
+            )}
+            <button
+              onClick={handleCreate}
+              disabled={!name.trim()}
+              className="flex-1 py-3 rounded-xl bg-teal-500 text-white font-display font-bold hover:bg-teal-600 disabled:opacity-40 transition-colors shadow-subtle"
+            >
+              Create profile
+            </button>
+          </div>
+
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="min-h-screen flex items-center justify-center p-4"
+      style={{ background: 'var(--color-bg)' }}>
+      <div className="bg-white rounded-2xl shadow-raised p-8 w-full max-w-sm border border-warm-200">
+
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-10 h-10 rounded-xl bg-teal-500 flex items-center justify-center shadow-subtle">
+            <span className="text-white font-display font-bold">V</span>
+          </div>
+          <div>
+            <h2 className="font-display font-bold text-warm-900 text-xl leading-none">Voca</h2>
+            <p className="font-sans text-warm-400 text-xs mt-0.5">Who is communicating today?</p>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-2 mb-5">
+          {state.profiles.map(profile => (
+            <button
+              key={profile.id}
+              onClick={() => handleSelect(profile.id)}
+              className="flex items-center gap-3 p-3.5 rounded-xl border border-warm-200 hover:border-teal-500 hover:bg-teal-50 transition-all text-left group"
+            >
+              <div
+                className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-display font-bold text-base flex-shrink-0"
+                style={{ backgroundColor: profile.avatarColor }}
+              >
+                {profile.name.charAt(0).toUpperCase()}
+              </div>
+              <div className="flex-1">
+                <div className="font-sans font-600 text-warm-900 text-sm">{profile.name}</div>
+                <div className="font-sans text-warm-400 text-xs">
+                  Tap to continue
+                </div>
+              </div>
+              <svg className="w-4 h-4 text-warm-300 group-hover:text-teal-500 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M9 18l6-6-6-6"/>
+              </svg>
+            </button>
+          ))}
+        </div>
+
+        {state.profiles.length < 3 && (
+          <button
+            onClick={() => setCreating(true)}
+            className="w-full py-3 rounded-xl border-2 border-dashed border-warm-200 font-sans font-500 text-warm-400 hover:border-teal-400 hover:text-teal-500 transition-colors text-sm"
+          >
+            + Add another profile
+          </button>
+        )}
+
+      </div>
+    </div>
+  )
+}
