@@ -8,7 +8,7 @@ import {
 } from '../store/profileStore'
 import { getBoardsForProfile } from '../store/boardStore'
 import { runLayoutOptimiser } from '../engine/layoutOptimiser'
-import { migrateSymbolIds } from '../services/symbolService'
+import { migrateSymbolIds, migrateMissingBoards } from '../services/symbolService'
 
 const AppContext = createContext(null)
 
@@ -136,8 +136,11 @@ export function AppProvider({ children }) {
       storedId && profiles.find(p => p.id === storedId)
         ? storedId
         : profiles[0]?.id || null
-    // Migrate all profiles' board symbol IDs to verified correct ones
-    profiles.forEach(p => migrateSymbolIds(p.id))
+    // Migrate all profiles: fix symbol IDs, then add any new category boards
+    profiles.forEach(p => {
+      migrateSymbolIds(p.id)
+      migrateMissingBoards(p.id)
+    })
     const activeProfile = resolvedId ? getProfile(resolvedId) : null
     const boards = resolvedId ? getBoardsForProfile(resolvedId) : []
     dispatch({

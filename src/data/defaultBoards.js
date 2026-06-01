@@ -189,11 +189,65 @@ export const DEFAULT_BOARDS = [
       { position: 5, symbolId: '5921',  label: 'toilet', wordType: 'noun',   imageUrl: null, isCustom: false },
     ]
   },
+  {
+    id: 'board_people',
+    name: 'People',
+    category: 'people',
+    isRoot: false,
+    gridColumns: 4,
+    symbols: [
+      { position: 0, symbolId: '2458',  label: 'mom',      wordType: 'noun', imageUrl: null, isCustom: false },
+      { position: 1, symbolId: '31146', label: 'dad',      wordType: 'noun', imageUrl: null, isCustom: false },
+      { position: 2, symbolId: '2423',  label: 'brother',  wordType: 'noun', imageUrl: null, isCustom: false },
+      { position: 3, symbolId: '2422',  label: 'sister',   wordType: 'noun', imageUrl: null, isCustom: false },
+      { position: 4, symbolId: '23710', label: 'grandma',  wordType: 'noun', imageUrl: null, isCustom: false },
+      { position: 5, symbolId: '23718', label: 'grandpa',  wordType: 'noun', imageUrl: null, isCustom: false },
+      { position: 6, symbolId: '6060',  label: 'baby',     wordType: 'noun', imageUrl: null, isCustom: false },
+      { position: 7, symbolId: '25790', label: 'friend',   wordType: 'noun', imageUrl: null, isCustom: false },
+    ]
+  },
+  {
+    id: 'board_activities',
+    name: 'Activities',
+    category: 'activities',
+    isRoot: false,
+    gridColumns: 4,
+    symbols: [
+      { position: 0, symbolId: '6465',  label: 'run',     wordType: 'verb', imageUrl: null, isCustom: false },
+      { position: 1, symbolId: '39052', label: 'jump',    wordType: 'verb', imageUrl: null, isCustom: false },
+      { position: 2, symbolId: '6568',  label: 'swim',    wordType: 'verb', imageUrl: null, isCustom: false },
+      { position: 3, symbolId: '29951', label: 'walk',    wordType: 'verb', imageUrl: null, isCustom: false },
+      { position: 4, symbolId: '6960',  label: 'sing',    wordType: 'verb', imageUrl: null, isCustom: false },
+      { position: 5, symbolId: '35747', label: 'dance',   wordType: 'verb', imageUrl: null, isCustom: false },
+      { position: 6, symbolId: '29123', label: 'watch',   wordType: 'verb', imageUrl: null, isCustom: false },
+      { position: 7, symbolId: '4550',  label: 'hug',     wordType: 'verb', imageUrl: null, isCustom: false },
+    ]
+  },
+  {
+    id: 'board_social',
+    name: 'Social',
+    category: 'social',
+    isRoot: false,
+    gridColumns: 4,
+    symbols: [
+      { position: 0, symbolId: '8195',  label: 'please',    wordType: 'social', imageUrl: null, isCustom: false },
+      { position: 1, symbolId: '8129',  label: 'thank you', wordType: 'social', imageUrl: null, isCustom: false },
+      { position: 2, symbolId: '6522',  label: 'hello',     wordType: 'social', imageUrl: null, isCustom: false },
+      { position: 3, symbolId: '6028',  label: 'goodbye',   wordType: 'social', imageUrl: null, isCustom: false },
+      { position: 4, symbolId: '11625', label: 'sorry',     wordType: 'social', imageUrl: null, isCustom: false },
+      { position: 5, symbolId: '36914', label: 'wait',      wordType: 'social', imageUrl: null, isCustom: false },
+      { position: 6, symbolId: '37163', label: 'again',     wordType: 'social', imageUrl: null, isCustom: false },
+      { position: 7, symbolId: '28429', label: 'finished',  wordType: 'social', imageUrl: null, isCustom: false },
+    ]
+  },
 ]
 
 export const CATEGORY_CARDS = [
-  { category: 'feelings',  name: 'Feelings',     icon: '💛', color: 'bg-yellow-50 border-yellow-200' },
-  { category: 'food',      name: 'Food & Drink',  icon: '🍎', color: 'bg-red-50 border-red-200'      },
-  { category: 'school',    name: 'School',        icon: '📚', color: 'bg-blue-50 border-blue-200'    },
-  { category: 'emergency', name: 'Emergency',     icon: '🆘', color: 'bg-orange-50 border-orange-200'},
+  { category: 'feelings',   name: 'Feelings',    icon: '💛', color: 'bg-yellow-50 border-yellow-200'  },
+  { category: 'food',       name: 'Food & Drink', icon: '🍎', color: 'bg-red-50 border-red-200'        },
+  { category: 'people',     name: 'People',       icon: '👥', color: 'bg-purple-50 border-purple-200'  },
+  { category: 'activities', name: 'Activities',   icon: '⚡', color: 'bg-green-50 border-green-200'   },
+  { category: 'social',     name: 'Social',       icon: '🤝', color: 'bg-teal-50 border-teal-100'      },
+  { category: 'school',     name: 'School',       icon: '📚', color: 'bg-blue-50 border-blue-200'      },
+  { category: 'emergency',  name: 'Emergency',    icon: '🆘', color: 'bg-orange-50 border-orange-200'  },
 ]
