@@ -1,0 +1,136 @@
+[
+  {
+    "name": "Home",
+    "category": "home",
+    "isRoot": true,
+    "gridColumns": 4,
+    "symbols": [
+      { "position": 0,  "symbolId": "6632",  "label": "I",      "wordType": "pronoun" },
+      { "position": 1,  "symbolId": "6625",  "label": "you",    "wordType": "pronoun" },
+      { "position": 2,  "symbolId": "5441",  "label": "want",   "wordType": "verb" },
+      { "position": 3,  "symbolId": "37826", "label": "like",   "wordType": "verb" },
+      { "position": 4,  "symbolId": "8142",  "label": "go",     "wordType": "verb" },
+      { "position": 5,  "symbolId": "32669", "label": "come",   "wordType": "verb" },
+      { "position": 6,  "symbolId": "6456",  "label": "eat",    "wordType": "verb" },
+      { "position": 7,  "symbolId": "6061",  "label": "drink",  "wordType": "verb" },
+      { "position": 8,  "symbolId": "23392", "label": "play",   "wordType": "verb" },
+      { "position": 9,  "symbolId": "6479",  "label": "sleep",  "wordType": "verb" },
+      { "position": 10, "symbolId": "6964",  "label": "home",   "wordType": "noun" },
+      { "position": 11, "symbolId": "5508",  "label": "more",   "wordType": "descriptor" },
+      { "position": 12, "symbolId": "32648", "label": "help",   "wordType": "social" },
+      { "position": 13, "symbolId": "7196",  "label": "stop",   "wordType": "social" },
+      { "position": 14, "symbolId": "5584",  "label": "yes",    "wordType": "social" },
+      { "position": 15, "symbolId": "5526",  "label": "no",     "wordType": "social" }
+    ]
+  },
+  {
+    "name": "Feelings",
+    "category": "feelings",
+    "isRoot": false,
+    "gridColumns": 4,
+    "symbols": [
+      { "position": 0, "symbolId": "35533", "label": "happy",  "wordType": "descriptor" },
+      { "position": 1, "symbolId": "35545", "label": "sad",    "wordType": "descriptor" },
+      { "position": 2, "symbolId": "35539", "label": "angry",  "wordType": "descriptor" },
+      { "position": 3, "symbolId": "35535", "label": "scared", "wordType": "descriptor" },
+      { "position": 4, "symbolId": "35537", "label": "tired",  "wordType": "descriptor" },
+      { "position": 5, "symbolId": "4962",  "label": "hungry", "wordType": "descriptor" },
+      { "position": 6, "symbolId": "30620", "label": "hurt",   "wordType": "descriptor" },
+      { "position": 7, "symbolId": "4581",  "label": "good",   "wordType": "descriptor" }
+    ]
+  },
+  {
+    "name": "Food & Drink",
+    "category": "food",
+    "isRoot": false,
+    "gridColumns": 4,
+    "symbols": [
+      { "position": 0, "symbolId": "32464", "label": "water",  "wordType": "noun" },
+      { "position": 1, "symbolId": "2445",  "label": "milk",   "wordType": "noun" },
+      { "position": 2, "symbolId": "11461", "label": "juice",  "wordType": "noun" },
+      { "position": 3, "symbolId": "2494",  "label": "bread",  "wordType": "noun" },
+      { "position": 4, "symbolId": "2462",  "label": "apple",  "wordType": "noun" },
+      { "position": 5, "symbolId": "2530",  "label": "banana", "wordType": "noun" },
+      { "position": 6, "symbolId": "6911",  "label": "rice",   "wordType": "noun" },
+      { "position": 7, "symbolId": "8312",  "label": "cookie", "wordType": "noun" }
+    ]
+  },
+  {
+    "name": "School",
+    "category": "school",
+    "isRoot": false,
+    "gridColumns": 4,
+    "symbols": [
+      { "position": 0, "symbolId": "32446", "label": "school",  "wordType": "noun" },
+      { "position": 1, "symbolId": "6556",  "label": "teacher", "wordType": "noun" },
+      { "position": 2, "symbolId": "25790", "label": "friend",  "wordType": "noun" },
+      { "position": 3, "symbolId": "25191", "label": "book",    "wordType": "noun" },
+      { "position": 4, "symbolId": "2380",  "label": "write",   "wordType": "verb" },
+      { "position": 5, "symbolId": "7141",  "label": "read",    "wordType": "verb" },
+      { "position": 6, "symbolId": "8088",  "label": "draw",    "wordType": "verb" },
+      { "position": 7, "symbolId": "37810", "label": "learn",   "wordType": "verb" }
+    ]
+  },
+  {
+    "name": "Emergency",
+    "category": "emergency",
+    "isRoot": false,
+    "gridColumns": 3,
+    "symbols": [
+      { "position": 0, "symbolId": "5584",  "label": "yes",    "wordType": "social" },
+      { "position": 1, "symbolId": "5526",  "label": "no",     "wordType": "social" },
+      { "position": 2, "symbolId": "32648", "label": "help",   "wordType": "social" },
+      { "position": 3, "symbolId": "7196",  "label": "stop",   "wordType": "social" },
+      { "position": 4, "symbolId": "30620", "label": "hurts",  "wordType": "descriptor" },
+      { "position": 5, "symbolId": "5921",  "label": "toilet", "wordType": "noun" }
+    ]
+  },
+  {
+    "name": "People",
+    "category": "people",
+    "isRoot": false,
+    "gridColumns": 4,
+    "symbols": [
+      { "position": 0, "symbolId": "2458",  "label": "mom",     "wordType": "noun" },
+      { "position": 1, "symbolId": "31146", "label": "dad",     "wordType": "noun" },
+      { "position": 2, "symbolId": "2423",  "label": "brother", "wordType": "noun" },
+      { "position": 3, "symbolId": "2422",  "label": "sister",  "wordType": "noun" },
+      { "position": 4, "symbolId": "23710", "label": "grandma", "wordType": "noun" },
+      { "position": 5, "symbolId": "23718", "label": "grandpa", "wordType": "noun" },
+      { "position": 6, "symbolId": "6060",  "label": "baby",    "wordType": "noun" },
+      { "position": 7, "symbolId": "25790", "label": "friend",  "wordType": "noun" }
+    ]
+  },
+  {
+    "name": "Activities",
+    "category": "activities",
+    "isRoot": false,
+    "gridColumns": 4,
+    "symbols": [
+      { "position": 0, "symbolId": "6465",  "label": "run",   "wordType": "verb" },
+      { "position": 1, "symbolId": "39052", "label": "jump",  "wordType": "verb" },
+      { "position": 2, "symbolId": "6568",  "label": "swim",  "wordType": "verb" },
+      { "position": 3, "symbolId": "29951", "label": "walk",  "wordType": "verb" },
+      { "position": 4, "symbolId": "6960",  "label": "sing",  "wordType": "verb" },
+      { "position": 5, "symbolId": "35747", "label": "dance", "wordType": "verb" },
+      { "position": 6, "symbolId": "29123", "label": "watch", "wordType": "verb" },
+      { "position": 7, "symbolId": "4550",  "label": "hug",   "wordType": "verb" }
+    ]
+  },
+  {
+    "name": "Social",
+    "category": "social",
+    "isRoot": false,
+    "gridColumns": 4,
+    "symbols": [
+      { "position": 0, "symbolId": "8195",  "label": "please",    "wordType": "social" },
+      { "position": 1, "symbolId": "8129",  "label": "thank you", "wordType": "social" },
+      { "position": 2, "symbolId": "6522",  "label": "hello",     "wordType": "social" },
+      { "position": 3, "symbolId": "6028",  "label": "goodbye",   "wordType": "social" },
+      { "position": 4, "symbolId": "11625", "label": "sorry",     "wordType": "social" },
+      { "position": 5, "symbolId": "36914", "label": "wait",      "wordType": "social" },
+      { "position": 6, "symbolId": "37163", "label": "again",     "wordType": "social" },
+      { "position": 7, "symbolId": "28429", "label": "finished",  "wordType": "social" }
+    ]
+  }
+]

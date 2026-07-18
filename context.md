@@ -5,9 +5,9 @@
 
 ## What Voca Is
 
-Voca is a free, web-based AAC (Augmentative and Alternative Communication) platform for non-verbal and minimally verbal individuals. Users tap pictographic symbols to build sentences, which are spoken aloud by the browser. It has an AI intelligence layer powered by on-device JS pattern analysis and the Gemini API.
+Voca is a free, web-based AAC (Augmentative and Alternative Communication) platform for non-verbal and minimally verbal individuals. Users tap pictographic symbols to build sentences, which are spoken aloud by the browser. Intelligence (predictions, adaptive layout, gap detection, insights, coach, companion agent) runs on a Python backend.
 
-**Competition MVP** — built for a competition showcase. No backend, no auth, everything stored locally.
+**Architecture** — separate frontend and backend. React SPA (`frontend/`) talks to a FastAPI + LangGraph backend (`backend/`) over a JWT-authenticated REST API. All data lives in a relational DB (SQLite locally, Postgres in production via `DATABASE_URL`).
 
 ---
 
@@ -16,86 +16,79 @@ Voca is a free, web-based AAC (Augmentative and Alternative Communication) platf
 | Layer | Technology |
 |-------|-----------|
 | Frontend | React 18 + Vite 5 |
+| Server state | TanStack Query v5 (server data) + Context/useReducer (UI state) |
 | Styling | Tailwind CSS v3 |
-| Local storage | localStorage + IndexedDB |
-| Symbol library | ARASAAC (fetched by URL, cached) |
+| Backend | Python 3.13, FastAPI, Uvicorn |
+| ORM / migrations | SQLAlchemy 2.0 + Alembic |
+| Database | SQLite (dev) / PostgreSQL (prod) — `DATABASE_URL` env |
+| Auth | JWT (PyJWT) + bcrypt password hashing |
+| AI agent | **LangGraph** StateGraph + `langchain-google-genai` (`gemini-2.5-flash`) |
+| AI engines | Python: bigram prediction, decay-weighted layout, gap detection, insights |
+| AI coaching | Gemini via LangChain, cached per ISO week in DB |
+| Symbol library | ARASAAC (resolved server-side for agent, URL-loaded in UI) |
 | Text-to-speech | Web Speech API (browser built-in) |
-| On-device AI | Custom JS engines (no API) |
-| AI coaching | Google Gemini API (`gemini-2.5-flash`) |
-| AI companion | Google Gemini API (`gemini-2.5-flash`) |
 | Fonts | Nunito (display), DM Sans (body), DM Mono (mono) — Google Fonts |
-| Deploy target | Vercel |
+| Deploy target | Frontend: Vercel · Backend: Render/Railway + managed Postgres (Neon) |
 
 ---
 
-## Folder Structure
+## Repo Structure
 
 ```
 voca/
-├── public/
-├── src/
-│   ├── assets/
-│   │   └── symbols/
-│   ├── components/
-│   │   ├── board/
-│   │   │   ├── BoardNavigator.jsx     ← main board with folder nav
-│   │   │   ├── BoardTabBar.jsx        ← legacy, replaced by BoardNavigator
-│   │   │   ├── CategoryCard.jsx       ← category folder cards
-│   │   │   ├── PredictionBar.jsx      ← AI prediction chips above grid
-│   │   │   ├── SymbolCard.jsx         ← individual symbol card
-│   │   │   └── SymbolGrid.jsx         ← grid layout (used inside BoardNavigator)
-│   │   ├── caregiver/
-│   │   │   ├── OverviewTab.jsx        ← caregiver summary: sentence count, mood, gaps, coach
-│   │   │   ├── BoardEditorTab.jsx     ← settings rendered as a full page (not drawer)
-│   │   │   └── CompanionTab.jsx       ← AI chat interface for caregivers
-│   │   ├── insights/
-│   │   │   ├── CoachCard.jsx          ← Gemini vocabulary coach card
-│   │   │   ├── GapAlert.jsx           ← vocabulary gap alert card
-│   │   │   └── InsightsDashboard.jsx  ← weekly insights view (also used in caregiver Insights tab)
-│   │   ├── journal/
-│   │   │   └── JournalView.jsx        ← private symbol diary (3 sub-screens)
-│   │   ├── landing/
-│   │   │   └── LandingPage.jsx        ← marketing landing page
-│   │   ├── profile/
-│   │   │   ├── ProfileSelector.jsx    ← profile pick/create screen
-│   │   │   └── WhoIAmCard.jsx         ← digital ID card modal
-│   │   └── settings/
-│   │       └── SettingsPanel.jsx      ← slide-in drawer (still exists, used as fallback)
-│   ├── context/
-│   │   └── AppContext.jsx             ← global state, useReducer
-│   ├── data/
-│   │   ├── categoryVocab.json         ← gap detection expansion lists
-│   │   ├── defaultBoards.js           ← default board configs + WORD_TYPES + CATEGORY_CARDS
-│   │   └── globalPredictions.json     ← fallback bigram frequency table
-│   ├── engine/
-│   │   ├── gapDetector.js             ← browse-without-tap gap signal logic
-│   │   ├── insightsEngine.js          ← weekly metric calculations
-│   │   ├── layoutOptimiser.js         ← adaptive symbol repositioning
-│   │   └── predictionEngine.js        ← bigram prediction engine
-│   ├── agent/
-│   │   ├── agentTools.js              ← agent tool declarations + executors + apply action
-│   │   └── companionAgent.js          ← Gemini function-calling agent loop
-│   ├── seed/
-│   │   └── demoProfile.js             ← seeds "Layla" demo profile with history
-│   ├── services/
-│   │   ├── db.js                      ← IndexedDB helpers (communication + tap logs)
-│   │   ├── geminiCoach.js             ← Gemini API call + weekly cache
-│   │   ├── speechService.js           ← Web Speech API wrapper
-│   │   ├── storage.js                 ← localStorage helpers
-│   │   └── symbolService.js           ← ARASAAC URL builder + search
-│   ├── store/
-│   │   ├── boardStore.js              ← board CRUD (localStorage)
-│   │   ├── journalStore.js            ← journal entry CRUD (localStorage)
-│   │   ├── logStore.js                ← communication log (IndexedDB)
-│   │   └── profileStore.js            ← profile CRUD + whoIAm + settings
-│   ├── App.jsx                        ← main app shell, two-mode routing
-│   ├── index.css                      ← global styles + print styles
-│   └── main.jsx                       ← entry point, seeds demo profile
-├── .env                               ← VITE_GEMINI_API_KEY (never commit)
-├── .env.example
-├── index.html                         ← Google Fonts loaded here
-├── tailwind.config.js
-└── vite.config.js
+├── frontend/                          ← React SPA (Vite)
+│   ├── src/
+│   │   ├── api/
+│   │   │   ├── client.js              ← fetch wrapper, JWT token store, 401 handling
+│   │   │   └── index.js               ← typed endpoint functions for every API route
+│   │   ├── components/
+│   │   │   ├── auth/AuthPage.jsx      ← login / register screen
+│   │   │   ├── board/                 ← BoardNavigator, CategoryCard, PredictionBar, SymbolCard
+│   │   │   ├── caregiver/             ← OverviewTab, BoardEditorTab, CompanionTab
+│   │   │   ├── insights/              ← InsightsDashboard, CoachCard, GapAlert
+│   │   │   ├── journal/JournalView.jsx
+│   │   │   ├── landing/LandingPage.jsx
+│   │   │   ├── profile/               ← ProfileSelector, WhoIAmCard
+│   │   │   ├── sentence/SentenceBar.jsx
+│   │   │   └── settings/SettingsPanel.jsx
+│   │   ├── context/AppContext.jsx     ← UI state + async API actions (compat dispatch)
+│   │   ├── data/defaultBoards.js      ← WORD_TYPES + CATEGORY_CARDS (display only)
+│   │   ├── engine/
+│   │   │   ├── gapDetector.js         ← 8s browse timer (client) → POST gap signal
+│   │   │   └── predictionEngine.js    ← adapter → backend predictions/taps
+│   │   ├── services/
+│   │   │   ├── speechService.js       ← Web Speech API wrapper
+│   │   │   └── symbolService.js       ← ARASAAC URL builder + search (display)
+│   │   ├── store/                     ← thin async adapters over src/api
+│   │   │                                (boardStore, profileStore, journalStore, logStore)
+│   │   ├── App.jsx                    ← shell: landing → auth gate → selector → modes
+│   │   └── main.jsx                   ← QueryClientProvider + AppProvider
+│   ├── .env                           ← VITE_API_URL only (no secrets!)
+│   └── vite.config.js
+│
+└── backend/                           ← FastAPI + LangGraph (Python)
+    ├── app/
+    │   ├── main.py                    ← app factory, CORS, router registration
+    │   ├── config.py                  ← pydantic-settings (.env)
+    │   ├── database.py                ← SQLAlchemy engine/session
+    │   ├── models.py                  ← User, Profile, Board, BoardSymbol,
+    │   │                                CommunicationLog, TapLog, JournalEntry,
+    │   │                                GapSignal, GapAlert, CoachCard, Bigram
+    │   ├── schemas.py                 ← Pydantic v2 (camelCase over the wire)
+    │   ├── auth.py                    ← bcrypt + JWT + ownership dependencies
+    │   ├── routers/                   ← auth, profiles, boards, logs, journal,
+    │   │                                intelligence (insights/gaps/coach), agent
+    │   ├── engines/                   ← insights, gap_detector, prediction,
+    │   │                                layout_optimiser (ported from JS)
+    │   ├── agent/
+    │   │   ├── graph.py               ← LangGraph StateGraph agent loop
+    │   │   └── tools.py               ← 8 DB-backed tools + staged actions
+    │   ├── services/                  ← arasaac.py, coach_llm.py
+    │   └── data/                      ← default_boards, category_vocab, global_predictions
+    ├── alembic/                       ← migrations (initial schema committed)
+    ├── seed.py                        ← demo account (demo@voca.app) + Layla history
+    ├── requirements.txt
+    └── .env                           ← DATABASE_URL, JWT_SECRET, GEMINI_API_KEY
 ```
 
 ---
@@ -303,38 +296,36 @@ Each profile is fully independent:
 
 ---
 
-## localStorage Keys
+## Database & API
 
+All persistent data lives in the backend DB (SQLite dev / Postgres prod). The
+browser keeps only: the JWT (`localStorage.voca_token`), the last active profile
+id (`localStorage.voca_active_profile`), per-profile mode
+(`sessionStorage.voca_mode_<profileId>`), and the landing stage
+(`sessionStorage.voca_stage`).
+
+**Auth**: `POST /api/auth/register|login` → `{ accessToken, user }`. All other
+routes require `Authorization: Bearer <token>`. Profiles are owned by the user;
+every `/api/profiles/{id}/...` route 404s unless the profile belongs to the
+caller.
+
+**Key routes** (all JSON camelCase):
 ```
-voca_profiles                    → Profile[]
-voca_active_profile              → profileId string
-boards_<profileId>               → Board[]
-predictions_<profileId>          → bigram frequency object
-gap_signals_<profileId>          → GapSignal[]
-gap_alerts_<profileId>           → GapAlert[]
-coachCard_<profileId>_<weekISO>  → CoachCard
-journal_entries_<profileId>      → JournalEntry[]
-layout_optimised_session_<profileId> → date string
-arasaac_id_<label>               → resolved ARASAAC symbolId
+GET/POST         /api/profiles                          profile list / create (creates default boards)
+PATCH            /api/profiles/{id}                     name, avatarColor, settings, whoIAm
+POST             /api/profiles/{id}/optimise-layout     decay-weighted board reorder
+GET/POST         /api/profiles/{id}/boards              board CRUD (+ /symbols endpoints)
+GET/POST         /api/profiles/{id}/sentences           communication log
+POST             /api/profiles/{id}/taps                tap log + bigram update
+GET              /api/profiles/{id}/predictions         next-word suggestions
+GET/POST/DELETE  /api/profiles/{id}/journal             journal entries
+GET              /api/profiles/{id}/insights            weekly metrics
+POST             /api/profiles/{id}/gaps/signal         browse-without-tap signal
+GET              /api/profiles/{id}/gaps/alerts         active gap alerts + suggestions
+GET/POST         /api/profiles/{id}/coach[/generate]    weekly Gemini coach card (DB-cached)
+POST             /api/profiles/{id}/agent/chat          LangGraph agent conversation
+POST             /api/profiles/{id}/agent/apply-action  caregiver-approved board update
 ```
-
-## sessionStorage Keys
-
-```
-voca_stage                  → 'landing' | 'app'
-voca_mode_<profileId>       → 'user' | 'caregiver'   (per-profile)
-```
-
----
-
-## IndexedDB
-
-**Database:** `voca_db` v1
-**Stores:**
-- `communication_log` — keyed by `id`, indexed by `profileId` and `timestamp`
-- `tap_log` — keyed by `id`, indexed by `profileId`
-
----
 
 ## Symbol Images
 
@@ -384,106 +375,51 @@ Defined in `defaultBoards.js` as `WORD_TYPES`:
 
 ## AI Features
 
-### 1. Predictive Suggestions (on-device)
-- **File:** `src/engine/predictionEngine.js`
-- Bigram frequency table stored in localStorage per profile
-- Falls back to `globalPredictions.json` for new profiles
-- Personal history weighted 3× over global fallback
-- `recordTap(profileId, previousLabel, currentLabel)` — call on every symbol tap
-- `getPredictions(profileId, lastLabel, count)` — returns array of label strings
-- Rendered by `PredictionBar.jsx`
+All engines run server-side in Python (`backend/app/engines/`), on real DB data.
 
-### 2. Adaptive Layout (on-device)
-- **File:** `src/engine/layoutOptimiser.js`
-- Runs once per session on profile load
-- Requires minimum 20 taps before first adaptation
-- Uses **exponential time-decay weighting** per tap: `weight = e^(-0.1 × daysAgo)`
-  - Tap from today = 1.0 weight · 10 days ago ≈ 0.37 · 30 days ago ≈ 0.05
-  - Symbols are ranked by sum of decay-weighted scores, not raw counts
-  - Layout adapts quickly when usage patterns shift (e.g. child stops using "school")
-- Repositions symbols by weighted score, most-used → most accessible positions
-- Respects `settings.adaptiveLayoutEnabled`
+### 1. Predictive Suggestions
+`engines/prediction.py` — bigram table in the `bigrams` DB table, personal
+history weighted 3x over `data/global_predictions.json`. Served by
+`GET /predictions`; `PredictionBar.jsx` fetches via TanStack Query on every
+sentence change. Taps are recorded through `POST /taps`.
 
-### 3. Vocabulary Gap Detection (on-device)
-- **File:** `src/engine/gapDetector.js`
-- `startBrowseTimer(profileId, boardId)` — call when board becomes active
-- `markTappedOnBoard()` — call on any symbol tap to cancel timer
-- 8-second timer: if user browses without tapping → gap signal logged
-- 3 signals in 7 days → gap alert generated
-- Expansion vocabulary from `categoryVocab.json`
-- Alerts displayed in `InsightsDashboard` and `OverviewTab`
+### 2. Adaptive Layout
+`engines/layout_optimiser.py` — exponential time-decay weighting
+(`e^(-0.1 x daysAgo)`) over the `tap_logs` table; reorders `board_symbols`
+positions. Triggered by `POST /optimise-layout` on profile select (min 20 taps,
+respects `settings.adaptiveLayoutEnabled`).
 
-### 4. Weekly Insights (on-device)
-- **File:** `src/engine/insightsEngine.js`
-- `computeInsights(logEntries)` → metrics object
-- Metrics: totalThisWeek, totalLastWeek, topicCounts, newVocab, peakTime, longestSentence
-- Rendered by `InsightsDashboard.jsx` (Insights tab) and `OverviewTab.jsx` (Overview tab)
+### 3. Vocabulary Gap Detection
+Client keeps the 8-second browse timer (`frontend/src/engine/gapDetector.js`);
+when it fires, `POST /gaps/signal` records it. `engines/gap_detector.py`
+evaluates: 3+ signals on a board within 7 days → `gap_alerts` row for the ISO
+week, expansion words from `data/category_vocab.json`.
 
-### 5. Gemini Vocabulary Coach (API)
-- **File:** `src/services/geminiCoach.js`
-- Model: `gemini-2.5-flash` via `v1beta` endpoint
-- `thinkingConfig: { thinkingBudget: 0 }` — thinking disabled to avoid token budget issues
-- One call per profile per week (cached by ISO week string in localStorage)
-- API key: `VITE_GEMINI_API_KEY` in `.env`
-- Input: anonymised communication summary (no PII)
-- Output: `{ summary, strength, priority, suggestions[], reasoning }`
-- Rendered by `CoachCard.jsx` inside `InsightsDashboard.jsx`
-- Error state shows actual Gemini error message + "Try again" button
-- Refresh button available on the card header
+### 4. Weekly Insights
+`engines/insights.py` — `GET /insights` computes totals, per-board topic
+counts (by name), new vocab vs prior 30 days, peak time, longest sentence.
 
-### 6. AI Companion Agent (API, function calling)
-- **Files:** `src/agent/companionAgent.js` (agent loop), `src/agent/agentTools.js` (tools)
-- **Component:** `src/components/caregiver/CompanionTab.jsx`
-- Model: `gemini-2.5-flash` via `v1beta` endpoint with `tools: [{ functionDeclarations }]`
-- Available in caregiver mode → Companion tab only
-- **True agent loop**: no data is pre-bundled. Gemini decides which tools to call,
-  results are fed back as `functionResponse` parts, and it iterates (max 8 rounds)
-  until it produces a final text answer.
-- **Read tools:** `get_weekly_insights`, `get_communication_log`, `get_vocabulary_gaps`,
-  `get_board_contents`, `get_journal_moods` (moods only — journal sentences stay private),
-  `get_coach_recommendation`, `search_symbol` (live ARASAAC lookup)
-- **Action tool:** `propose_symbols_for_board` — stages new symbols for a board
-  (dedupes against existing symbols, resolves real ARASAAC pictograms). The change is
-  NOT applied directly: the UI renders an approval card; on "Approve & add" the
-  symbols are written via `applyPendingAction()` and `REFRESH_BOARDS` is dispatched.
-- UI shows a live tool trace (chips) while the agent works, and a per-message
-  trace of the steps it took
-- Conversation lives in component state only — resets on tab change / page refresh
-- Three suggested question chips shown on empty state
-- User messages: right-aligned teal bubbles; replies: left-aligned white cards
-- Error state: shows actual Gemini error message inline
+### 5. Gemini Vocabulary Coach
+`services/coach_llm.py` via `langchain-google-genai`. `POST /coach/generate`
+creates one card per profile per ISO week (cached in the `coach_cards` table;
+`?force=true` regenerates). The Insights tab auto-generates on first visit.
 
----
+### 6. Companion Agent (LangGraph)
+`agent/graph.py` + `agent/tools.py`. A LangGraph `StateGraph` runs an explicit
+reason → act → observe loop: the agent node calls Gemini with 8 tools bound;
+a `ToolNode` executes requested tools against the DB; the loop repeats until a
+final grounded answer (max 8 turns).
 
-## Gemini API Pattern
+**Read tools**: weekly insights, communication log, vocabulary gaps, board
+contents, journal moods (moods only — journal sentences stay private), coach
+recommendation, ARASAAC symbol search.
+**Action tool**: `propose_symbols_for_board` — dedupes against the board,
+resolves real ARASAAC pictograms, stages the change. The API returns it as
+`pendingAction`; the UI renders an approval card; `POST /agent/apply-action`
+writes approved symbols to the board.
 
-Both Gemini services use the same endpoint and pattern:
-
-```js
-const GEMINI_ENDPOINT =
-  'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent'
-
-fetch(`${GEMINI_ENDPOINT}?key=${apiKey}`, {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    contents: [{ parts: [{ text: prompt }] }],
-    generationConfig: {
-      temperature: 0.4,
-      maxOutputTokens: 1024,
-      thinkingConfig: { thinkingBudget: 0 },
-    }
-  })
-})
-
-// Extract text from response:
-const parts = data.candidates?.[0]?.content?.parts || []
-const text = parts.map(p => p.text || '').join('')
-```
-
-Coach card parses JSON from the text response. Companion returns plain text.
-
----
+`CompanionTab.jsx` shows the tool trace (chips) per reply and the approval
+card with Approve & add / Dismiss.
 
 ## Journal Feature
 
@@ -577,52 +513,26 @@ Two print regions defined:
 
 ## Environment Variables
 
-```
-VITE_GEMINI_API_KEY=your_key_here
-```
+**backend/.env** — `DATABASE_URL` (sqlite dev / postgres prod), `JWT_SECRET`,
+`GEMINI_API_KEY`, `GEMINI_MODEL`, `CORS_ORIGINS`.
+**frontend/.env** — `VITE_API_URL` only. The Gemini key never ships to the
+browser.
 
-In Vite, accessed as `import.meta.env.VITE_GEMINI_API_KEY`.
-Never commit `.env`. Set in Vercel dashboard for production.
+## Known Issues / Notes
 
----
+1. **ARASAAC symbol IDs** — verified IDs live in `backend/app/services/arasaac.py`
+   (agent) and `frontend/src/services/symbolService.js` (display fallback).
+   Unknown words are resolved live against the ARASAAC search API.
 
-## Known Issues / Things Still To Do
+2. **Demo account** — `backend/seed.py` creates `demo@voca.app` /
+   `voca-demo-123` with the Layla profile, 3 weeks of history, and gap signals
+   on Feelings. Coach card generates from real data on first Insights visit.
 
-1. **ARASAAC symbol IDs** — some IDs in `defaultBoards.js` are approximate.
-   The `resolveSymbolId()` function in `symbolService.js` auto-fixes on first load
-   by searching the ARASAAC API and caching the correct ID.
-   To manually verify: `https://api.arasaac.org/v1/pictograms/en/search/{word}`
-
-2. **Demo coach card** — Layla's Gemini coach card should be pre-injected into
-   localStorage before the competition demo so no live API call is needed on stage.
-   Inject via browser console:
-   ```js
-   const week = (() => {
-     const now = new Date()
-     const start = new Date(now.getFullYear(), 0, 1)
-     const w = Math.ceil(((now - start) / 86400000 + start.getDay() + 1) / 7)
-     return `${now.getFullYear()}-W${w}`
-   })()
-   const profiles = JSON.parse(localStorage.getItem('voca_profiles') || '[]')
-   const id = profiles[0]?.id
-   if (id) {
-     localStorage.setItem(`coachCard_${id}_${week}`, JSON.stringify({
-       summary: "This individual communicates frequently about wants and needs — a strong foundation. Communication peaks in the afternoon and shows consistent use of core vocabulary.",
-       strength: "Consistent use of 'I want' constructions shows strong agent-action understanding — a key developmental milestone.",
-       priority: "Expand feeling vocabulary beyond happy and sad to support emotional expression.",
-       suggestions: ["frustrated", "excited", "worried", "proud", "calm"],
-       reasoning: "The feelings board shows gap signals this week, indicating the individual is seeking emotional vocabulary that is not currently available. These five words cover the most common unmet emotional expression needs in this age group.",
-       generatedAt: new Date().toISOString()
-     }))
-     console.log('Coach card injected for', profiles[0].name)
-   }
-   ```
-
-3. **Vercel deploy** — set `VITE_GEMINI_API_KEY` in Vercel project environment variables.
-
-4. **StrictMode** — removed from `main.jsx` to prevent double Gemini API calls in development.
-
----
+3. **Deploy** — backend: Render/Railway with `DATABASE_URL` pointing at managed
+   Postgres (add `psycopg2-binary` to requirements), run
+   `alembic upgrade head`, set `CORS_ORIGINS` to the Vercel URL. Frontend:
+   Vercel with root directory `frontend/` and `VITE_API_URL` set to the
+   backend URL.
 
 ## Demo Flow (5 minutes)
 
@@ -643,8 +553,6 @@ Never commit `.env`. Set in Vercel dashboard for production.
 
 ## What Is NOT Built (out of scope for MVP)
 
-- User authentication / Supabase
-- Cloud sync across devices
 - Therapist portal
 - Scanning mode / switch access
 - Voice banking
@@ -652,13 +560,23 @@ Never commit `.env`. Set in Vercel dashboard for production.
 - Analytics / telemetry
 - Social / sharing features
 - AI journal analysis (planned for later)
+- Refresh tokens / password reset (single long-lived access token for now)
 
 ---
 
 ## Running Locally
 
 ```bash
-npm run dev        # start dev server at localhost:5173
-npm run build      # production build
-npm run preview    # preview production build
+# Backend (Python 3.11+)
+cd backend
+python -m venv .venv && .venv/Scripts/pip install -r requirements.txt
+python seed.py                                  # tables + demo data
+.venv/Scripts/python -m uvicorn app.main:app --port 8000 --reload
+
+# Frontend
+cd frontend
+npm install
+npm run dev                                     # http://localhost:5173
 ```
+
+Sign in with `demo@voca.app` / `voca-demo-123`, or register a new account.

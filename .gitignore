@@ -25,3 +25,10 @@ dist-ssr
 .claude/
 
 .env
+
+# Python backend
+backend/.venv/
+backend/voca.db
+backend/.env
+__pycache__/
+*.pyc

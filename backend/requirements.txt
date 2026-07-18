@@ -1,0 +1,14 @@
+fastapi>=0.115
+uvicorn[standard]>=0.30
+sqlalchemy>=2.0
+alembic>=1.13
+pydantic>=2.8
+pydantic-settings>=2.4
+email-validator>=2.0
+PyJWT>=2.9
+bcrypt>=4.1
+httpx>=0.27
+langgraph>=0.2.60
+langchain-core>=0.3.60
+langchain-google-genai>=2.1
+# For Postgres deploys add: psycopg2-binary>=2.9.10
