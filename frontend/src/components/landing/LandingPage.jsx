@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import Navbar from '../shared/Navbar'
 import ProfileMenu from '../shared/ProfileMenu'
 
@@ -528,9 +528,9 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
         </div>
       </section>
 
-      {/* AI features */}
+      {/* AI features — Voca vs. typical AAC apps */}
       <section id="ai-features" style={{ padding: '72px 2rem', maxWidth: '1100px', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: '52px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
           <div style={{
             display: 'inline-block', padding: '4px 14px',
             background: '#FDF3E0', borderRadius: '100px',
@@ -544,33 +544,68 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
             fontSize: '2.6rem', color: '#2C2A26', margin: '0 0 12px',
             letterSpacing: '-0.02em',
           }}>
-            Intelligence no AAC tool has.
+            Built different from day one.
           </h2>
           <p style={{ fontSize: '1.15rem', color: '#6B6860', margin: 0 }}>
-            Every feature is woven into the core — not bolted on.
+            Here's how Voca compares to a typical AAC app.
           </p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+        <div style={{
+          maxWidth: '880px', margin: '0 auto',
+          display: 'grid', gridTemplateColumns: 'minmax(150px, 1.3fr) 1fr 1fr',
+          borderRadius: '20px', overflow: 'hidden', border: '1px solid #E8E6E1',
+          boxShadow: '0 4px 20px rgba(44,42,38,0.04)',
+        }}>
+          {/* Header row */}
+          <div style={{ background: 'white', padding: '18px 20px' }} />
+          <div style={{ background: 'white', padding: '18px 16px', textAlign: 'center' }}>
+            <span style={{ fontSize: '13px', fontWeight: 700, color: '#9B9890', letterSpacing: '0.02em' }}>
+              Typical AAC apps
+            </span>
+          </div>
+          <div style={{ background: '#14523F', padding: '18px 16px', textAlign: 'center' }}>
+            <span style={{ fontSize: '13px', fontWeight: 800, color: 'white', letterSpacing: '0.02em' }}>
+              Voca
+            </span>
+          </div>
+
+          {/* Rows */}
           {[
-            { icon: '⚡', title: 'Predictive suggestions',    desc: 'Predicts the next symbol in real time. Starts with common AAC patterns, gets personal over time.',              bg: '#E8F7F4', border: '#B8E8DF', accent: '#2D9B83' },
-            { icon: '🧭', title: 'Adaptive layout',           desc: 'Most-used symbols automatically move to the most accessible positions on the grid.',                           bg: '#E8F7F4', border: '#B8E8DF', accent: '#2D9B83' },
-            { icon: '🔍', title: 'Vocabulary gap detection',  desc: "Detects when the individual is browsing for a word they don't have. Tells caregivers exactly what to add.",     bg: '#FDF3E0', border: '#F5DFA0', accent: '#7A5010' },
-            { icon: '🎓', title: 'Gemini Vocabulary Coach',   desc: 'Weekly coaching powered by Gemini AI. $150/hr therapist guidance — delivered free, automatically, every week.', bg: '#FDF3E0', border: '#F5DFA0', accent: '#7A5010' },
-          ].map(({ icon, title, desc, bg, border }) => (
-            <div key={title} style={{
-              background: bg, borderRadius: '16px', padding: '26px',
-              border: `1.5px solid ${border}`,
-            }}>
-              <div style={{ fontSize: '1.7rem', marginBottom: '12px' }}>{icon}</div>
+            { feature: 'Word prediction',        typical: 'Static, generic word lists',            voca: 'Learns your patterns in real time' },
+            { feature: 'Board layout',            typical: 'Fixed grid — manual editing only',      voca: 'Auto-reorders itself by real usage' },
+            { feature: 'Missing vocabulary',      typical: 'No signal when a word is missing',      voca: 'Flags gaps, suggests exactly what to add' },
+            { feature: 'Coaching & guidance',     typical: "None — you're on your own",             voca: 'Weekly AI coaching, powered by Gemini' },
+            { feature: 'Cost',                    typical: '$50–150/hr for therapist consultations', voca: 'Free. Always.' },
+          ].map(row => (
+            <Fragment key={row.feature}>
               <div style={{
-                fontFamily: 'Nunito, sans-serif', fontWeight: 800,
-                fontSize: '1.15rem', color: '#2C2A26', marginBottom: '8px',
+                background: 'white', padding: '20px', borderTop: '1px solid #F0EFEA',
+                display: 'flex', alignItems: 'center',
               }}>
-                {title}
+                <span style={{ fontFamily: 'Nunito, sans-serif', fontWeight: 800, fontSize: '15px', color: '#2C2A26' }}>
+                  {row.feature}
+                </span>
               </div>
-              <div style={{ fontSize: '16px', color: '#6B6860', lineHeight: 1.6 }}>{desc}</div>
-            </div>
+              <div style={{
+                background: 'white', padding: '20px 16px', borderTop: '1px solid #F0EFEA',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', textAlign: 'center',
+              }}>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#C4C1BA" strokeWidth="2.5" strokeLinecap="round" style={{ flexShrink: 0 }}>
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+                <span style={{ fontSize: '13.5px', color: '#9B9890', lineHeight: 1.5 }}>{row.typical}</span>
+              </div>
+              <div style={{
+                background: '#14523F', padding: '20px 16px', borderTop: '1px solid rgba(255,255,255,0.1)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', textAlign: 'center',
+              }}>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8CE0C8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+                <span style={{ fontSize: '13.5px', fontWeight: 600, color: 'white', lineHeight: 1.5 }}>{row.voca}</span>
+              </div>
+            </Fragment>
           ))}
         </div>
 
@@ -583,6 +618,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
           </button>
         </div>
       </section>
+
 
       {/* Contact Us */}
       <section id="contact" style={{
