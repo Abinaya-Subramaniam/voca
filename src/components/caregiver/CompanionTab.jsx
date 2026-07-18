@@ -99,7 +99,7 @@ export default function CompanionTab() {
           </div>
           <div>
             <div className="font-display font-bold text-warm-900 text-sm leading-none">Companion</div>
-            <div className="font-sans text-warm-400 text-xs mt-0.5">
+            <div className="font-sans text-warm-400 text-[13.5px] mt-0.5">
               Ask anything about {activeProfile?.name}'s communication
             </div>
           </div>
@@ -152,7 +152,7 @@ export default function CompanionTab() {
 
         {/* Error */}
         {error && (
-          <div className="bg-red-50 border border-red-100 rounded-xl px-4 py-3 text-xs font-sans text-red-600">
+          <div className="bg-red-50 border border-red-100 rounded-xl px-4 py-3 text-[13.5px] font-sans text-red-600">
             {error}
           </div>
         )}
@@ -168,7 +168,7 @@ export default function CompanionTab() {
               key={q}
               onClick={() => handleSend(q)}
               disabled={!hasKey || !profileData}
-              className="flex-shrink-0 px-3 py-2 bg-white border border-warm-200 rounded-xl text-xs font-sans text-warm-600 hover:border-teal-300 hover:text-teal-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              className="flex-shrink-0 px-3 py-2 bg-white border border-warm-200 rounded-xl text-[13.5px] font-sans text-warm-600 hover:border-teal-300 hover:text-teal-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {q}
             </button>
@@ -179,7 +179,7 @@ export default function CompanionTab() {
       {/* Input bar */}
       <div className="px-4 py-3 bg-white border-t border-warm-200 flex-shrink-0">
         {!hasKey && (
-          <div className="text-xs font-sans text-warm-400 text-center mb-2">
+          <div className="text-[13.5px] font-sans text-warm-400 text-center mb-2">
             Add VITE_GEMINI_API_KEY to .env to enable Companion
           </div>
         )}

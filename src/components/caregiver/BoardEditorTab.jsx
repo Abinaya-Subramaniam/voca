@@ -34,7 +34,7 @@ export default function BoardEditorTab() {
         {/* Header */}
         <div>
           <h2 className="font-display font-bold text-warm-900 text-xl leading-none">Board Editor</h2>
-          <p className="font-sans text-warm-400 text-xs mt-1">
+          <p className="font-sans text-warm-400 text-[13.5px] mt-1">
             Display and accessibility settings for {activeProfile?.name}
           </p>
         </div>
@@ -73,7 +73,7 @@ export default function BoardEditorTab() {
             onChange={e => updateSetting('gridColumns', parseInt(e.target.value))}
             className="w-full accent-teal-500"
           />
-          <div className="flex justify-between text-xs text-warm-400 mt-1 font-mono">
+          <div className="flex justify-between text-[13.5px] text-warm-400 mt-1 font-mono">
             <span>3</span><span>4</span><span>5</span><span>6</span>
           </div>
         </div>
@@ -116,7 +116,7 @@ export default function BoardEditorTab() {
             >
               <div>
                 <div className="font-sans font-medium text-warm-800 text-sm">{label}</div>
-                <div className="font-sans text-warm-400 text-xs mt-0.5">{desc}</div>
+                <div className="font-sans text-warm-400 text-[13.5px] mt-0.5">{desc}</div>
               </div>
               <button
                 onClick={() => updateSetting(key, !settings[key])}
@@ -134,7 +134,7 @@ export default function BoardEditorTab() {
             <span className="font-sans font-semibold text-warm-700 text-sm">Boards</span>
             <button
               onClick={handleAddBoard}
-              className="flex items-center gap-1.5 text-xs font-semibold text-teal-600 hover:text-teal-700 transition-colors"
+              className="flex items-center gap-1.5 text-[13.5px] font-semibold text-teal-600 hover:text-teal-700 transition-colors"
             >
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
                 <line x1="12" y1="5" x2="12" y2="19"/>
@@ -155,7 +155,7 @@ export default function BoardEditorTab() {
               {board.category !== 'emergency' && (
                 <button
                   onClick={() => handleDeleteBoard(board.id)}
-                  className="text-xs text-warm-400 hover:text-red-500 transition-colors font-medium"
+                  className="text-[13.5px] text-warm-400 hover:text-red-500 transition-colors font-medium"
                 >
                   Delete
                 </button>
