@@ -21,9 +21,7 @@ function UserNav({ activeProfile, showJournal, onLogoClick, onJournalToggle, onP
   return (
     <header className="flex items-center justify-between px-4 py-3 bg-white border-b border-warm-200 flex-shrink-0 shadow-subtle">
       <button onClick={onLogoClick} className="flex items-center gap-2 hover:opacity-75 transition-opacity">
-        <div className="w-7 h-7 rounded-lg bg-teal-500 flex items-center justify-center flex-shrink-0">
-          <span className="text-white font-display font-bold text-xs">V</span>
-        </div>
+        <img src="https://i.imgur.com/3vT9jwF.jpeg" alt="Voca" className="w-7 h-7 rounded-lg object-cover flex-shrink-0" />
         <span className="font-display font-bold text-warm-900 text-base">Voca</span>
       </button>
 
@@ -96,9 +94,7 @@ function CaregiverNav({ activeProfile, activeTab, onTabChange, onSwitchToUser, o
       <div className="flex items-center justify-between px-4 py-2.5">
         <div className="flex items-center gap-2">
           <button onClick={onLogoClick} className="flex items-center gap-2 hover:opacity-75 transition-opacity">
-            <div className="w-7 h-7 rounded-lg bg-teal-500 flex items-center justify-center flex-shrink-0">
-              <span className="text-white font-display font-bold text-xs">V</span>
-            </div>
+            <img src="https://i.imgur.com/3vT9jwF.jpeg" alt="Voca" className="w-7 h-7 rounded-lg object-cover flex-shrink-0" />
             <span className="font-display font-bold text-warm-900 text-base">Voca</span>
           </button>
           <span className="text-xs font-sans text-warm-400 ml-1 bg-warm-100 px-2 py-0.5 rounded-full">
@@ -222,9 +218,7 @@ export default function App() {
       <div className="h-screen flex flex-col overflow-hidden" style={{ background: 'var(--color-bg)' }}>
         <header className="flex items-center justify-between px-4 py-3 bg-white border-b border-warm-200 flex-shrink-0 shadow-subtle">
           <button onClick={() => goToStage('landing')} className="flex items-center gap-2 hover:opacity-75 transition-opacity">
-            <div className="w-7 h-7 rounded-lg bg-teal-500 flex items-center justify-center">
-              <span className="text-white font-display font-bold text-xs">V</span>
-            </div>
+            <img src="https://i.imgur.com/3vT9jwF.jpeg" alt="Voca" className="w-7 h-7 rounded-lg object-cover" />
             <span className="font-display font-bold text-warm-900 text-base">Voca</span>
           </button>
           <div className="flex items-center gap-3">

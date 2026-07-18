@@ -1,14 +1,14 @@
 export default function Navbar({ scrolled = false, onLogoClick, children }) {
   const logo = (
     <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
-      <div style={{
-        width: '30px', height: '30px', borderRadius: '9px',
-        background: 'linear-gradient(135deg, #34AB92, #1F7A65)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        boxShadow: '0 2px 8px rgba(45,155,131,0.35)',
-      }}>
-        <span style={{ color: 'white', fontWeight: 800, fontSize: '15px', fontFamily: 'Nunito, sans-serif' }}>V</span>
-      </div>
+      <img
+        src="https://i.imgur.com/3vT9jwF.jpeg"
+        alt="Voca"
+        style={{
+          width: '30px', height: '30px', borderRadius: '9px',
+          objectFit: 'cover', boxShadow: '0 2px 8px rgba(45,155,131,0.35)',
+        }}
+      />
       <span style={{ fontFamily: 'Nunito, sans-serif', fontWeight: 800, fontSize: '17px', color: '#2C2A26' }}>Voca</span>
     </div>
   )

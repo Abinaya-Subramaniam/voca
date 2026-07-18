@@ -176,9 +176,7 @@ export default function AuthPage({ onAuthed, onBackToLanding }) {
       <div className="flex-1 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-raised p-8 w-full max-w-sm border border-warm-200">
 
-        <div className="w-12 h-12 rounded-xl bg-teal-500 flex items-center justify-center mb-4 shadow-subtle">
-          <span className="text-white font-display font-bold text-xl">V</span>
-        </div>
+        <img src="https://i.imgur.com/3vT9jwF.jpeg" alt="Voca" className="w-12 h-12 rounded-xl object-cover mb-4 shadow-subtle" />
 
         <h2 className="font-display font-bold text-warm-900 text-2xl mb-1">
           {isRegister ? 'Create your account' : 'Welcome back'}

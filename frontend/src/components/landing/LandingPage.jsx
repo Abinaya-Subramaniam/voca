@@ -185,17 +185,6 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
         display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '72px', alignItems: 'center',
       }}>
         <div>
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: '6px',
-            padding: '5px 12px', background: '#E8F7F4', borderRadius: '100px',
-            border: '1px solid #B8E8DF', marginBottom: '28px',
-          }}>
-            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#2D9B83', display: 'inline-block' }} />
-            <span style={{ fontSize: '11px', color: '#2D9B83', fontWeight: 600, letterSpacing: '0.04em' }}>
-              FREE · WEB-BASED · AI-POWERED
-            </span>
-          </div>
-
           <h1 style={{
             fontFamily: 'Nunito, sans-serif', fontWeight: 900,
             fontSize: 'clamp(2.9rem, 5.5vw, 4.6rem)', lineHeight: 1.02,
