@@ -72,10 +72,12 @@ voca/
 │   │   ├── insightsEngine.js          ← weekly metric calculations
 │   │   ├── layoutOptimiser.js         ← adaptive symbol repositioning
 │   │   └── predictionEngine.js        ← bigram prediction engine
+│   ├── agent/
+│   │   ├── agentTools.js              ← agent tool declarations + executors + apply action
+│   │   └── companionAgent.js          ← Gemini function-calling agent loop
 │   ├── seed/
 │   │   └── demoProfile.js             ← seeds "Layla" demo profile with history
 │   ├── services/
-│   │   ├── companionService.js        ← Gemini chat API with profile context bundling
 │   │   ├── db.js                      ← IndexedDB helpers (communication + tap logs)
 │   │   ├── geminiCoach.js             ← Gemini API call + weekly cache
 │   │   ├── speechService.js           ← Web Speech API wrapper
@@ -429,24 +431,26 @@ Defined in `defaultBoards.js` as `WORD_TYPES`:
 - Error state shows actual Gemini error message + "Try again" button
 - Refresh button available on the card header
 
-### 6. AI Companion Chat (API)
-- **File:** `src/services/companionService.js`
+### 6. AI Companion Agent (API, function calling)
+- **Files:** `src/agent/companionAgent.js` (agent loop), `src/agent/agentTools.js` (tools)
 - **Component:** `src/components/caregiver/CompanionTab.jsx`
-- Model: `gemini-2.5-flash` via `v1beta` endpoint
+- Model: `gemini-2.5-flash` via `v1beta` endpoint with `tools: [{ functionDeclarations }]`
 - Available in caregiver mode → Companion tab only
-- Before each call, bundles full profile context into the system prompt:
-  - Sentence counts (this week + last week)
-  - Longest sentence, peak time
-  - New vocabulary used this week
-  - Vocabulary gap alerts
-  - Last journal mood
-  - AI coach priority
-  - Top active boards
+- **True agent loop**: no data is pre-bundled. Gemini decides which tools to call,
+  results are fed back as `functionResponse` parts, and it iterates (max 8 rounds)
+  until it produces a final text answer.
+- **Read tools:** `get_weekly_insights`, `get_communication_log`, `get_vocabulary_gaps`,
+  `get_board_contents`, `get_journal_moods` (moods only — journal sentences stay private),
+  `get_coach_recommendation`, `search_symbol` (live ARASAAC lookup)
+- **Action tool:** `propose_symbols_for_board` — stages new symbols for a board
+  (dedupes against existing symbols, resolves real ARASAAC pictograms). The change is
+  NOT applied directly: the UI renders an approval card; on "Approve & add" the
+  symbols are written via `applyPendingAction()` and `REFRESH_BOARDS` is dispatched.
+- UI shows a live tool trace (chips) while the agent works, and a per-message
+  trace of the steps it took
 - Conversation lives in component state only — resets on tab change / page refresh
 - Three suggested question chips shown on empty state
-- User messages: right-aligned teal bubbles
-- Companion replies: left-aligned white cards with border
-- Loading state: three animated bounce dots
+- User messages: right-aligned teal bubbles; replies: left-aligned white cards
 - Error state: shows actual Gemini error message inline
 
 ---
