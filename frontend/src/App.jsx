@@ -10,140 +10,45 @@ import { logout } from './api'
 import { recordTap } from './engine/predictionEngine'
 import { startBrowseTimer, markTappedOnBoard } from './engine/gapDetector'
 import BoardNavigator from './components/board/BoardNavigator'
+import Sidebar from './components/board/Sidebar'
 import JournalView from './components/journal/JournalView'
 import WhoIAmCard from './components/profile/WhoIAmCard'
 import OverviewTab from './components/caregiver/OverviewTab'
 import BoardEditorTab from './components/caregiver/BoardEditorTab'
 import CompanionTab from './components/caregiver/CompanionTab'
+import CaregiverSidebar from './components/caregiver/CaregiverSidebar'
 
 
-function UserNav({ activeProfile, showJournal, onLogoClick, onJournalToggle, onProfileClick, onSwitchProfile, onSwitchToCaregiver }) {
-  return (
-    <header className="flex items-center justify-between px-4 py-3 bg-white border-b border-warm-200 flex-shrink-0 shadow-subtle">
-      <button onClick={onLogoClick} className="flex items-center gap-2 hover:opacity-75 transition-opacity">
-        <img src="https://i.imgur.com/3vT9jwF.jpeg" alt="Voca" className="w-7 h-7 rounded-lg object-cover flex-shrink-0" />
-        <span className="font-display font-bold text-warm-900 text-base">Voca</span>
-      </button>
-
-      <div className="flex items-center gap-2">
-        {activeProfile && (
-          <>
-            {/* Journal toggle */}
-            <button
-              onClick={onJournalToggle}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
-                showJournal
-                  ? 'bg-teal-500 text-white shadow-subtle'
-                  : 'bg-warm-100 text-warm-600 hover:text-warm-900'
-              }`}
-            >
-              <span className="text-base leading-none">📔</span>
-              Journal
-            </button>
-
-            {/* Avatar */}
-            <button
-              onClick={onProfileClick}
-              className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-xs flex-shrink-0 hover:opacity-80 transition-opacity"
-              style={{ backgroundColor: activeProfile.avatarColor || '#2D9B83' }}
-              title={`${activeProfile.name} — Who I Am`}
-            >
-              {activeProfile.name?.charAt(0).toUpperCase()}
-            </button>
-
-            {/* Switch profile */}
-            <button
-              onClick={onSwitchProfile}
-              className="w-8 h-8 flex items-center justify-center rounded-lg text-warm-400 hover:bg-warm-100 hover:text-warm-700 transition-colors"
-              title="Switch user"
-            >
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                <circle cx="9" cy="7" r="4"/>
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-              </svg>
-            </button>
-
-            {/* Caregiver link */}
-            <button
-              onClick={onSwitchToCaregiver}
-              className="text-xs font-sans text-warm-400 hover:text-teal-500 transition-colors whitespace-nowrap"
-            >
-              Caregiver View
-            </button>
-          </>
-        )}
-      </div>
-    </header>
-  )
+function greetingWord() {
+  const hour = new Date().getHours()
+  if (hour < 12) return 'Good morning'
+  if (hour < 18) return 'Good afternoon'
+  return 'Good evening'
 }
 
-
-const CAREGIVER_TABS = [
-  { id: 'overview',    label: 'Overview'     },
-  { id: 'insights',   label: 'Insights'     },
-  { id: 'boardeditor',label: 'Board Editor' },
-  { id: 'companion',  label: 'Companion'    },
-]
-
-function CaregiverNav({ activeProfile, activeTab, onTabChange, onSwitchToUser, onLogoClick, userName, userEmail, onLogout }) {
+function GreetingBanner({ name, avatarColor }) {
   return (
-    <header className="flex flex-col bg-white border-b border-warm-200 flex-shrink-0 shadow-subtle">
-      {/* Top row */}
-      <div className="flex items-center justify-between px-4 py-2.5">
-        <div className="flex items-center gap-2">
-          <button onClick={onLogoClick} className="flex items-center gap-2 hover:opacity-75 transition-opacity">
-            <img src="https://i.imgur.com/3vT9jwF.jpeg" alt="Voca" className="w-7 h-7 rounded-lg object-cover flex-shrink-0" />
-            <span className="font-display font-bold text-warm-900 text-base">Voca</span>
-          </button>
-          <span className="text-xs font-sans text-warm-400 ml-1 bg-warm-100 px-2 py-0.5 rounded-full">
-            Caregiver View
-          </span>
+    <div
+      className="flex items-center gap-3 px-5 py-3.5 flex-shrink-0"
+      style={{ background: `linear-gradient(90deg, ${avatarColor || '#2D9B83'}1F, transparent 70%)` }}
+    >
+      <span className="text-2xl leading-none">👋</span>
+      <div className="min-w-0">
+        <div className="font-display font-bold text-warm-900 text-xl leading-tight truncate">
+          {greetingWord()}, {name}!
         </div>
-
-        <div className="flex items-center gap-3">
-          {activeProfile && (
-            <button
-              onClick={onSwitchToUser}
-              className="flex items-center gap-1.5 text-xs font-sans font-semibold text-teal-600 hover:text-teal-700 transition-colors"
-            >
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M19 12H5M12 5l-7 7 7 7"/>
-              </svg>
-              Back to {activeProfile.name}'s Board
-            </button>
-          )}
-          <ProfileMenu name={userName} email={userEmail} onLogout={onLogout} />
+        <div className="text-sm font-sans text-warm-500">
+          Tap symbols below to say what's on your mind.
         </div>
       </div>
-
-      {/* Tab bar */}
-      {activeProfile && (
-        <div className="flex px-4 pb-0 gap-1">
-          {CAREGIVER_TABS.map(tab => (
-            <button
-              key={tab.id}
-              onClick={() => onTabChange(tab.id)}
-              className={`px-3 py-2 text-sm font-medium border-b-2 transition-all whitespace-nowrap ${
-                activeTab === tab.id
-                  ? 'text-teal-600 border-teal-500'
-                  : 'text-warm-500 border-transparent hover:text-warm-800'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-      )}
-    </header>
+    </div>
   )
 }
 
 
 export default function App() {
   const { state, dispatch, authed, setAuthed, booting, user } = useApp()
-  const { activeProfileId, activeProfile, activeBoardId, sentenceBuffer, mode } = state
+  const { activeProfileId, activeProfile, boards, activeBoardId, sentenceBuffer, mode } = state
 
   const [appStage, setAppStage]     = useState(() => sessionStorage.getItem('voca_stage') || 'landing')
   const [showJournal, setShowJournal] = useState(false)
@@ -181,6 +86,12 @@ export default function App() {
       startBrowseTimer(activeProfileId, activeBoardId)
     }
   }, [activeBoardId, activeProfileId, mode])
+
+  function handleSelectBoard(boardId) {
+    if (!boardId) return
+    dispatch({ type: 'SET_ACTIVE_BOARD', boardId })
+    setShowJournal(false)
+  }
 
   function handleBoardSymbolTap(symbol) {
     const previousLabel = sentenceBuffer.length > 0 ? sentenceBuffer[sentenceBuffer.length - 1].label : null
@@ -235,8 +146,8 @@ export default function App() {
 
   if (mode === 'caregiver') {
     return (
-      <div className="h-screen flex flex-col overflow-hidden" style={{ background: 'var(--color-bg)' }}>
-        <CaregiverNav
+      <div className="h-screen flex overflow-hidden bg-warm-50">
+        <CaregiverSidebar
           activeProfile={activeProfile}
           activeTab={caregiverTab}
           onTabChange={setCaregiverTab}
@@ -247,41 +158,52 @@ export default function App() {
           onLogout={handleLogout}
         />
 
-        {caregiverTab === 'overview'    && <OverviewTab />}
-        {caregiverTab === 'insights'   && <InsightsDashboard />}
-        {caregiverTab === 'boardeditor' && <BoardEditorTab />}
-        {caregiverTab === 'companion'  && <CompanionTab />}
+        <main className="flex-1 overflow-hidden flex flex-col" style={{ background: 'var(--color-bg)' }}>
+          {caregiverTab === 'overview'    && <OverviewTab />}
+          {caregiverTab === 'insights'   && <InsightsDashboard />}
+          {caregiverTab === 'boardeditor' && <BoardEditorTab />}
+          {caregiverTab === 'companion'  && <CompanionTab />}
+        </main>
       </div>
     )
   }
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden" style={{ background: 'var(--color-bg)' }}>
-      <UserNav
+    <div className="h-screen flex overflow-hidden bg-warm-50">
+      <Sidebar
         activeProfile={activeProfile}
+        boards={boards}
+        activeBoardId={activeBoardId}
         showJournal={showJournal}
+        onSelectBoard={handleSelectBoard}
         onLogoClick={() => goToStage('landing')}
         onJournalToggle={() => setShowJournal(v => !v)}
-        onProfileClick={() => setShowWhoIAm(true)}
+        onWhoAmI={() => setShowWhoIAm(true)}
         onSwitchProfile={() => dispatch({ type: 'SET_ACTIVE_PROFILE', profileId: null })}
         onSwitchToCaregiver={() => switchMode('caregiver')}
       />
 
-      {showJournal ? (
-        <JournalView />
-      ) : (
-        <>
-          <SentenceBar />
-          <BoardNavigator
-            onSymbolTap={handleBoardSymbolTap}
-            onPredict={(sym) => {
-              const previousLabel = sentenceBuffer.length > 0 ? sentenceBuffer[sentenceBuffer.length - 1].label : null
-              dispatch({ type: 'ADD_TO_SENTENCE', symbol: sym })
-              recordTap(activeProfileId, previousLabel, sym.label, activeBoardId)
-            }}
-          />
-        </>
-      )}
+      <main
+        className="flex-1 flex flex-col overflow-hidden"
+        style={{ background: `linear-gradient(180deg, ${activeProfile?.avatarColor || '#2D9B83'}14 0%, var(--color-bg) 260px)` }}
+      >
+        {showJournal ? (
+          <JournalView />
+        ) : (
+          <>
+            <GreetingBanner name={activeProfile?.name} avatarColor={activeProfile?.avatarColor} />
+            <SentenceBar />
+            <BoardNavigator
+              onSymbolTap={handleBoardSymbolTap}
+              onPredict={(sym) => {
+                const previousLabel = sentenceBuffer.length > 0 ? sentenceBuffer[sentenceBuffer.length - 1].label : null
+                dispatch({ type: 'ADD_TO_SENTENCE', symbol: sym })
+                recordTap(activeProfileId, previousLabel, sym.label, activeBoardId)
+              }}
+            />
+          </>
+        )}
+      </main>
 
       {showWhoIAm && <WhoIAmCard onClose={() => setShowWhoIAm(false)} />}
     </div>
