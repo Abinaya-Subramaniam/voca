@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useApp } from '../../context/AppContext'
 import { createProfile } from '../../store/profileStore'
 
@@ -9,12 +10,14 @@ const COLORS = [
 
 export default function ProfileSelector() {
   const { state, dispatch } = useApp()
+  const navigate = useNavigate()
   const [creating, setCreating] = useState(false)
   const [name, setName]         = useState('')
   const [color, setColor]       = useState(COLORS[0])
 
   function handleSelect(profileId) {
     dispatch({ type: 'SET_ACTIVE_PROFILE', profileId })
+    navigate('/board')
   }
 
   async function handleCreate() {
@@ -25,6 +28,7 @@ export default function ProfileSelector() {
       dispatch({ type: 'SET_ACTIVE_PROFILE', profileId: profile.id })
       setCreating(false)
       setName('')
+      navigate('/board')
     } catch (err) {
       alert(`Could not create profile: ${err.message}`)
     }

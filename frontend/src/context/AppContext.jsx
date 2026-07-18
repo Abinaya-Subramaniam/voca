@@ -14,11 +14,6 @@ const initialState = {
   activeBoardId: null,
   sentenceBuffer: [],
   view: 'board',
-  mode: 'user',
-}
-
-function getModeForProfile(profileId) {
-  return sessionStorage.getItem(`voca_mode_${profileId}`) || 'user'
 }
 
 function reducer(state, action) {
@@ -32,7 +27,6 @@ function reducer(state, action) {
         activeProfile: action.activeProfile,
         boards: action.boards,
         activeBoardId: action.boards[0]?.id || null,
-        mode: action.activeProfileId ? getModeForProfile(action.activeProfileId) : 'user',
       }
     }
 
@@ -44,7 +38,6 @@ function reducer(state, action) {
         boards: [],
         activeBoardId: null,
         sentenceBuffer: [],
-        mode: 'user',
       }
     }
 
@@ -56,7 +49,6 @@ function reducer(state, action) {
         boards: action.boards,
         activeBoardId: action.boards[0]?.id || null,
         sentenceBuffer: [],
-        mode: getModeForProfile(action.profile.id),
       }
     }
 
@@ -98,13 +90,6 @@ function reducer(state, action) {
 
     case 'SET_VIEW':
       return { ...state, view: action.view }
-
-    case 'SET_MODE': {
-      if (state.activeProfileId) {
-        sessionStorage.setItem(`voca_mode_${state.activeProfileId}`, action.mode)
-      }
-      return { ...state, mode: action.mode }
-    }
 
     default:
       return state

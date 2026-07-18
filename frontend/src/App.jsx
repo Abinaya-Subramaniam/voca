@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Routes, Route, Navigate, useNavigate, useLocation, useParams } from 'react-router-dom'
 import { useApp } from './context/AppContext'
 import LandingPage from './components/landing/LandingPage'
 import ProfileSelector from './components/profile/ProfileSelector'
@@ -18,8 +19,9 @@ import BoardEditorTab from './components/caregiver/BoardEditorTab'
 import CompanionTab from './components/caregiver/CompanionTab'
 import CaregiverSidebar from './components/caregiver/CaregiverSidebar'
 
+const CAREGIVER_TAB_IDS = ['overview', 'insights', 'boardeditor', 'companion']
 
-function greetingWord() {
+function greetingPhrase() {
   const hour = new Date().getHours()
   if (hour < 12) return 'Good morning'
   if (hour < 18) return 'Good afternoon'
@@ -35,7 +37,7 @@ function GreetingBanner({ name, avatarColor }) {
       <span className="text-2xl leading-none">👋</span>
       <div className="min-w-0">
         <div className="font-display font-bold text-warm-900 text-xl leading-tight truncate">
-          {greetingWord()}, {name}!
+          {greetingPhrase()}, {name}!
         </div>
         <div className="text-sm font-sans text-warm-500">
           Tap symbols below to say what's on your mind.
@@ -45,29 +47,114 @@ function GreetingBanner({ name, avatarColor }) {
   )
 }
 
+function LoadingScreen() {
+  return (
+    <div className="h-screen flex items-center justify-center" style={{ background: 'var(--color-bg)' }}>
+      <div className="text-warm-400 text-sm font-sans">Loading...</div>
+    </div>
+  )
+}
 
-export default function App() {
-  const { state, dispatch, authed, setAuthed, booting, user } = useApp()
-  const { activeProfileId, activeProfile, boards, activeBoardId, sentenceBuffer, mode } = state
+// Where "take me home" should land, based on auth + whether a profile is active.
+function homePathFor(authed, activeProfileId) {
+  if (!authed) return '/login'
+  return activeProfileId ? '/board' : '/profiles'
+}
 
-  const [appStage, setAppStage]     = useState(() => sessionStorage.getItem('voca_stage') || 'landing')
-  const [showJournal, setShowJournal] = useState(false)
-  const [showWhoIAm, setShowWhoIAm] = useState(false)
-  const [caregiverTab, setCaregiverTab] = useState('overview')
+// Guards a route that needs both an authenticated session and an active profile
+// (the board and caregiver dashboards). Redirects to the right earlier step
+// otherwise, so a bookmarked/typed URL always resolves somewhere sensible.
+function RequireProfile({ children }) {
+  const { authed, booting, state } = useApp()
+  if (!authed) return <Navigate to="/login" replace />
+  if (booting) return <LoadingScreen />
+  if (!state.activeProfileId) return <Navigate to="/profiles" replace />
+  return children
+}
 
-  function goToStage(stage) {
-    sessionStorage.setItem('voca_stage', stage)
-    setAppStage(stage)
-  }
+// ── /  — landing page ──────────────────────────────────────────────────────
+
+function LandingRoute() {
+  const navigate = useNavigate()
+  const { authed, user, setAuthed, state } = useApp()
 
   function handleLogout() {
     logout()
     setAuthed(false)
   }
 
-  function switchMode(newMode) {
-    dispatch({ type: 'SET_MODE', mode: newMode })
+  return (
+    <LandingPage
+      onEnter={() => navigate(homePathFor(authed, state.activeProfileId))}
+      authed={authed}
+      userName={user?.name}
+      userEmail={user?.email}
+      onLogout={handleLogout}
+    />
+  )
+}
+
+// ── /login ───────────────────────────────────────────────────────────────
+
+function LoginRoute() {
+  const navigate = useNavigate()
+  const { authed, booting, setAuthed, state } = useApp()
+
+  if (authed) {
+    if (booting) return <LoadingScreen />
+    return <Navigate to={homePathFor(true, state.activeProfileId)} replace />
   }
+
+  return (
+    <AuthPage
+      onAuthed={() => setAuthed(true)}
+      onBackToLanding={() => navigate('/')}
+    />
+  )
+}
+
+// ── /profiles ────────────────────────────────────────────────────────────
+
+function ProfilesRoute() {
+  const navigate = useNavigate()
+  const { authed, booting, user, setAuthed } = useApp()
+
+  if (!authed) return <Navigate to="/login" replace />
+  if (booting) return <LoadingScreen />
+
+  function handleLogout() {
+    logout()
+    setAuthed(false)
+  }
+
+  return (
+    <div className="h-screen flex flex-col overflow-hidden" style={{ background: 'var(--color-bg)' }}>
+      <header className="flex items-center justify-between px-4 py-3 bg-white border-b border-warm-200 flex-shrink-0 shadow-subtle">
+        <button onClick={() => navigate('/')} className="flex items-center gap-2 hover:opacity-75 transition-opacity">
+          <img src="https://i.imgur.com/3vT9jwF.jpeg" alt="Voca" className="w-7 h-7 rounded-lg object-cover" />
+          <span className="font-display font-bold text-warm-900 text-base">Voca</span>
+        </button>
+        <div className="flex items-center gap-3">
+          <span className="text-xs text-warm-400 font-sans">Select a profile</span>
+          <ProfileMenu name={user?.name} email={user?.email} onLogout={handleLogout} />
+        </div>
+      </header>
+      <div className="flex-1 overflow-y-auto">
+        <ProfileSelector />
+      </div>
+    </div>
+  )
+}
+
+// ── /board, /board/journal ──────────────────────────────────────────────
+
+function BoardRoute() {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const { state, dispatch } = useApp()
+  const { activeProfileId, activeProfile, boards, activeBoardId, sentenceBuffer } = state
+  const [showWhoIAm, setShowWhoIAm] = useState(false)
+  const showJournal = location.pathname === '/board/journal'
 
   // High contrast
   useEffect(() => {
@@ -82,15 +169,15 @@ export default function App() {
 
   // Gap timer
   useEffect(() => {
-    if (activeProfileId && activeBoardId && mode === 'user') {
+    if (activeProfileId && activeBoardId && !showJournal) {
       startBrowseTimer(activeProfileId, activeBoardId)
     }
-  }, [activeBoardId, activeProfileId, mode])
+  }, [activeBoardId, activeProfileId, showJournal])
 
   function handleSelectBoard(boardId) {
     if (!boardId) return
     dispatch({ type: 'SET_ACTIVE_BOARD', boardId })
-    setShowJournal(false)
+    if (showJournal) navigate('/board')
   }
 
   function handleBoardSymbolTap(symbol) {
@@ -98,74 +185,6 @@ export default function App() {
     dispatch({ type: 'ADD_TO_SENTENCE', symbol })
     recordTap(activeProfileId, previousLabel, symbol.label, activeBoardId)
     markTappedOnBoard()
-  }
-
-  if (appStage === 'landing') {
-    return (
-      <LandingPage
-        onEnter={() => goToStage('app')}
-        authed={authed}
-        userName={user?.name}
-        userEmail={user?.email}
-        onLogout={handleLogout}
-      />
-    )
-  }
-
-  if (!authed) {
-    return <AuthPage onAuthed={() => setAuthed(true)} onBackToLanding={() => goToStage('landing')} />
-  }
-
-  if (booting) {
-    return (
-      <div className="h-screen flex items-center justify-center" style={{ background: 'var(--color-bg)' }}>
-        <div className="text-warm-400 text-sm font-sans">Loading...</div>
-      </div>
-    )
-  }
-
-  if (!activeProfileId) {
-    return (
-      <div className="h-screen flex flex-col overflow-hidden" style={{ background: 'var(--color-bg)' }}>
-        <header className="flex items-center justify-between px-4 py-3 bg-white border-b border-warm-200 flex-shrink-0 shadow-subtle">
-          <button onClick={() => goToStage('landing')} className="flex items-center gap-2 hover:opacity-75 transition-opacity">
-            <img src="https://i.imgur.com/3vT9jwF.jpeg" alt="Voca" className="w-7 h-7 rounded-lg object-cover" />
-            <span className="font-display font-bold text-warm-900 text-base">Voca</span>
-          </button>
-          <div className="flex items-center gap-3">
-            <span className="text-xs text-warm-400 font-sans">Select a profile</span>
-            <ProfileMenu name={user?.name} email={user?.email} onLogout={handleLogout} />
-          </div>
-        </header>
-        <div className="flex-1 overflow-y-auto">
-          <ProfileSelector />
-        </div>
-      </div>
-    )
-  }
-
-  if (mode === 'caregiver') {
-    return (
-      <div className="h-screen flex overflow-hidden bg-warm-50">
-        <CaregiverSidebar
-          activeProfile={activeProfile}
-          activeTab={caregiverTab}
-          onTabChange={setCaregiverTab}
-          onSwitchToUser={() => switchMode('user')}
-          onLogoClick={() => goToStage('landing')}
-          userName={user?.name}
-          userEmail={user?.email}
-          onLogout={handleLogout}
-        />
-
-        <main className="flex-1 overflow-hidden flex flex-col" style={{ background: 'var(--color-bg)' }}>
-          {caregiverTab === 'overview'    && <OverviewTab />}
-          {caregiverTab === 'insights'   && <InsightsDashboard />}
-          {caregiverTab === 'boardeditor' && <BoardEditorTab />}
-          {caregiverTab === 'companion'  && <CompanionTab />}
-        </main>
-      </div>
-    )
   }
 
   return (
@@ -176,11 +195,11 @@ export default function App() {
         activeBoardId={activeBoardId}
         showJournal={showJournal}
         onSelectBoard={handleSelectBoard}
-        onLogoClick={() => goToStage('landing')}
-        onJournalToggle={() => setShowJournal(v => !v)}
+        onLogoClick={() => navigate('/')}
+        onJournalToggle={() => navigate(showJournal ? '/board' : '/board/journal')}
         onWhoAmI={() => setShowWhoIAm(true)}
-        onSwitchProfile={() => dispatch({ type: 'SET_ACTIVE_PROFILE', profileId: null })}
-        onSwitchToCaregiver={() => switchMode('caregiver')}
+        onSwitchProfile={() => { dispatch({ type: 'SET_ACTIVE_PROFILE', profileId: null }); navigate('/profiles') }}
+        onSwitchToCaregiver={() => navigate('/caregiver/overview')}
       />
 
       <main
@@ -207,5 +226,62 @@ export default function App() {
 
       {showWhoIAm && <WhoIAmCard onClose={() => setShowWhoIAm(false)} />}
     </div>
+  )
+}
+
+// ── /caregiver/:tab ──────────────────────────────────────────────────────
+
+function CaregiverRoute() {
+  const navigate = useNavigate()
+  const { tab } = useParams()
+  const { state, user, setAuthed } = useApp()
+  const { activeProfile } = state
+
+  if (!CAREGIVER_TAB_IDS.includes(tab)) {
+    return <Navigate to="/caregiver/overview" replace />
+  }
+
+  function handleLogout() {
+    logout()
+    setAuthed(false)
+  }
+
+  return (
+    <div className="h-screen flex overflow-hidden bg-warm-50">
+      <CaregiverSidebar
+        activeProfile={activeProfile}
+        activeTab={tab}
+        onTabChange={id => navigate(`/caregiver/${id}`)}
+        onSwitchToUser={() => navigate('/board')}
+        onLogoClick={() => navigate('/')}
+        userName={user?.name}
+        userEmail={user?.email}
+        onLogout={handleLogout}
+      />
+
+      <main className="flex-1 overflow-hidden flex flex-col" style={{ background: 'var(--color-bg)' }}>
+        {tab === 'overview'    && <OverviewTab />}
+        {tab === 'insights'    && <InsightsDashboard />}
+        {tab === 'boardeditor' && <BoardEditorTab />}
+        {tab === 'companion'   && <CompanionTab />}
+      </main>
+    </div>
+  )
+}
+
+// ── App ──────────────────────────────────────────────────────────────────
+
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<LandingRoute />} />
+      <Route path="/login" element={<LoginRoute />} />
+      <Route path="/profiles" element={<ProfilesRoute />} />
+      <Route path="/board" element={<RequireProfile><BoardRoute /></RequireProfile>} />
+      <Route path="/board/journal" element={<RequireProfile><BoardRoute /></RequireProfile>} />
+      <Route path="/caregiver" element={<Navigate to="/caregiver/overview" replace />} />
+      <Route path="/caregiver/:tab" element={<RequireProfile><CaregiverRoute /></RequireProfile>} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   )
 }
