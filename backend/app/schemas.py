@@ -16,6 +16,7 @@ class CamelModel(BaseModel):
 
 
 class RegisterRequest(CamelModel):
+    name: str = Field(min_length=1, max_length=100)
     email: EmailStr
     password: str = Field(min_length=8, max_length=128)
 
@@ -33,6 +34,7 @@ class TokenResponse(CamelModel):
 
 class UserOut(CamelModel):
     id: str
+    name: str
     email: str
     created_at: datetime
 

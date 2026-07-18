@@ -1,9 +1,9 @@
 import { request, setToken, clearToken } from './client'
 
 
-export async function register(email, password) {
+export async function register(name, email, password) {
   const data = await request('/api/auth/register', {
-    method: 'POST', body: { email, password }, auth: false,
+    method: 'POST', body: { name, email, password }, auth: false,
   })
   setToken(data.accessToken)
   return data.user

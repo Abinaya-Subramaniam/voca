@@ -4,6 +4,15 @@ import Navbar from '../shared/Navbar'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
+function UserIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+      <circle cx="12" cy="7" r="4"/>
+    </svg>
+  )
+}
+
 function MailIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -92,6 +101,7 @@ function PasswordField({ id, label, value, onChange, autoComplete, placeholder, 
 
 export default function AuthPage({ onAuthed, onBackToLanding }) {
   const [mode, setMode] = useState('login')
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -102,6 +112,7 @@ export default function AuthPage({ onAuthed, onBackToLanding }) {
   const [loading, setLoading] = useState(false)
 
   const isRegister = mode === 'register'
+  const nameValid = name.trim().length > 0
   const emailValid = EMAIL_RE.test(email.trim())
   const passwordLongEnough = password.length >= 8
   const passwordsMatch = !isRegister || password === confirmPassword
@@ -110,12 +121,14 @@ export default function AuthPage({ onAuthed, onBackToLanding }) {
     : null
 
   const canSubmit = emailValid
+    && (isRegister ? nameValid : true)
     && (isRegister ? passwordLongEnough : password.length > 0)
     && (isRegister ? confirmPassword === password : true)
     && !loading
 
   function switchMode() {
     setMode(m => (m === 'login' ? 'register' : 'login'))
+    setName('')
     setPassword('')
     setConfirmPassword('')
     setTouched(false)
@@ -132,7 +145,7 @@ export default function AuthPage({ onAuthed, onBackToLanding }) {
     try {
       const user = mode === 'login'
         ? await login(email.trim(), password)
-        : await register(email.trim(), password)
+        : await register(name.trim(), email.trim(), password)
       onAuthed(user)
     } catch (err) {
       setError(err.message)
@@ -178,6 +191,37 @@ export default function AuthPage({ onAuthed, onBackToLanding }) {
 
         <form onSubmit={handleSubmit} noValidate>
 
+          {/* Name — register only */}
+          {isRegister && (
+            <div className="mb-4">
+              <label htmlFor="name" className="block font-sans font-semibold text-warm-700 text-xs mb-1.5">
+                Full name
+              </label>
+              <div className="relative">
+                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-warm-400 pointer-events-none">
+                  <UserIcon />
+                </span>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  required
+                  autoComplete="name"
+                  className={`w-full border rounded-xl pl-10 pr-4 py-3 font-sans text-warm-900 text-base focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent placeholder:text-warm-400 transition-colors ${
+                    touched && !nameValid ? 'border-red-300' : 'border-warm-200'
+                  }`}
+                  placeholder="Your name"
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  autoFocus
+                />
+              </div>
+              {touched && !nameValid && (
+                <p className="text-[12.5px] font-sans text-red-500 mt-1.5">Enter your name</p>
+              )}
+            </div>
+          )}
+
           {/* Email */}
           <div className="mb-4">
             <label htmlFor="email" className="block font-sans font-semibold text-warm-700 text-xs mb-1.5">
@@ -199,7 +243,7 @@ export default function AuthPage({ onAuthed, onBackToLanding }) {
                 placeholder="you@example.com"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                autoFocus
+                autoFocus={!isRegister}
               />
             </div>
             {touched && email && !emailValid && (

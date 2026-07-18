@@ -89,7 +89,7 @@ const CAREGIVER_TABS = [
   { id: 'companion',  label: 'Companion'    },
 ]
 
-function CaregiverNav({ activeProfile, activeTab, onTabChange, onSwitchToUser, onLogoClick, userEmail, onLogout }) {
+function CaregiverNav({ activeProfile, activeTab, onTabChange, onSwitchToUser, onLogoClick, userName, userEmail, onLogout }) {
   return (
     <header className="flex flex-col bg-white border-b border-warm-200 flex-shrink-0 shadow-subtle">
       {/* Top row */}
@@ -118,7 +118,7 @@ function CaregiverNav({ activeProfile, activeTab, onTabChange, onSwitchToUser, o
               Back to {activeProfile.name}'s Board
             </button>
           )}
-          <ProfileMenu email={userEmail} onLogout={onLogout} />
+          <ProfileMenu name={userName} email={userEmail} onLogout={onLogout} />
         </div>
       </div>
 
@@ -198,6 +198,7 @@ export default function App() {
       <LandingPage
         onEnter={() => goToStage('app')}
         authed={authed}
+        userName={user?.name}
         userEmail={user?.email}
         onLogout={handleLogout}
       />
@@ -228,7 +229,7 @@ export default function App() {
           </button>
           <div className="flex items-center gap-3">
             <span className="text-xs text-warm-400 font-sans">Select a profile</span>
-            <ProfileMenu email={user?.email} onLogout={handleLogout} />
+            <ProfileMenu name={user?.name} email={user?.email} onLogout={handleLogout} />
           </div>
         </header>
         <div className="flex-1 overflow-y-auto">
@@ -247,6 +248,7 @@ export default function App() {
           onTabChange={setCaregiverTab}
           onSwitchToUser={() => switchMode('user')}
           onLogoClick={() => goToStage('landing')}
+          userName={user?.name}
           userEmail={user?.email}
           onLogout={handleLogout}
         />

@@ -42,7 +42,7 @@ def seed() -> None:
             print("Demo account already seeded — nothing to do.")
             return
 
-        user = User(email=DEMO_EMAIL, password_hash=hash_password(DEMO_PASSWORD))
+        user = User(email=DEMO_EMAIL, name="Demo Caregiver", password_hash=hash_password(DEMO_PASSWORD))
         db.add(user)
         db.flush()
 

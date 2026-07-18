@@ -1,17 +1,19 @@
 import { useEffect, useRef, useState } from 'react'
 
-function displayName(email) {
+// Fallback only for accounts created before the "name" field existed at
+// signup — every new registration always has a real name.
+function fallbackName(email) {
   if (!email) return 'Account'
   const local = email.split('@')[0]
   const match = local.match(/[A-Za-z][A-Za-z0-9._-]*/)
-  const name = match ? match[0] : local
-  return name.charAt(0).toUpperCase() + name.slice(1)
+  const guess = match ? match[0] : local
+  return guess.charAt(0).toUpperCase() + guess.slice(1)
 }
 
-export default function ProfileMenu({ email, onLogout, onDashboard, dashboardLabel = 'Dashboard' }) {
+export default function ProfileMenu({ name, email, onLogout, onDashboard, dashboardLabel = 'Dashboard' }) {
   const [open, setOpen] = useState(false)
   const rootRef = useRef(null)
-  const name = displayName(email)
+  const displayName = name?.trim() || fallbackName(email)
 
   useEffect(() => {
     if (!open) return
@@ -26,12 +28,12 @@ export default function ProfileMenu({ email, onLogout, onDashboard, dashboardLab
     <div ref={rootRef} className="relative flex-shrink-0">
       <button
         onClick={() => setOpen(v => !v)}
-        title={name}
+        title={displayName}
         aria-haspopup="menu"
         aria-expanded={open}
         className="w-9 h-9 rounded-full bg-gradient-to-br from-teal-500 to-teal-700 flex items-center justify-center text-white font-display font-bold text-sm hover:brightness-105 active:scale-95 transition-all shadow-subtle"
       >
-        {name.charAt(0).toUpperCase()}
+        {displayName.charAt(0).toUpperCase()}
       </button>
 
       {open && (
@@ -41,7 +43,7 @@ export default function ProfileMenu({ email, onLogout, onDashboard, dashboardLab
         >
           <div className="px-4 py-3 border-b border-warm-100">
             <div className="text-sm font-sans font-semibold text-warm-800 truncate">
-              {name}
+              {displayName}
             </div>
           </div>
 

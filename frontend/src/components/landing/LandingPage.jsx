@@ -127,7 +127,7 @@ function PrivacyContent() {
   )
 }
 
-export default function LandingPage({ onEnter, authed, userEmail, onLogout }) {
+export default function LandingPage({ onEnter, authed, userName, userEmail, onLogout }) {
   const [modal, setModal] = useState(null) // null | 'terms' | 'privacy'
   const [scrolled, setScrolled] = useState(false)
 
@@ -161,7 +161,7 @@ export default function LandingPage({ onEnter, authed, userEmail, onLogout }) {
         </a>
 
         {authed ? (
-          <ProfileMenu email={userEmail} onLogout={onLogout} onDashboard={onEnter} />
+          <ProfileMenu name={userName} email={userEmail} onLogout={onLogout} onDashboard={onEnter} />
         ) : (
           <button onClick={onEnter} style={{
             padding: '10px 22px',
