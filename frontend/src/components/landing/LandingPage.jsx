@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Navbar from '../shared/Navbar'
+import ProfileMenu from '../shared/ProfileMenu'
 
 const BTN = {
   primary: {
@@ -126,7 +127,7 @@ function PrivacyContent() {
   )
 }
 
-export default function LandingPage({ onEnter }) {
+export default function LandingPage({ onEnter, authed, userEmail, onLogout }) {
   const [modal, setModal] = useState(null) // null | 'terms' | 'privacy'
   const [scrolled, setScrolled] = useState(false)
 
@@ -158,19 +159,24 @@ export default function LandingPage({ onEnter }) {
         >
           Contact Us
         </a>
-        <button onClick={onEnter} style={{
-          padding: '10px 22px',
-          background: 'linear-gradient(135deg, #34AB92, #1F7A65)', color: 'white',
-          border: 'none', borderRadius: '100px', fontSize: '14.5px', fontWeight: 700,
-          cursor: 'pointer', fontFamily: 'Nunito, sans-serif', letterSpacing: '0.01em',
-          boxShadow: '0 4px 14px rgba(45,155,131,0.35)',
-          transition: 'all 0.15s',
-        }}
-          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(45,155,131,0.45)' }}
-          onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(45,155,131,0.35)' }}
-        >
-          Open Voca
-        </button>
+
+        {authed ? (
+          <ProfileMenu email={userEmail} onLogout={onLogout} onDashboard={onEnter} />
+        ) : (
+          <button onClick={onEnter} style={{
+            padding: '10px 22px',
+            background: 'linear-gradient(135deg, #34AB92, #1F7A65)', color: 'white',
+            border: 'none', borderRadius: '100px', fontSize: '14.5px', fontWeight: 700,
+            cursor: 'pointer', fontFamily: 'Nunito, sans-serif', letterSpacing: '0.01em',
+            boxShadow: '0 4px 14px rgba(45,155,131,0.35)',
+            transition: 'all 0.15s',
+          }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(45,155,131,0.45)' }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(45,155,131,0.35)' }}
+          >
+            Try Voca
+          </button>
+        )}
       </Navbar>
 
       {/* Hero */}

@@ -115,6 +115,7 @@ export function AppProvider({ children }) {
   const [state, baseDispatch] = useReducer(reducer, initialState)
   const [authed, setAuthed] = useState(isAuthenticated())
   const [booting, setBooting] = useState(isAuthenticated())
+  const [user, setUser] = useState(null)
   const profileIdRef = useRef(null)
   profileIdRef.current = state.activeProfileId
 
@@ -182,14 +183,18 @@ export function AppProvider({ children }) {
     }
   }, [selectProfile, refreshBoards, refreshProfiles, refreshActiveProfile])
 
-  // Boot: load profiles and restore the active one
+  // Boot: load the account, profiles, and restore the active one
   useEffect(() => {
-    if (!authed) return
+    if (!authed) { setUser(null); return }
     let cancelled = false
     async function boot() {
       try {
-        const profiles = await api.listProfiles()
+        const [profiles, me] = await Promise.all([
+          api.listProfiles(),
+          api.getMe().catch(() => null),
+        ])
         if (cancelled) return
+        setUser(me)
         const storedId = localStorage.getItem(ACTIVE_KEY)
         const resolved = profiles.find(p => p.id === storedId) || null
         if (resolved) {
@@ -225,10 +230,11 @@ export function AppProvider({ children }) {
     authed,
     setAuthed,
     booting,
+    user,
     selectProfile,
     refreshBoards,
     refreshProfiles,
-  }), [state, dispatch, authed, booting, selectProfile, refreshBoards, refreshProfiles])
+  }), [state, dispatch, authed, booting, user, selectProfile, refreshBoards, refreshProfiles])
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>
 }

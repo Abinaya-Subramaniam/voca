@@ -5,6 +5,7 @@ import ProfileSelector from './components/profile/ProfileSelector'
 import SentenceBar from './components/sentence/SentenceBar'
 import AuthPage from './components/auth/AuthPage'
 import InsightsDashboard from './components/insights/InsightsDashboard'
+import ProfileMenu from './components/shared/ProfileMenu'
 import { logout } from './api'
 import { recordTap } from './engine/predictionEngine'
 import { startBrowseTimer, markTappedOnBoard } from './engine/gapDetector'
@@ -90,7 +91,7 @@ const CAREGIVER_TABS = [
   { id: 'companion',  label: 'Companion'    },
 ]
 
-function CaregiverNav({ activeProfile, activeTab, onTabChange, onSwitchToUser, onLogoClick }) {
+function CaregiverNav({ activeProfile, activeTab, onTabChange, onSwitchToUser, onLogoClick, userEmail, onLogout }) {
   return (
     <header className="flex flex-col bg-white border-b border-warm-200 flex-shrink-0 shadow-subtle">
       {/* Top row */}
@@ -107,17 +108,20 @@ function CaregiverNav({ activeProfile, activeTab, onTabChange, onSwitchToUser, o
           </span>
         </div>
 
-        {activeProfile && (
-          <button
-            onClick={onSwitchToUser}
-            className="flex items-center gap-1.5 text-xs font-sans font-semibold text-teal-600 hover:text-teal-700 transition-colors"
-          >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M19 12H5M12 5l-7 7 7 7"/>
-            </svg>
-            Back to {activeProfile.name}'s Board
-          </button>
-        )}
+        <div className="flex items-center gap-3">
+          {activeProfile && (
+            <button
+              onClick={onSwitchToUser}
+              className="flex items-center gap-1.5 text-xs font-sans font-semibold text-teal-600 hover:text-teal-700 transition-colors"
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M19 12H5M12 5l-7 7 7 7"/>
+              </svg>
+              Back to {activeProfile.name}'s Board
+            </button>
+          )}
+          <ProfileMenu email={userEmail} onLogout={onLogout} />
+        </div>
       </div>
 
       {/* Tab bar */}
@@ -145,7 +149,7 @@ function CaregiverNav({ activeProfile, activeTab, onTabChange, onSwitchToUser, o
 // ── App ───────────────────────────────────────────────────────────────────────
 
 export default function App() {
-  const { state, dispatch, authed, setAuthed, booting } = useApp()
+  const { state, dispatch, authed, setAuthed, booting, user } = useApp()
   const { activeProfileId, activeProfile, activeBoardId, sentenceBuffer, mode } = state
 
   const [appStage, setAppStage]     = useState(() => sessionStorage.getItem('voca_stage') || 'landing')
@@ -156,6 +160,11 @@ export default function App() {
   function goToStage(stage) {
     sessionStorage.setItem('voca_stage', stage)
     setAppStage(stage)
+  }
+
+  function handleLogout() {
+    logout()
+    setAuthed(false)
   }
 
   function switchMode(newMode) {
@@ -189,7 +198,14 @@ export default function App() {
 
   // ── Landing ────────────────────────────────────────────────────────────────
   if (appStage === 'landing') {
-    return <LandingPage onEnter={() => goToStage('app')} />
+    return (
+      <LandingPage
+        onEnter={() => goToStage('app')}
+        authed={authed}
+        userEmail={user?.email}
+        onLogout={handleLogout}
+      />
+    )
   }
 
   // ── Auth gate ──────────────────────────────────────────────────────────────
@@ -218,12 +234,7 @@ export default function App() {
           </button>
           <div className="flex items-center gap-3">
             <span className="text-xs text-warm-400 font-sans">Select a profile</span>
-            <button
-              onClick={() => { logout(); setAuthed(false) }}
-              className="text-xs font-sans text-warm-400 hover:text-red-500 transition-colors"
-            >
-              Sign out
-            </button>
+            <ProfileMenu email={user?.email} onLogout={handleLogout} />
           </div>
         </header>
         <div className="flex-1 overflow-y-auto">
@@ -243,6 +254,8 @@ export default function App() {
           onTabChange={setCaregiverTab}
           onSwitchToUser={() => switchMode('user')}
           onLogoClick={() => goToStage('landing')}
+          userEmail={user?.email}
+          onLogout={handleLogout}
         />
 
         {caregiverTab === 'overview'    && <OverviewTab />}
