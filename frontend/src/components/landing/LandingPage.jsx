@@ -2,8 +2,8 @@ import { useState } from 'react'
 
 const BTN = {
   primary: {
-    padding: '13px 32px', background: '#2D9B83', color: 'white',
-    border: 'none', borderRadius: '12px', fontSize: '14px',
+    padding: '15px 34px', background: '#2D9B83', color: 'white',
+    border: 'none', borderRadius: '12px', fontSize: '15.5px',
     fontFamily: 'Nunito, sans-serif', fontWeight: 800,
     cursor: 'pointer', transition: 'all 0.15s',
   },
@@ -127,61 +127,85 @@ function PrivacyContent() {
 
 export default function LandingPage({ onEnter }) {
   const [modal, setModal] = useState(null) // null | 'terms' | 'privacy'
+  const [scrolled, setScrolled] = useState(false)
+
+  function handleScroll(e) {
+    const isScrolled = e.currentTarget.scrollTop > 8
+    setScrolled(prev => (prev === isScrolled ? prev : isScrolled))
+  }
 
   return (
-    <div className="h-screen overflow-y-auto" style={{ background: '#FAFAF8', fontFamily: "'DM Sans', system-ui, sans-serif" }}>
+    <div
+      className="h-screen overflow-y-auto"
+      onScroll={handleScroll}
+      style={{ background: '#FAFAF8', fontFamily: "'DM Sans', system-ui, sans-serif" }}
+    >
 
       {modal === 'terms'   && <Modal title="Terms of Service" onClose={() => setModal(null)}><TermsContent /></Modal>}
       {modal === 'privacy' && <Modal title="Privacy Policy"   onClose={() => setModal(null)}><PrivacyContent /></Modal>}
 
-      {/* Sticky nav */}
+      {/* Full-width glass nav */}
       <nav style={{
-        position: 'sticky', top: 0, zIndex: 50,
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '0 2rem', height: '60px',
-        background: 'rgba(250,250,248,0.85)', backdropFilter: 'blur(12px)',
-        borderBottom: '1px solid #E8E6E1',
+        position: 'sticky', top: 0, zIndex: 50, width: '100%',
+        background: scrolled ? 'rgba(255,255,255,0.82)' : 'rgba(255,255,255,0.6)',
+        backdropFilter: 'blur(20px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+        borderBottom: scrolled ? '1px solid rgba(232,230,225,0.9)' : '1px solid rgba(232,230,225,0.35)',
+        boxShadow: scrolled ? '0 4px 24px rgba(44,42,38,0.06)' : 'none',
+        transition: 'all 0.35s cubic-bezier(0.4,0,0.2,1)',
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <div style={{
-            width: '28px', height: '28px', borderRadius: '8px',
-            background: '#2D9B83', display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>
-            <span style={{ color: 'white', fontWeight: 800, fontSize: '15px', fontFamily: 'Nunito, sans-serif' }}>V</span>
+        <div style={{
+          maxWidth: '1100px', margin: '0 auto', padding: '0 2rem',
+          height: scrolled ? '60px' : '72px',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          flexWrap: 'wrap', gap: '10px',
+          transition: 'height 0.35s cubic-bezier(0.4,0,0.2,1)',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
+            <div style={{
+              width: '30px', height: '30px', borderRadius: '9px',
+              background: 'linear-gradient(135deg, #34AB92, #1F7A65)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 2px 8px rgba(45,155,131,0.35)',
+            }}>
+              <span style={{ color: 'white', fontWeight: 800, fontSize: '15px', fontFamily: 'Nunito, sans-serif' }}>V</span>
+            </div>
+            <span style={{ fontFamily: 'Nunito, sans-serif', fontWeight: 800, fontSize: '17px', color: '#2C2A26' }}>Voca</span>
           </div>
-          <span style={{ fontFamily: 'Nunito, sans-serif', fontWeight: 800, fontSize: '17px', color: '#2C2A26' }}>Voca</span>
-        </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <a href="#contact" style={{
-            fontSize: '15px', fontWeight: 600, color: '#6B6860',
-            textDecoration: 'none', padding: '6px 14px', borderRadius: '8px',
-            border: '1.5px solid #E8E6E1', background: 'white',
-            transition: 'all 0.15s', display: 'inline-flex', alignItems: 'center', gap: '5px',
-          }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = '#2D9B83'; e.currentTarget.style.color = '#2D9B83' }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = '#E8E6E1'; e.currentTarget.style.color = '#6B6860' }}
-          >
-            Contact Us
-          </a>
-          <button onClick={onEnter} style={{
-            padding: '8px 20px', background: '#2D9B83', color: 'white',
-            border: 'none', borderRadius: '10px', fontSize: '15px', fontWeight: 600,
-            cursor: 'pointer', fontFamily: 'Nunito, sans-serif', letterSpacing: '0.01em',
-            transition: 'background 0.15s',
-          }}
-            onMouseEnter={e => e.target.style.background = '#238A72'}
-            onMouseLeave={e => e.target.style.background = '#2D9B83'}
-          >
-            Open App →
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <a href="#contact" style={{
+              fontSize: '14px', fontWeight: 600, color: '#4A473F',
+              textDecoration: 'none', padding: '9px 16px', borderRadius: '100px',
+              border: '1px solid rgba(232,230,225,0.9)', background: 'rgba(255,255,255,0.55)',
+              transition: 'all 0.15s', display: 'inline-flex', alignItems: 'center', gap: '5px',
+            }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = '#2D9B83'; e.currentTarget.style.color = '#2D9B83'; e.currentTarget.style.background = 'rgba(255,255,255,0.9)' }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(232,230,225,0.9)'; e.currentTarget.style.color = '#4A473F'; e.currentTarget.style.background = 'rgba(255,255,255,0.55)' }}
+            >
+              Contact Us
+            </a>
+            <button onClick={onEnter} style={{
+              padding: '10px 22px',
+              background: 'linear-gradient(135deg, #34AB92, #1F7A65)', color: 'white',
+              border: 'none', borderRadius: '100px', fontSize: '14.5px', fontWeight: 700,
+              cursor: 'pointer', fontFamily: 'Nunito, sans-serif', letterSpacing: '0.01em',
+              boxShadow: '0 4px 14px rgba(45,155,131,0.35)',
+              transition: 'all 0.15s',
+            }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(45,155,131,0.45)' }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(45,155,131,0.35)' }}
+            >
+              Open App →
+            </button>
+          </div>
         </div>
       </nav>
 
       {/* Hero */}
       <section style={{
-        maxWidth: '860px', margin: '0 auto', padding: '80px 2rem 60px',
-        display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '60px', alignItems: 'center',
+        maxWidth: '1100px', margin: '0 auto', padding: '88px 2rem 64px',
+        display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '72px', alignItems: 'center',
       }}>
         <div>
           <div style={{
@@ -197,24 +221,24 @@ export default function LandingPage({ onEnter }) {
 
           <h1 style={{
             fontFamily: 'Nunito, sans-serif', fontWeight: 900,
-            fontSize: 'clamp(2.6rem, 5vw, 3.8rem)', lineHeight: 1.0,
-            color: '#2C2A26', marginBottom: '20px', letterSpacing: '-0.02em',
+            fontSize: 'clamp(2.9rem, 5.5vw, 4.6rem)', lineHeight: 1.02,
+            color: '#2C2A26', marginBottom: '22px', letterSpacing: '-0.02em',
           }}>
             A voice<br />
             for <span style={{ color: '#2D9B83', fontStyle: 'italic' }}>everyone.</span>
           </h1>
 
           <p style={{
-            fontSize: '1.05rem', lineHeight: 1.7, color: '#6B6860',
-            marginBottom: '36px', maxWidth: '420px',
+            fontSize: '1.2rem', lineHeight: 1.7, color: '#6B6860',
+            marginBottom: '38px', maxWidth: '480px',
           }}>
             Voca helps non-verbal and minimally verbal individuals communicate — with AI that learns how they speak and gets smarter every week.
           </p>
 
-          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
             <button onClick={onEnter} style={{
-              padding: '14px 28px', background: '#2D9B83', color: 'white',
-              border: 'none', borderRadius: '14px', fontSize: '15px',
+              padding: '16px 32px', background: '#2D9B83', color: 'white',
+              border: 'none', borderRadius: '14px', fontSize: '16.5px',
               fontFamily: 'Nunito, sans-serif', fontWeight: 800,
               cursor: 'pointer', transition: 'all 0.15s', letterSpacing: '-0.01em',
             }}
@@ -224,8 +248,8 @@ export default function LandingPage({ onEnter }) {
               Start communicating →
             </button>
             <a href="#how-it-works" style={{
-              padding: '14px 24px', background: 'white', color: '#6B6860',
-              border: '1.5px solid #E8E6E1', borderRadius: '14px', fontSize: '14px',
+              padding: '16px 26px', background: 'white', color: '#6B6860',
+              border: '1.5px solid #E8E6E1', borderRadius: '14px', fontSize: '15.5px',
               fontWeight: 500, cursor: 'pointer', textDecoration: 'none',
               transition: 'all 0.15s', display: 'inline-flex', alignItems: 'center',
             }}
@@ -320,7 +344,7 @@ export default function LandingPage({ onEnter }) {
       </section>
 
       {/* Stats bar */}
-      <section style={{ maxWidth: '860px', margin: '0 auto', padding: '0 2rem 60px' }}>
+      <section style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 2rem 60px' }}>
         <div style={{
           display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
           gap: '1px', background: '#E8E6E1', borderRadius: '16px', overflow: 'hidden',
@@ -333,12 +357,12 @@ export default function LandingPage({ onEnter }) {
           ].map(({ num, label, accent }) => (
             <div key={num} style={{ background: 'white', padding: '28px 24px', textAlign: 'center' }}>
               <div style={{
-                fontFamily: 'Nunito, sans-serif', fontWeight: 900, fontSize: '2.2rem',
-                color: accent, lineHeight: 1, marginBottom: '6px',
+                fontFamily: 'Nunito, sans-serif', fontWeight: 900, fontSize: '2.6rem',
+                color: accent, lineHeight: 1, marginBottom: '8px',
               }}>
                 {num}
               </div>
-              <div style={{ fontSize: '14.5px', color: '#6B6860', lineHeight: 1.4 }}>{label}</div>
+              <div style={{ fontSize: '15.5px', color: '#6B6860', lineHeight: 1.4 }}>{label}</div>
             </div>
           ))}
         </div>
@@ -349,7 +373,7 @@ export default function LandingPage({ onEnter }) {
         background: 'white', borderTop: '1px solid #E8E6E1', borderBottom: '1px solid #E8E6E1',
         padding: '72px 2rem',
       }}>
-        <div style={{ maxWidth: '860px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '52px' }}>
             <div style={{
               display: 'inline-block', padding: '4px 14px',
@@ -361,12 +385,12 @@ export default function LandingPage({ onEnter }) {
             </div>
             <h2 style={{
               fontFamily: 'Nunito, sans-serif', fontWeight: 900,
-              fontSize: '2.2rem', color: '#2C2A26', margin: '0 0 10px',
+              fontSize: '2.6rem', color: '#2C2A26', margin: '0 0 12px',
               letterSpacing: '-0.02em',
             }}>
               Simple to use. Intelligent underneath.
             </h2>
-            <p style={{ fontSize: '1rem', color: '#6B6860', margin: 0 }}>
+            <p style={{ fontSize: '1.15rem', color: '#6B6860', margin: 0 }}>
               Three steps between a thought and a spoken word.
             </p>
           </div>
@@ -391,11 +415,11 @@ export default function LandingPage({ onEnter }) {
                 <div style={{ fontSize: '2rem', marginBottom: '16px' }}>{emoji}</div>
                 <div style={{
                   fontFamily: 'Nunito, sans-serif', fontWeight: 800,
-                  fontSize: '1.1rem', color: '#2C2A26', marginBottom: '10px',
+                  fontSize: '1.2rem', color: '#2C2A26', marginBottom: '10px',
                 }}>
                   {title}
                 </div>
-                <div style={{ fontSize: '15px', color: '#6B6860', lineHeight: 1.6 }}>{desc}</div>
+                <div style={{ fontSize: '16px', color: '#6B6860', lineHeight: 1.6 }}>{desc}</div>
               </div>
             ))}
           </div>
@@ -412,7 +436,7 @@ export default function LandingPage({ onEnter }) {
       </section>
 
       {/* Journal feature */}
-      <section id="journal" style={{ padding: '72px 2rem', maxWidth: '860px', margin: '0 auto' }}>
+      <section id="journal" style={{ padding: '72px 2rem', maxWidth: '1100px', margin: '0 auto' }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '60px', alignItems: 'center' }}>
           <div style={{ position: 'relative' }}>
             <div style={{
@@ -502,12 +526,12 @@ export default function LandingPage({ onEnter }) {
             </div>
             <h2 style={{
               fontFamily: 'Nunito, sans-serif', fontWeight: 900,
-              fontSize: '2.0rem', color: '#2C2A26', margin: '0 0 14px',
+              fontSize: '2.3rem', color: '#2C2A26', margin: '0 0 16px',
               letterSpacing: '-0.02em', lineHeight: 1.1,
             }}>
               A private diary — in their own words.
             </h2>
-            <p style={{ fontSize: '1rem', color: '#6B6860', lineHeight: 1.7, marginBottom: '28px' }}>
+            <p style={{ fontSize: '1.15rem', color: '#6B6860', lineHeight: 1.7, marginBottom: '28px' }}>
               The Journal lets individuals record their day, feelings, and thoughts using the same symbols they communicate with. No text to type — just tap and save.
             </p>
 
@@ -539,7 +563,7 @@ export default function LandingPage({ onEnter }) {
       </section>
 
       {/* AI features */}
-      <section id="ai-features" style={{ padding: '72px 2rem', maxWidth: '860px', margin: '0 auto' }}>
+      <section id="ai-features" style={{ padding: '72px 2rem', maxWidth: '1100px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '52px' }}>
           <div style={{
             display: 'inline-block', padding: '4px 14px',
@@ -551,17 +575,17 @@ export default function LandingPage({ onEnter }) {
           </div>
           <h2 style={{
             fontFamily: 'Nunito, sans-serif', fontWeight: 900,
-            fontSize: '2.2rem', color: '#2C2A26', margin: '0 0 10px',
+            fontSize: '2.6rem', color: '#2C2A26', margin: '0 0 12px',
             letterSpacing: '-0.02em',
           }}>
             Intelligence no AAC tool has.
           </h2>
-          <p style={{ fontSize: '1rem', color: '#6B6860', margin: 0 }}>
+          <p style={{ fontSize: '1.15rem', color: '#6B6860', margin: 0 }}>
             Every feature is woven into the core — not bolted on.
           </p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
           {[
             { icon: '⚡', title: 'Predictive suggestions',    desc: 'Predicts the next symbol in real time. Starts with common AAC patterns, gets personal over time.',              bg: '#E8F7F4', border: '#B8E8DF', accent: '#2D9B83' },
             { icon: '🧭', title: 'Adaptive layout',           desc: 'Most-used symbols automatically move to the most accessible positions on the grid.',                           bg: '#E8F7F4', border: '#B8E8DF', accent: '#2D9B83' },
@@ -569,17 +593,17 @@ export default function LandingPage({ onEnter }) {
             { icon: '🎓', title: 'Gemini Vocabulary Coach',   desc: 'Weekly coaching powered by Gemini AI. $150/hr therapist guidance — delivered free, automatically, every week.', bg: '#FDF3E0', border: '#F5DFA0', accent: '#7A5010' },
           ].map(({ icon, title, desc, bg, border }) => (
             <div key={title} style={{
-              background: bg, borderRadius: '16px', padding: '24px',
+              background: bg, borderRadius: '16px', padding: '26px',
               border: `1.5px solid ${border}`,
             }}>
-              <div style={{ fontSize: '1.6rem', marginBottom: '12px' }}>{icon}</div>
+              <div style={{ fontSize: '1.7rem', marginBottom: '12px' }}>{icon}</div>
               <div style={{
                 fontFamily: 'Nunito, sans-serif', fontWeight: 800,
-                fontSize: '1rem', color: '#2C2A26', marginBottom: '8px',
+                fontSize: '1.15rem', color: '#2C2A26', marginBottom: '8px',
               }}>
                 {title}
               </div>
-              <div style={{ fontSize: '15px', color: '#6B6860', lineHeight: 1.6 }}>{desc}</div>
+              <div style={{ fontSize: '16px', color: '#6B6860', lineHeight: 1.6 }}>{desc}</div>
             </div>
           ))}
         </div>
@@ -599,7 +623,7 @@ export default function LandingPage({ onEnter }) {
         background: 'white', borderTop: '1px solid #E8E6E1', borderBottom: '1px solid #E8E6E1',
         padding: '72px 2rem',
       }}>
-        <div style={{ maxWidth: '860px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '52px' }}>
             <div style={{
               display: 'inline-block', padding: '4px 14px',
@@ -611,12 +635,12 @@ export default function LandingPage({ onEnter }) {
             </div>
             <h2 style={{
               fontFamily: 'Nunito, sans-serif', fontWeight: 900,
-              fontSize: '2.2rem', color: '#2C2A26', margin: '0 0 10px',
+              fontSize: '2.6rem', color: '#2C2A26', margin: '0 0 12px',
               letterSpacing: '-0.02em',
             }}>
               Get in touch
             </h2>
-            <p style={{ fontSize: '1rem', color: '#6B6860', margin: 0 }}>
+            <p style={{ fontSize: '1.15rem', color: '#6B6860', margin: 0 }}>
               Questions, feedback, or partnership enquiries — we'd love to hear from you.
             </p>
           </div>
@@ -660,16 +684,16 @@ export default function LandingPage({ onEnter }) {
                 <div>
                   <div style={{
                     fontFamily: 'Nunito, sans-serif', fontWeight: 800,
-                    fontSize: '15px', color: '#2C2A26', marginBottom: '6px',
+                    fontSize: '16px', color: '#2C2A26', marginBottom: '6px',
                   }}>
                     {title}
                   </div>
-                  <div style={{ fontSize: '15px', color: '#6B6860', lineHeight: 1.6, marginBottom: '14px' }}>
+                  <div style={{ fontSize: '15.5px', color: '#6B6860', lineHeight: 1.6, marginBottom: '14px' }}>
                     {desc}
                   </div>
                   <a href={href} style={{
                     display: 'inline-flex', alignItems: 'center', gap: '6px',
-                    fontSize: '15px', fontWeight: 600, color: '#2D9B83',
+                    fontSize: '15.5px', fontWeight: 600, color: '#2D9B83',
                     textDecoration: 'none', borderBottom: '1.5px solid #B8E8DF',
                     paddingBottom: '1px', transition: 'border-color 0.15s',
                   }}
@@ -689,8 +713,8 @@ export default function LandingPage({ onEnter }) {
             background: '#E8F7F4', borderRadius: '12px', border: '1px solid #B8E8DF',
             display: 'flex', alignItems: 'center', gap: '10px',
           }}>
-            <span style={{ fontSize: '16px' }}>⏱️</span>
-            <span style={{ fontSize: '15px', color: '#2C2A26' }}>
+            <span style={{ fontSize: '17px' }}>⏱️</span>
+            <span style={{ fontSize: '15.5px', color: '#2C2A26' }}>
               <strong>We typically respond within 24 hours.</strong>{' '}
               <span style={{ color: '#6B6860' }}>Voca is built by a small team with a big mission — we read every message.</span>
             </span>
@@ -699,24 +723,24 @@ export default function LandingPage({ onEnter }) {
       </section>
 
       {/* Footer CTA */}
-      <section style={{ background: '#2D9B83', padding: '72px 2rem', textAlign: 'center' }}>
-        <div style={{ maxWidth: '520px', margin: '0 auto' }}>
+      <section style={{ background: '#2D9B83', padding: '80px 2rem', textAlign: 'center' }}>
+        <div style={{ maxWidth: '580px', margin: '0 auto' }}>
           <h2 style={{
             fontFamily: 'Nunito, sans-serif', fontWeight: 900,
-            fontSize: '2.4rem', color: 'white', marginBottom: '14px',
+            fontSize: '2.8rem', color: 'white', marginBottom: '16px',
             letterSpacing: '-0.02em', lineHeight: 1.1,
           }}>
             Free. Always.
           </h2>
           <p style={{
-            fontSize: '1rem', color: 'rgba(255,255,255,0.75)',
-            marginBottom: '36px', lineHeight: 1.6,
+            fontSize: '1.2rem', color: 'rgba(255,255,255,0.75)',
+            marginBottom: '38px', lineHeight: 1.6,
           }}>
             No app store. No download. No cost. Works on any device with a browser — tablet, phone, laptop.
           </p>
           <button onClick={onEnter} style={{
-            padding: '16px 40px', background: 'white', color: '#2D9B83',
-            border: 'none', borderRadius: '14px', fontSize: '16px',
+            padding: '17px 42px', background: 'white', color: '#2D9B83',
+            border: 'none', borderRadius: '14px', fontSize: '17px',
             fontFamily: 'Nunito, sans-serif', fontWeight: 900,
             cursor: 'pointer', transition: 'all 0.15s',
           }}
