@@ -1,6 +1,3 @@
-// Full-width glass navbar shared by the landing page and the auth screen —
-// keeps the "floating glass" look consistent everywhere it's used.
-
 export default function Navbar({ scrolled = false, onLogoClick, children }) {
   const logo = (
     <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>

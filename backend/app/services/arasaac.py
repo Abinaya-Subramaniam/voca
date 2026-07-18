@@ -1,5 +1,3 @@
-"""ARASAAC pictogram lookup with verified-ID shortcuts and an in-process cache."""
-
 import httpx
 
 SEARCH_API = "https://api.arasaac.org/v1/pictograms/en/search"
@@ -35,7 +33,6 @@ def symbol_image_url(symbol_id: str | None) -> str | None:
 
 
 def resolve_symbol_id(label: str) -> str | None:
-    """Find the best ARASAAC pictogram ID for a word, or None."""
     key = label.lower().strip()
     if key in VERIFIED_IDS:
         return VERIFIED_IDS[key]

@@ -1,5 +1,3 @@
-// Boards — thin adapter over the backend API. All functions async.
-
 import * as api from '../api'
 
 export function getBoardsForProfile(profileId) {

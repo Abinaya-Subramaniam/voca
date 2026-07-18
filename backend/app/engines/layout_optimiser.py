@@ -1,5 +1,3 @@
-"""Adaptive layout — repositions symbols by exponential time-decay-weighted usage."""
-
 import math
 from datetime import datetime, timedelta, timezone
 
@@ -10,7 +8,7 @@ from ..models import Board, Profile, TapLog
 
 MIN_TAPS = 20
 DAYS_WINDOW = 30
-DECAY_LAMBDA = 0.1  # tap from 10 days ago ~ 37% weight; 30 days ~ 5%
+DECAY_LAMBDA = 0.1  
 
 
 def _decay_weight(timestamp: datetime) -> float:
@@ -20,7 +18,6 @@ def _decay_weight(timestamp: datetime) -> float:
 
 
 def run_layout_optimiser(db: Session, profile: Profile) -> bool:
-    """Reorder board symbols by decay-weighted tap frequency. Returns True if boards changed."""
     if not profile.settings.get("adaptiveLayoutEnabled", True):
         return False
 

@@ -15,8 +15,6 @@ class CamelModel(BaseModel):
     )
 
 
-# ── Auth ──────────────────────────────────────────────────────────────────────
-
 class RegisterRequest(CamelModel):
     email: EmailStr
     password: str = Field(min_length=8, max_length=128)
@@ -39,7 +37,6 @@ class UserOut(CamelModel):
     created_at: datetime
 
 
-# ── Profiles ──────────────────────────────────────────────────────────────────
 
 DEFAULT_SETTINGS = {
     "symbolSize": "medium",
@@ -85,7 +82,6 @@ class ProfileOut(CamelModel):
     created_at: datetime
 
 
-# ── Boards ────────────────────────────────────────────────────────────────────
 
 class BoardSymbolIn(CamelModel):
     symbol_id: str
@@ -123,7 +119,6 @@ class ReorderRequest(CamelModel):
     symbols: list[BoardSymbolOut]
 
 
-# ── Logs ──────────────────────────────────────────────────────────────────────
 
 class SentenceLogCreate(CamelModel):
     board_id: str | None = None
@@ -146,7 +141,6 @@ class TapLogCreate(CamelModel):
     previous_label: str | None = None  # also feeds the bigram prediction table
 
 
-# ── Journal ───────────────────────────────────────────────────────────────────
 
 class JournalEntryCreate(CamelModel):
     mood_symbol: dict[str, Any] | None = None
@@ -161,7 +155,6 @@ class JournalEntryOut(CamelModel):
     created_at: datetime
 
 
-# ── Insights / gaps / coach / predictions ─────────────────────────────────────
 
 class InsightsOut(CamelModel):
     total_this_week: int
@@ -198,7 +191,6 @@ class PredictionsOut(CamelModel):
     predictions: list[str]
 
 
-# ── Agent ─────────────────────────────────────────────────────────────────────
 
 class AgentMessage(CamelModel):
     role: str  # 'user' | 'companion'

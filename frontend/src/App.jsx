@@ -16,7 +16,6 @@ import OverviewTab from './components/caregiver/OverviewTab'
 import BoardEditorTab from './components/caregiver/BoardEditorTab'
 import CompanionTab from './components/caregiver/CompanionTab'
 
-// ── User mode nav ─────────────────────────────────────────────────────────────
 
 function UserNav({ activeProfile, showJournal, onLogoClick, onJournalToggle, onProfileClick, onSwitchProfile, onSwitchToCaregiver }) {
   return (
@@ -82,7 +81,6 @@ function UserNav({ activeProfile, showJournal, onLogoClick, onJournalToggle, onP
   )
 }
 
-// ── Caregiver mode nav ────────────────────────────────────────────────────────
 
 const CAREGIVER_TABS = [
   { id: 'overview',    label: 'Overview'     },
@@ -146,7 +144,6 @@ function CaregiverNav({ activeProfile, activeTab, onTabChange, onSwitchToUser, o
   )
 }
 
-// ── App ───────────────────────────────────────────────────────────────────────
 
 export default function App() {
   const { state, dispatch, authed, setAuthed, booting, user } = useApp()
@@ -196,7 +193,6 @@ export default function App() {
     markTappedOnBoard()
   }
 
-  // ── Landing ────────────────────────────────────────────────────────────────
   if (appStage === 'landing') {
     return (
       <LandingPage
@@ -208,7 +204,6 @@ export default function App() {
     )
   }
 
-  // ── Auth gate ──────────────────────────────────────────────────────────────
   if (!authed) {
     return <AuthPage onAuthed={() => setAuthed(true)} onBackToLanding={() => goToStage('landing')} />
   }
@@ -221,7 +216,6 @@ export default function App() {
     )
   }
 
-  // ── Profile selector ───────────────────────────────────────────────────────
   if (!activeProfileId) {
     return (
       <div className="h-screen flex flex-col overflow-hidden" style={{ background: 'var(--color-bg)' }}>
@@ -244,7 +238,6 @@ export default function App() {
     )
   }
 
-  // ── Caregiver mode ─────────────────────────────────────────────────────────
   if (mode === 'caregiver') {
     return (
       <div className="h-screen flex flex-col overflow-hidden" style={{ background: 'var(--color-bg)' }}>
@@ -266,7 +259,6 @@ export default function App() {
     )
   }
 
-  // ── User mode ──────────────────────────────────────────────────────────────
   return (
     <div className="h-screen flex flex-col overflow-hidden" style={{ background: 'var(--color-bg)' }}>
       <UserNav

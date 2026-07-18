@@ -1,5 +1,3 @@
-"""Insights, gap detection, and the weekly Gemini coach card."""
-
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session

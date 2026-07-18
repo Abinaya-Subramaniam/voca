@@ -1,14 +1,3 @@
-"""LangGraph agent graph for the Voca Companion.
-
-Explicit reason -> act -> observe loop:
-
-    START -> agent --(tool_calls?)--> tools -> agent -> ... -> END
-
-The `agent` node calls Gemini with the tool schemas bound; while the model keeps
-requesting tools, the `tools` node executes them against the real database and
-feeds observations back, until the model produces a final text answer.
-"""
-
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langgraph.graph import END, START, MessagesState, StateGraph
@@ -59,7 +48,6 @@ def _build_graph(ctx: AgentContext):
 
 
 def _extract_text(content) -> str:
-    """AIMessage.content may be a string or a list of content blocks."""
     if isinstance(content, str):
         return content.strip()
     if isinstance(content, list):
@@ -74,8 +62,6 @@ def _extract_text(content) -> str:
 
 
 def run_companion_agent(db, profile: Profile, messages: list[dict]) -> dict:
-    """Run the agent over the chat history. Returns text, tool-step trace, and any
-    staged (unapplied) board action."""
     if not settings.gemini_api_key:
         raise RuntimeError("GEMINI_API_KEY is not configured on the server.")
 

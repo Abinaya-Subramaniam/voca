@@ -1,8 +1,5 @@
-// Typed endpoint functions for the Voca backend API.
-
 import { request, setToken, clearToken } from './client'
 
-// ── Auth ──────────────────────────────────────────────────────────────────────
 
 export async function register(email, password) {
   const data = await request('/api/auth/register', {
@@ -26,8 +23,6 @@ export function logout() {
 
 export const getMe = () => request('/api/auth/me')
 
-// ── Profiles ──────────────────────────────────────────────────────────────────
-
 export const listProfiles = () => request('/api/profiles')
 export const createProfile = (name, avatarColor) =>
   request('/api/profiles', { method: 'POST', body: { name, avatarColor } })
@@ -38,8 +33,6 @@ export const deleteProfile = (profileId) =>
   request(`/api/profiles/${profileId}`, { method: 'DELETE' })
 export const optimiseLayout = (profileId) =>
   request(`/api/profiles/${profileId}/optimise-layout`, { method: 'POST' })
-
-// ── Boards ────────────────────────────────────────────────────────────────────
 
 export const listBoards = (profileId) => request(`/api/profiles/${profileId}/boards`)
 export const createBoard = (profileId, name, category = 'custom') =>
@@ -55,7 +48,6 @@ export const removeSymbolFromBoard = (profileId, boardId, symbolId) =>
 export const reorderBoardSymbols = (profileId, boardId, symbols) =>
   request(`/api/profiles/${profileId}/boards/${boardId}/symbols`, { method: 'PUT', body: { symbols } })
 
-// ── Communication logs / predictions ─────────────────────────────────────────
 
 export const logSentence = (profileId, boardId, symbols, sentence) =>
   request(`/api/profiles/${profileId}/sentences`, {
@@ -73,15 +65,12 @@ export const getPredictions = (profileId, lastLabel, count = 3) => {
   return request(`/api/profiles/${profileId}/predictions?${params}`)
 }
 
-// ── Journal ───────────────────────────────────────────────────────────────────
 
 export const listJournalEntries = (profileId) => request(`/api/profiles/${profileId}/journal`)
 export const createJournalEntry = (profileId, entry) =>
   request(`/api/profiles/${profileId}/journal`, { method: 'POST', body: entry })
 export const deleteJournalEntry = (profileId, entryId) =>
   request(`/api/profiles/${profileId}/journal/${entryId}`, { method: 'DELETE' })
-
-// ── Intelligence: insights, gaps, coach ──────────────────────────────────────
 
 export const getInsights = (profileId) => request(`/api/profiles/${profileId}/insights`)
 export const sendGapSignal = (profileId, boardId) =>
@@ -91,7 +80,6 @@ export const getCoachCard = (profileId) => request(`/api/profiles/${profileId}/c
 export const generateCoachCard = (profileId, force = false) =>
   request(`/api/profiles/${profileId}/coach/generate?force=${force}`, { method: 'POST' })
 
-// ── AI Agent (LangGraph, server-side) ────────────────────────────────────────
 
 export const agentChat = (profileId, messages) =>
   request(`/api/profiles/${profileId}/agent/chat`, { method: 'POST', body: { messages } })

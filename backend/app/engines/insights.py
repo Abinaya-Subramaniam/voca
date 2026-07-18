@@ -1,5 +1,3 @@
-"""Weekly insights engine — ported from the original on-device JS implementation."""
-
 from datetime import datetime, timedelta, timezone
 
 from sqlalchemy import select

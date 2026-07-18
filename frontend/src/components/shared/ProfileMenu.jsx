@@ -1,11 +1,5 @@
-// Account avatar + dropdown — reused on the landing page navbar and inside
-// the app (caregiver dashboard, profile selector) so "sign out" always looks
-// and behaves the same, wherever it's clicked from.
-
 import { useEffect, useRef, useState } from 'react'
 
-// No display name is collected at signup — derive a friendly one from the
-// email's local part (skips any leading digits, e.g. "1208abi2002@..." → "Abi2002").
 function displayName(email) {
   if (!email) return 'Account'
   const local = email.split('@')[0]
