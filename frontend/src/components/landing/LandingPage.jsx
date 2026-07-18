@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Navbar from '../shared/Navbar'
 
 const BTN = {
   primary: {
@@ -145,62 +146,32 @@ export default function LandingPage({ onEnter }) {
       {modal === 'privacy' && <Modal title="Privacy Policy"   onClose={() => setModal(null)}><PrivacyContent /></Modal>}
 
       {/* Full-width glass nav */}
-      <nav style={{
-        position: 'sticky', top: 0, zIndex: 50, width: '100%',
-        background: scrolled ? 'rgba(255,255,255,0.82)' : 'rgba(255,255,255,0.6)',
-        backdropFilter: 'blur(20px) saturate(180%)',
-        WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-        borderBottom: scrolled ? '1px solid rgba(232,230,225,0.9)' : '1px solid rgba(232,230,225,0.35)',
-        boxShadow: scrolled ? '0 4px 24px rgba(44,42,38,0.06)' : 'none',
-        transition: 'all 0.35s cubic-bezier(0.4,0,0.2,1)',
-      }}>
-        <div style={{
-          maxWidth: '1100px', margin: '0 auto', padding: '0 2rem',
-          height: scrolled ? '60px' : '72px',
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          flexWrap: 'wrap', gap: '10px',
-          transition: 'height 0.35s cubic-bezier(0.4,0,0.2,1)',
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
-            <div style={{
-              width: '30px', height: '30px', borderRadius: '9px',
-              background: 'linear-gradient(135deg, #34AB92, #1F7A65)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              boxShadow: '0 2px 8px rgba(45,155,131,0.35)',
-            }}>
-              <span style={{ color: 'white', fontWeight: 800, fontSize: '15px', fontFamily: 'Nunito, sans-serif' }}>V</span>
-            </div>
-            <span style={{ fontFamily: 'Nunito, sans-serif', fontWeight: 800, fontSize: '17px', color: '#2C2A26' }}>Voca</span>
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <a href="#contact" style={{
-              fontSize: '14px', fontWeight: 600, color: '#4A473F',
-              textDecoration: 'none', padding: '9px 16px', borderRadius: '100px',
-              border: '1px solid rgba(232,230,225,0.9)', background: 'rgba(255,255,255,0.55)',
-              transition: 'all 0.15s', display: 'inline-flex', alignItems: 'center', gap: '5px',
-            }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = '#2D9B83'; e.currentTarget.style.color = '#2D9B83'; e.currentTarget.style.background = 'rgba(255,255,255,0.9)' }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(232,230,225,0.9)'; e.currentTarget.style.color = '#4A473F'; e.currentTarget.style.background = 'rgba(255,255,255,0.55)' }}
-            >
-              Contact Us
-            </a>
-            <button onClick={onEnter} style={{
-              padding: '10px 22px',
-              background: 'linear-gradient(135deg, #34AB92, #1F7A65)', color: 'white',
-              border: 'none', borderRadius: '100px', fontSize: '14.5px', fontWeight: 700,
-              cursor: 'pointer', fontFamily: 'Nunito, sans-serif', letterSpacing: '0.01em',
-              boxShadow: '0 4px 14px rgba(45,155,131,0.35)',
-              transition: 'all 0.15s',
-            }}
-              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(45,155,131,0.45)' }}
-              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(45,155,131,0.35)' }}
-            >
-              Open App →
-            </button>
-          </div>
-        </div>
-      </nav>
+      <Navbar scrolled={scrolled}>
+        <a href="#contact" style={{
+          fontSize: '14px', fontWeight: 600, color: '#4A473F',
+          textDecoration: 'none', padding: '9px 16px', borderRadius: '100px',
+          border: '1px solid rgba(232,230,225,0.9)', background: 'rgba(255,255,255,0.55)',
+          transition: 'all 0.15s', display: 'inline-flex', alignItems: 'center', gap: '5px',
+        }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = '#2D9B83'; e.currentTarget.style.color = '#2D9B83'; e.currentTarget.style.background = 'rgba(255,255,255,0.9)' }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(232,230,225,0.9)'; e.currentTarget.style.color = '#4A473F'; e.currentTarget.style.background = 'rgba(255,255,255,0.55)' }}
+        >
+          Contact Us
+        </a>
+        <button onClick={onEnter} style={{
+          padding: '10px 22px',
+          background: 'linear-gradient(135deg, #34AB92, #1F7A65)', color: 'white',
+          border: 'none', borderRadius: '100px', fontSize: '14.5px', fontWeight: 700,
+          cursor: 'pointer', fontFamily: 'Nunito, sans-serif', letterSpacing: '0.01em',
+          boxShadow: '0 4px 14px rgba(45,155,131,0.35)',
+          transition: 'all 0.15s',
+        }}
+          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(45,155,131,0.45)' }}
+          onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(45,155,131,0.35)' }}
+        >
+          Open Voca
+        </button>
+      </Navbar>
 
       {/* Hero */}
       <section style={{

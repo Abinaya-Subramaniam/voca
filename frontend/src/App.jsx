@@ -194,7 +194,7 @@ export default function App() {
 
   // ── Auth gate ──────────────────────────────────────────────────────────────
   if (!authed) {
-    return <AuthPage onAuthed={() => setAuthed(true)} />
+    return <AuthPage onAuthed={() => setAuthed(true)} onBackToLanding={() => goToStage('landing')} />
   }
 
   if (booting) {

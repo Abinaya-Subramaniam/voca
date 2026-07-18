@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { login, register } from '../../api'
+import Navbar from '../shared/Navbar'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -89,7 +90,7 @@ function PasswordField({ id, label, value, onChange, autoComplete, placeholder, 
   )
 }
 
-export default function AuthPage({ onAuthed }) {
+export default function AuthPage({ onAuthed, onBackToLanding }) {
   const [mode, setMode] = useState('login')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -141,7 +142,25 @@ export default function AuthPage({ onAuthed }) {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4" style={{ background: 'var(--color-bg)' }}>
+    <div className="min-h-screen flex flex-col" style={{ background: 'var(--color-bg)' }}>
+      <Navbar onLogoClick={onBackToLanding}>
+        {onBackToLanding && (
+          <button onClick={onBackToLanding} style={{
+            fontSize: '14px', fontWeight: 600, color: '#4A473F',
+            padding: '9px 16px', borderRadius: '100px',
+            border: '1px solid rgba(232,230,225,0.9)', background: 'rgba(255,255,255,0.55)',
+            transition: 'all 0.15s', display: 'inline-flex', alignItems: 'center', gap: '6px',
+            cursor: 'pointer', fontFamily: "'DM Sans', system-ui, sans-serif",
+          }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = '#2D9B83'; e.currentTarget.style.color = '#2D9B83'; e.currentTarget.style.background = 'rgba(255,255,255,0.9)' }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(232,230,225,0.9)'; e.currentTarget.style.color = '#4A473F'; e.currentTarget.style.background = 'rgba(255,255,255,0.55)' }}
+          >
+            ← Back to Home
+          </button>
+        )}
+      </Navbar>
+
+      <div className="flex-1 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-raised p-8 w-full max-w-sm border border-warm-200">
 
         <div className="w-12 h-12 rounded-xl bg-teal-500 flex items-center justify-center mb-4 shadow-subtle">
@@ -256,6 +275,7 @@ export default function AuthPage({ onAuthed }) {
           {isRegister ? 'Already have an account? Sign in' : 'No account yet? Create one'}
         </button>
 
+      </div>
       </div>
     </div>
   )
