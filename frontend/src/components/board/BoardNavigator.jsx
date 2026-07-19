@@ -90,6 +90,7 @@ export default function BoardNavigator({ onSymbolTap, onPredict }) {
   }
 
   const columns = currentBoard?.gridColumns || 4
+  const mobileColumns = Math.min(columns, 3)
   const symbolSize = activeProfile?.settings?.symbolSize || 'medium'
   const wideSpacing = activeProfile?.settings?.wideSpacing
   const gap = wideSpacing ? '12px' : '8px'
@@ -98,7 +99,7 @@ export default function BoardNavigator({ onSymbolTap, onPredict }) {
     <div className="flex-1 flex flex-col overflow-hidden">
 
       {/* Board header */}
-      <div className="flex items-center gap-2.5 px-6 py-3 bg-white border-b border-warm-200 flex-shrink-0">
+      <div className="flex items-center gap-2.5 px-3 sm:px-6 py-3 bg-white border-b border-warm-200 flex-shrink-0">
         <span className="font-sans font-bold text-warm-800 text-base flex items-center gap-1.5">
           {isAtRoot ? (
             <>🏠 Home</>
@@ -108,7 +109,7 @@ export default function BoardNavigator({ onSymbolTap, onPredict }) {
         </span>
 
         {/* Colour legend */}
-        <div className="flex items-center gap-2.5 ml-auto">
+        <div className="flex items-center gap-2 sm:gap-2.5 ml-auto">
           {LEGEND.map(({ color, label }) => (
             <div key={label} className="flex items-center gap-1.5 flex-shrink-0">
               <span className={`w-2.5 h-2.5 rounded-full ${color}`} />
@@ -122,12 +123,13 @@ export default function BoardNavigator({ onSymbolTap, onPredict }) {
       <PredictionBar onPredict={onPredict} />
 
       {/* Scrollable content — centered, with breathing room on both sides */}
-      <div className="flex-1 overflow-y-auto px-6 py-5">
+      <div className="flex-1 overflow-y-auto px-3 sm:px-6 py-5">
         <div className="max-w-4xl mx-auto">
           <div
+            className="board-symbol-grid"
             style={{
-              display: 'grid',
-              gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
+              '--board-cols': columns,
+              '--board-cols-mobile': mobileColumns,
               gap,
               alignContent: 'start',
             }}

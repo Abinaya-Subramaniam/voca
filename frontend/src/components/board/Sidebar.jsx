@@ -35,22 +35,50 @@ function ShieldIcon() {
 export default function Sidebar({
   activeProfile, boards, activeBoardId, showJournal,
   onSelectBoard, onLogoClick, onJournalToggle, onWhoAmI, onSwitchProfile, onSwitchToCaregiver,
+  mobileOpen = false, onMobileClose,
 }) {
   const rootBoard   = boards.find(b => b.isRoot === true || b.category === 'home') || boards[0]
   const activeBoard = boards.find(b => b.id === activeBoardId)
   const isHome      = !showJournal && activeBoard?.id === rootBoard?.id
 
+  function withClose(fn) {
+    return (...args) => { fn?.(...args); onMobileClose?.() }
+  }
+
   return (
-    <aside className="w-64 flex-shrink-0 h-full bg-white border-r border-warm-200 flex flex-col overflow-hidden">
+    <>
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-40 md:hidden"
+          onClick={onMobileClose}
+        />
+      )}
+      <aside className={`
+        fixed md:static inset-y-0 left-0 z-50 md:z-auto
+        w-64 max-w-[80vw] flex-shrink-0 h-full bg-white border-r border-warm-200 flex flex-col overflow-hidden
+        transform transition-transform duration-200 ease-out md:translate-x-0
+        ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}
+      `}>
 
       {/* Logo */}
-      <button
-        onClick={onLogoClick}
-        className="flex items-center gap-2.5 px-4 py-4 border-b border-warm-100 hover:bg-warm-50 transition-colors flex-shrink-0"
-      >
-        <img src="https://i.imgur.com/3vT9jwF.jpeg" alt="Voca" className="w-9 h-9 rounded-xl object-cover shadow-subtle" />
-        <span className="font-display font-bold text-warm-900 text-lg"><span style={{ color: '#238A72' }}>V</span>oca</span>
-      </button>
+      <div className="flex items-center justify-between gap-2 border-b border-warm-100 flex-shrink-0">
+        <button
+          onClick={withClose(onLogoClick)}
+          className="flex-1 flex items-center gap-2.5 px-4 py-4 hover:bg-warm-50 transition-colors min-w-0"
+        >
+          <img src="https://i.imgur.com/3vT9jwF.jpeg" alt="Voca" className="w-9 h-9 rounded-xl object-cover shadow-subtle" />
+          <span className="font-display font-bold text-warm-900 text-lg"><span style={{ color: '#238A72' }}>V</span>oca</span>
+        </button>
+        <button
+          onClick={onMobileClose}
+          className="md:hidden mr-3 w-8 h-8 rounded-lg flex items-center justify-center text-warm-400 hover:bg-warm-100 hover:text-warm-700 transition-colors flex-shrink-0"
+          aria-label="Close menu"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
 
       {/* Profile chip */}
       <div className="px-4 py-3 border-b border-warm-100 flex-shrink-0">
@@ -80,7 +108,7 @@ export default function Sidebar({
             icon="🏠"
             label="Home"
             active={isHome}
-            onClick={() => rootBoard && onSelectBoard(rootBoard.id)}
+            onClick={withClose(() => rootBoard && onSelectBoard(rootBoard.id))}
             tint="bg-teal-50"
           />
           {CATEGORY_CARDS.map(cat => {
@@ -91,7 +119,7 @@ export default function Sidebar({
                 icon={cat.icon}
                 label={cat.name}
                 active={!showJournal && activeBoard?.category === cat.category}
-                onClick={() => board && onSelectBoard(board.id)}
+                onClick={withClose(() => board && onSelectBoard(board.id))}
                 tint={cat.color}
               />
             )
@@ -106,14 +134,14 @@ export default function Sidebar({
             icon="📔"
             label="Journal"
             active={showJournal}
-            onClick={onJournalToggle}
+            onClick={withClose(onJournalToggle)}
             tint="bg-pink-50"
           />
           <SidebarItem
             icon={<IdCardIcon />}
             label="Who Am I"
             active={false}
-            onClick={onWhoAmI}
+            onClick={withClose(onWhoAmI)}
             tint="bg-purple-50"
           />
         </div>
@@ -122,7 +150,7 @@ export default function Sidebar({
       {/* Footer */}
       <div className="px-3 py-3 border-t border-warm-100 flex-shrink-0 space-y-1">
         <button
-          onClick={onSwitchProfile}
+          onClick={withClose(onSwitchProfile)}
           className="w-full flex items-center gap-3 px-2.5 py-2.5 rounded-xl text-[13.5px] font-sans font-semibold text-warm-500 hover:bg-warm-100 hover:text-warm-800 transition-all text-left"
         >
           <span className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -131,9 +159,10 @@ export default function Sidebar({
           Switch user
         </button>
         <div className="pt-1">
-          <SidebarSwitchButton icon={<ShieldIcon />} label="Caregiver View" onClick={onSwitchToCaregiver} />
+          <SidebarSwitchButton icon={<ShieldIcon />} label="Caregiver View" onClick={withClose(onSwitchToCaregiver)} />
         </div>
       </div>
-    </aside>
+      </aside>
+    </>
   )
 }

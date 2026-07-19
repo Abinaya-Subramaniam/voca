@@ -57,17 +57,45 @@ const TABS = [
 
 export default function CaregiverSidebar({
   activeProfile, activeTab, onTabChange, onSwitchToUser, onLogoClick, userName, userEmail, onLogout,
+  mobileOpen = false, onMobileClose,
 }) {
+  function withClose(fn) {
+    return (...args) => { fn?.(...args); onMobileClose?.() }
+  }
+
   return (
-    <aside className="w-64 flex-shrink-0 h-full bg-white border-r border-warm-200 flex flex-col overflow-hidden">
+    <>
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-40 md:hidden"
+          onClick={onMobileClose}
+        />
+      )}
+      <aside className={`
+        fixed md:static inset-y-0 left-0 z-50 md:z-auto
+        w-64 max-w-[80vw] flex-shrink-0 h-full bg-white border-r border-warm-200 flex flex-col overflow-hidden
+        transform transition-transform duration-200 ease-out md:translate-x-0
+        ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}
+      `}>
 
       {/* Logo + account */}
       <div className="flex items-center justify-between gap-2 px-4 py-4 border-b border-warm-100 flex-shrink-0">
-        <button onClick={onLogoClick} className="flex items-center gap-2.5 hover:opacity-80 transition-opacity min-w-0">
+        <button onClick={withClose(onLogoClick)} className="flex items-center gap-2.5 hover:opacity-80 transition-opacity min-w-0">
           <img src="https://i.imgur.com/3vT9jwF.jpeg" alt="Voca" className="w-9 h-9 rounded-xl object-cover shadow-subtle flex-shrink-0" />
           <span className="font-display font-bold text-warm-900 text-lg truncate"><span style={{ color: '#238A72' }}>V</span>oca</span>
         </button>
-        <ProfileMenu name={userName} email={userEmail} onLogout={onLogout} />
+        <div className="flex items-center gap-1 flex-shrink-0">
+          <ProfileMenu name={userName} email={userEmail} onLogout={onLogout} />
+          <button
+            onClick={onMobileClose}
+            className="md:hidden w-8 h-8 rounded-lg flex items-center justify-center text-warm-400 hover:bg-warm-100 hover:text-warm-700 transition-colors"
+            aria-label="Close menu"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
       </div>
 
       {/* Managing profile chip */}
@@ -102,7 +130,7 @@ export default function CaregiverSidebar({
               icon={tab.icon}
               label={tab.label}
               active={activeTab === tab.id}
-              onClick={() => onTabChange(tab.id)}
+              onClick={withClose(() => onTabChange(tab.id))}
               tint={tab.tint}
             />
           ))}
@@ -115,10 +143,11 @@ export default function CaregiverSidebar({
           <SidebarSwitchButton
             icon={<BoardIcon />}
             label={`${activeProfile.name}'s Board`}
-            onClick={onSwitchToUser}
+            onClick={withClose(onSwitchToUser)}
           />
         </div>
       )}
-    </aside>
+      </aside>
+    </>
   )
 }

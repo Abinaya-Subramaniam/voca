@@ -20,6 +20,7 @@ import CompanionTab from './components/caregiver/CompanionTab'
 import CaregiverSidebar from './components/caregiver/CaregiverSidebar'
 
 const CAREGIVER_TAB_IDS = ['overview', 'insights', 'boardeditor', 'companion']
+const CAREGIVER_TAB_LABELS = { overview: 'Overview', insights: 'Insights', boardeditor: 'Board Editor', companion: 'Companion' }
 
 function greetingPhrase() {
   const hour = new Date().getHours()
@@ -43,6 +44,24 @@ function GreetingBanner({ name, avatarColor }) {
           Tap symbols below to say what's on your mind.
         </div>
       </div>
+    </div>
+  )
+}
+
+function MobileTopBar({ onMenuClick, label }) {
+  return (
+    <div className="md:hidden flex items-center gap-3 px-4 py-2.5 bg-white border-b border-warm-200 flex-shrink-0">
+      <button
+        onClick={onMenuClick}
+        className="w-9 h-9 -ml-1 rounded-lg flex items-center justify-center text-warm-600 hover:bg-warm-100 transition-colors flex-shrink-0"
+        aria-label="Open menu"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+          <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+      </button>
+      <img src="https://i.imgur.com/3vT9jwF.jpeg" alt="Voca" className="w-6 h-6 rounded-md object-cover flex-shrink-0" />
+      <span className="font-display font-bold text-warm-900 text-sm truncate">{label}</span>
     </div>
   )
 }
@@ -154,6 +173,7 @@ function BoardRoute() {
   const { state, dispatch } = useApp()
   const { activeProfileId, activeProfile, boards, activeBoardId, sentenceBuffer } = state
   const [showWhoIAm, setShowWhoIAm] = useState(false)
+  const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const showJournal = location.pathname === '/board/journal'
 
   // High contrast
@@ -200,12 +220,15 @@ function BoardRoute() {
         onWhoAmI={() => setShowWhoIAm(true)}
         onSwitchProfile={() => { dispatch({ type: 'SET_ACTIVE_PROFILE', profileId: null }); navigate('/profiles') }}
         onSwitchToCaregiver={() => navigate('/caregiver/overview')}
+        mobileOpen={mobileNavOpen}
+        onMobileClose={() => setMobileNavOpen(false)}
       />
 
       <main
         className="flex-1 flex flex-col overflow-hidden"
         style={{ background: `linear-gradient(180deg, ${activeProfile?.avatarColor || '#2D9B83'}14 0%, var(--color-bg) 260px)` }}
       >
+        <MobileTopBar onMenuClick={() => setMobileNavOpen(true)} label={showJournal ? 'Journal' : (activeProfile?.name || 'Voca')} />
         {showJournal ? (
           <JournalView />
         ) : (
@@ -236,6 +259,7 @@ function CaregiverRoute() {
   const { tab } = useParams()
   const { state, user, setAuthed } = useApp()
   const { activeProfile } = state
+  const [mobileNavOpen, setMobileNavOpen] = useState(false)
 
   if (!CAREGIVER_TAB_IDS.includes(tab)) {
     return <Navigate to="/caregiver/overview" replace />
@@ -257,9 +281,12 @@ function CaregiverRoute() {
         userName={user?.name}
         userEmail={user?.email}
         onLogout={handleLogout}
+        mobileOpen={mobileNavOpen}
+        onMobileClose={() => setMobileNavOpen(false)}
       />
 
       <main className="flex-1 overflow-hidden flex flex-col" style={{ background: 'var(--color-bg)' }}>
+        <MobileTopBar onMenuClick={() => setMobileNavOpen(true)} label={CAREGIVER_TAB_LABELS[tab]} />
         {tab === 'overview'    && <OverviewTab />}
         {tab === 'insights'    && <InsightsDashboard />}
         {tab === 'boardeditor' && <BoardEditorTab />}

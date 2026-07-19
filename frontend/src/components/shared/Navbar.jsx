@@ -30,11 +30,12 @@ export default function Navbar({ scrolled = false, onLogoClick, children }) {
       fontFamily: "'DM Sans', system-ui, sans-serif",
     }}>
       <div style={{
-        maxWidth: '1100px', margin: '0 auto', padding: '0 2rem',
-        height: scrolled ? '60px' : '72px',
+        maxWidth: '1100px', margin: '0 auto',
+        padding: `10px clamp(1.1rem, 5vw, 2rem)`,
+        minHeight: scrolled ? '60px' : '72px',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         flexWrap: 'wrap', gap: '10px',
-        transition: 'height 0.35s cubic-bezier(0.4,0,0.2,1)',
+        transition: 'min-height 0.35s cubic-bezier(0.4,0,0.2,1)',
       }}>
         {onLogoClick ? (
           <button
