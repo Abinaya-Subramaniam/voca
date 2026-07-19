@@ -273,7 +273,7 @@ export default function WhoIAmCard({ onClose }) {
                   <div className="flex items-center justify-center gap-1.5">
                     <img src="https://i.imgur.com/3vT9jwF.jpeg" alt="Voca" className="w-5 h-5 rounded-md object-cover" />
                     <span className="font-sans text-warm-400 text-xs">
-                      Made with Voca — Free AAC for everyone
+                      Made with <span style={{ color: '#238A72' }}>V</span>oca — Free AAC for everyone
                     </span>
                   </div>
                 </div>

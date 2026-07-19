@@ -132,7 +132,7 @@ function ProfilesRoute() {
       <header className="flex items-center justify-between px-4 py-3 bg-white border-b border-warm-200 flex-shrink-0 shadow-subtle">
         <button onClick={() => navigate('/')} className="flex items-center gap-2 hover:opacity-75 transition-opacity">
           <img src="https://i.imgur.com/3vT9jwF.jpeg" alt="Voca" className="w-7 h-7 rounded-lg object-cover" />
-          <span className="font-display font-bold text-warm-900 text-base">Voca</span>
+          <span className="font-display font-bold text-warm-900 text-base"><span style={{ color: '#238A72' }}>V</span>oca</span>
         </button>
         <div className="flex items-center gap-3">
           <span className="text-xs text-warm-400 font-sans">Select a profile</span>

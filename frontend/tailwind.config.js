@@ -36,7 +36,7 @@ export default {
       },
       fontFamily: {
         sans:    ['DM Sans', 'system-ui', 'sans-serif'],
-        display: ['Nunito', 'sans-serif'],
+        display: ['Plus Jakarta Sans', 'sans-serif'],
         mono:    ['DM Mono', 'monospace'],
       },
       borderRadius: {

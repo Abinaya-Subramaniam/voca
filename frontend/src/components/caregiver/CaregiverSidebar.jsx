@@ -65,7 +65,7 @@ export default function CaregiverSidebar({
       <div className="flex items-center justify-between gap-2 px-4 py-4 border-b border-warm-100 flex-shrink-0">
         <button onClick={onLogoClick} className="flex items-center gap-2.5 hover:opacity-80 transition-opacity min-w-0">
           <img src="https://i.imgur.com/3vT9jwF.jpeg" alt="Voca" className="w-9 h-9 rounded-xl object-cover shadow-subtle flex-shrink-0" />
-          <span className="font-display font-bold text-warm-900 text-lg truncate">Voca</span>
+          <span className="font-display font-bold text-warm-900 text-lg truncate"><span style={{ color: '#238A72' }}>V</span>oca</span>
         </button>
         <ProfileMenu name={userName} email={userEmail} onLogout={onLogout} />
       </div>

@@ -1,15 +1,20 @@
 export default function Navbar({ scrolled = false, onLogoClick, children }) {
   const logo = (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '11px' }}>
       <img
         src="https://i.imgur.com/3vT9jwF.jpeg"
         alt="Voca"
         style={{
-          width: '30px', height: '30px', borderRadius: '9px',
-          objectFit: 'cover', boxShadow: '0 2px 8px rgba(45,155,131,0.35)',
+          width: '38px', height: '38px', borderRadius: '11px',
+          objectFit: 'cover', boxShadow: '0 2px 10px rgba(45,155,131,0.4)',
         }}
       />
-      <span style={{ fontFamily: 'Nunito, sans-serif', fontWeight: 800, fontSize: '17px', color: '#2C2A26' }}>Voca</span>
+      <span style={{
+        fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 900, fontSize: '23px',
+        color: '#2C2A26', letterSpacing: '-0.03em', lineHeight: 1,
+      }}>
+        <span style={{ color: '#238A72' }}>V</span>oca
+      </span>
     </div>
   )
 

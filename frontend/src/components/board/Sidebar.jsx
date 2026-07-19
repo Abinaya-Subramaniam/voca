@@ -49,7 +49,7 @@ export default function Sidebar({
         className="flex items-center gap-2.5 px-4 py-4 border-b border-warm-100 hover:bg-warm-50 transition-colors flex-shrink-0"
       >
         <img src="https://i.imgur.com/3vT9jwF.jpeg" alt="Voca" className="w-9 h-9 rounded-xl object-cover shadow-subtle" />
-        <span className="font-display font-bold text-warm-900 text-lg">Voca</span>
+        <span className="font-display font-bold text-warm-900 text-lg"><span style={{ color: '#238A72' }}>V</span>oca</span>
       </button>
 
       {/* Profile chip */}

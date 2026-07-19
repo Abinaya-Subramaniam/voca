@@ -6,7 +6,7 @@ const BTN = {
   primary: {
     padding: '15px 34px', background: '#2D9B83', color: 'white',
     border: 'none', borderRadius: '12px', fontSize: '15.5px',
-    fontFamily: 'Nunito, sans-serif', fontWeight: 800,
+    fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800,
     cursor: 'pointer', transition: 'all 0.15s',
   },
 }
@@ -34,7 +34,7 @@ function Modal({ title, onClose, children }) {
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           padding: '24px 28px', borderBottom: '1px solid #E8E6E1', flexShrink: 0,
         }}>
-          <span style={{ fontFamily: 'Nunito, sans-serif', fontWeight: 800, fontSize: '17px', color: '#2C2A26' }}>
+          <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800, fontSize: '17px', color: '#2C2A26' }}>
             {title}
           </span>
           <button
@@ -57,7 +57,7 @@ function Modal({ title, onClose, children }) {
 }
 
 function TermsContent() {
-  const s = { fontFamily: 'Nunito, sans-serif', fontWeight: 800, fontSize: '14px', color: '#2C2A26', marginTop: '20px', marginBottom: '6px', display: 'block' }
+  const s = { fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800, fontSize: '14px', color: '#2C2A26', marginTop: '20px', marginBottom: '6px', display: 'block' }
   return (
     <div>
       <p style={{ marginBottom: '12px', color: '#9B9890', fontSize: '14.5px' }}>Last updated: June 2026</p>
@@ -90,7 +90,7 @@ function TermsContent() {
 }
 
 function PrivacyContent() {
-  const s = { fontFamily: 'Nunito, sans-serif', fontWeight: 800, fontSize: '14px', color: '#2C2A26', marginTop: '20px', marginBottom: '6px', display: 'block' }
+  const s = { fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800, fontSize: '14px', color: '#2C2A26', marginTop: '20px', marginBottom: '6px', display: 'block' }
   return (
     <div>
       <p style={{ marginBottom: '12px', color: '#9B9890', fontSize: '14.5px' }}>Last updated: June 2026</p>
@@ -167,7 +167,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
             padding: '10px 22px',
             background: 'linear-gradient(135deg, #34AB92, #1F7A65)', color: 'white',
             border: 'none', borderRadius: '100px', fontSize: '14.5px', fontWeight: 700,
-            cursor: 'pointer', fontFamily: 'Nunito, sans-serif', letterSpacing: '0.01em',
+            cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif", letterSpacing: '0.01em',
             boxShadow: '0 4px 14px rgba(45,155,131,0.35)',
             transition: 'all 0.15s',
           }}
@@ -186,26 +186,26 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
       }}>
         <div>
           <h1 style={{
-            fontFamily: 'Nunito, sans-serif', fontWeight: 900,
+            fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 900,
             fontSize: 'clamp(2.9rem, 5.5vw, 4.6rem)', lineHeight: 1.02,
             color: '#2C2A26', marginBottom: '22px', letterSpacing: '-0.02em',
           }}>
             A voice<br />
-            for <span style={{ color: '#2D9B83', fontStyle: 'italic' }}>everyone.</span>
+            for <span style={{ color: '#2D9B83' }}>everyone.</span>
           </h1>
 
           <p style={{
             fontSize: '1.2rem', lineHeight: 1.7, color: '#6B6860',
             marginBottom: '38px', maxWidth: '480px',
           }}>
-            Voca helps non-verbal and minimally verbal individuals communicate — with AI that learns how they speak and gets smarter every week.
+            Voca helps non-verbal and minimally verbal individuals communicate with AI that learns how they speak and gets smarter every week.
           </p>
 
           <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
             <button onClick={onEnter} style={{
               padding: '16px 32px', background: '#2D9B83', color: 'white',
               border: 'none', borderRadius: '14px', fontSize: '16.5px',
-              fontFamily: 'Nunito, sans-serif', fontWeight: 800,
+              fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800,
               cursor: 'pointer', transition: 'all 0.15s', letterSpacing: '-0.01em',
             }}
               onMouseEnter={e => { e.currentTarget.style.background = '#238A72'; e.currentTarget.style.transform = 'translateY(-1px)' }}
@@ -323,7 +323,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
           ].map(({ num, label, accent }) => (
             <div key={num} style={{ background: 'white', padding: '28px 24px', textAlign: 'center' }}>
               <div style={{
-                fontFamily: 'Nunito, sans-serif', fontWeight: 900, fontSize: '2.6rem',
+                fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 900, fontSize: '2.6rem',
                 color: accent, lineHeight: 1, marginBottom: '8px',
               }}>
                 {num}
@@ -350,7 +350,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
               HOW IT WORKS
             </div>
             <h2 style={{
-              fontFamily: 'Nunito, sans-serif', fontWeight: 900,
+              fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 900,
               fontSize: '2.6rem', color: '#2C2A26', margin: '0 0 12px',
               letterSpacing: '-0.02em',
             }}>
@@ -380,7 +380,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
                 </div>
                 <div style={{ fontSize: '2rem', marginBottom: '16px' }}>{emoji}</div>
                 <div style={{
-                  fontFamily: 'Nunito, sans-serif', fontWeight: 800,
+                  fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800,
                   fontSize: '1.2rem', color: '#2C2A26', marginBottom: '10px',
                 }}>
                   {title}
@@ -412,12 +412,12 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
             }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
                 <div>
-                  <div style={{ fontFamily: 'Nunito, sans-serif', fontWeight: 800, fontSize: '15px', color: '#2C2A26' }}>My Journal</div>
+                  <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800, fontSize: '15px', color: '#2C2A26' }}>My Journal</div>
                   <div style={{ fontSize: '10px', color: '#9B9890' }}>A private space — just for you</div>
                 </div>
                 <div style={{
                   background: '#2D9B83', borderRadius: '8px', padding: '5px 10px',
-                  fontSize: '11px', fontWeight: 700, color: 'white', fontFamily: 'Nunito, sans-serif',
+                  fontSize: '11px', fontWeight: 700, color: 'white', fontFamily: "'Plus Jakarta Sans', sans-serif",
                 }}>
                   + New entry
                 </div>
@@ -491,7 +491,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
               JOURNAL
             </div>
             <h2 style={{
-              fontFamily: 'Nunito, sans-serif', fontWeight: 900,
+              fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 900,
               fontSize: '2.3rem', color: '#2C2A26', margin: '0 0 16px',
               letterSpacing: '-0.02em', lineHeight: 1.1,
             }}>
@@ -516,7 +516,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
                     {icon}
                   </div>
                   <div>
-                    <div style={{ fontFamily: 'Nunito, sans-serif', fontWeight: 800, fontSize: '15px', color: '#2C2A26', marginBottom: '2px' }}>
+                    <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800, fontSize: '15px', color: '#2C2A26', marginBottom: '2px' }}>
                       {title}
                     </div>
                     <div style={{ fontSize: '14.5px', color: '#6B6860', lineHeight: 1.5 }}>{desc}</div>
@@ -540,7 +540,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
             AI FEATURES
           </div>
           <h2 style={{
-            fontFamily: 'Nunito, sans-serif', fontWeight: 900,
+            fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 900,
             fontSize: '2.6rem', color: '#2C2A26', margin: '0 0 12px',
             letterSpacing: '-0.02em',
           }}>
@@ -583,7 +583,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
                 background: 'white', padding: '20px', borderTop: '1px solid #F0EFEA',
                 display: 'flex', alignItems: 'center',
               }}>
-                <span style={{ fontFamily: 'Nunito, sans-serif', fontWeight: 800, fontSize: '15px', color: '#2C2A26' }}>
+                <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800, fontSize: '15px', color: '#2C2A26' }}>
                   {row.feature}
                 </span>
               </div>
@@ -636,7 +636,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
               CONTACT
             </div>
             <h2 style={{
-              fontFamily: 'Nunito, sans-serif', fontWeight: 900,
+              fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 900,
               fontSize: '2.6rem', color: '#2C2A26', margin: '0 0 12px',
               letterSpacing: '-0.02em',
             }}>
@@ -685,7 +685,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
                 </div>
                 <div>
                   <div style={{
-                    fontFamily: 'Nunito, sans-serif', fontWeight: 800,
+                    fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800,
                     fontSize: '16px', color: '#2C2A26', marginBottom: '6px',
                   }}>
                     {title}
@@ -728,7 +728,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
       <section style={{ background: '#2D9B83', padding: '80px 2rem', textAlign: 'center' }}>
         <div style={{ maxWidth: '580px', margin: '0 auto' }}>
           <h2 style={{
-            fontFamily: 'Nunito, sans-serif', fontWeight: 900,
+            fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 900,
             fontSize: '2.8rem', color: 'white', marginBottom: '16px',
             letterSpacing: '-0.02em', lineHeight: 1.1,
           }}>
@@ -743,7 +743,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
           <button onClick={onEnter} style={{
             padding: '17px 42px', background: 'white', color: '#2D9B83',
             border: 'none', borderRadius: '14px', fontSize: '17px',
-            fontFamily: 'Nunito, sans-serif', fontWeight: 900,
+            fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 900,
             cursor: 'pointer', transition: 'all 0.15s',
           }}
             onMouseEnter={e => { e.currentTarget.style.background = '#E8F7F4'; e.currentTarget.style.transform = 'translateY(-2px)' }}
@@ -760,9 +760,9 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
                 background: 'rgba(255,255,255,0.2)', display: 'flex',
                 alignItems: 'center', justifyContent: 'center',
               }}>
-                <span style={{ color: 'white', fontWeight: 900, fontSize: '11px', fontFamily: 'Nunito, sans-serif' }}>V</span>
+                <span style={{ color: 'white', fontWeight: 900, fontSize: '11px', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>V</span>
               </div>
-              <span style={{ color: 'white', fontFamily: 'Nunito, sans-serif', fontWeight: 800, fontSize: '15px' }}>Voca</span>
+              <span style={{ color: 'white', fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800, fontSize: '15px' }}>Voca</span>
             </div>
             <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '14.5px', margin: '0 0 20px' }}>
               Built for every family on earth.
