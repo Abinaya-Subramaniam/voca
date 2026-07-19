@@ -1,5 +1,6 @@
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_google_genai.chat_models import ChatGoogleGenerativeAIError
 from langgraph.graph import END, START, MessagesState, StateGraph
 from langgraph.prebuilt import ToolNode, tools_condition
 
@@ -75,10 +76,18 @@ def run_companion_agent(db, profile: Profile, messages: list[dict]) -> dict:
         else:
             lc_messages.append(AIMessage(content=m["text"]))
 
-    result = graph.invoke(
-        {"messages": lc_messages},
-        config={"recursion_limit": 2 * MAX_AGENT_TURNS + 1},
-    )
+    try:
+        result = graph.invoke(
+            {"messages": lc_messages},
+            config={"recursion_limit": 2 * MAX_AGENT_TURNS + 1},
+        )
+    except ChatGoogleGenerativeAIError as err:
+        if "RESOURCE_EXHAUSTED" in str(err) or "429" in str(err):
+            raise RuntimeError(
+                "The AI Companion has hit its Gemini API quota for now. "
+                "Please wait a bit and try again, or check the API plan's rate limits."
+            ) from err
+        raise RuntimeError(f"The AI Companion couldn't reach Gemini: {err}") from err
 
     steps = []
     final_text = ""
