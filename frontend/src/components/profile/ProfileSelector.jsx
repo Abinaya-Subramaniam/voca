@@ -106,13 +106,16 @@ export default function ProfileSelector() {
       style={{ background: 'var(--color-bg)' }}>
       <div className="bg-white rounded-2xl shadow-raised p-8 w-full max-w-sm border border-warm-200">
 
-        <div className="flex items-center gap-3 mb-6">
+        <button
+          onClick={() => navigate('/')}
+          className="flex items-center gap-3 mb-6 hover:opacity-75 transition-opacity text-left"
+        >
           <img src="https://i.imgur.com/3vT9jwF.jpeg" alt="Voca" className="w-10 h-10 rounded-xl object-cover shadow-subtle" />
           <div>
             <h2 className="font-display font-bold text-warm-900 text-xl leading-none"><span style={{ color: '#238A72' }}>V</span>oca</h2>
             <p className="font-sans text-warm-400 text-xs mt-0.5">Who is communicating today?</p>
           </div>
-        </div>
+        </button>
 
         <div className="flex flex-col gap-2 mb-5">
           {state.profiles.map(profile => (

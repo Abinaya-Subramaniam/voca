@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useRef } from 'react'
 import Navbar from '../shared/Navbar'
 import ProfileMenu from '../shared/ProfileMenu'
 
@@ -130,14 +130,20 @@ function PrivacyContent() {
 export default function LandingPage({ onEnter, authed, userName, userEmail, onLogout }) {
   const [modal, setModal] = useState(null) // null | 'terms' | 'privacy'
   const [scrolled, setScrolled] = useState(false)
+  const scrollRef = useRef(null)
 
   function handleScroll(e) {
     const isScrolled = e.currentTarget.scrollTop > 8
     setScrolled(prev => (prev === isScrolled ? prev : isScrolled))
   }
 
+  function scrollToTop() {
+    scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
   return (
     <div
+      ref={scrollRef}
       className="h-screen overflow-y-auto"
       onScroll={handleScroll}
       style={{ background: '#FAFAF8', fontFamily: "'DM Sans', system-ui, sans-serif" }}
@@ -147,7 +153,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
       {modal === 'privacy' && <Modal title="Privacy Policy"   onClose={() => setModal(null)}><PrivacyContent /></Modal>}
 
       {/* Full-width glass nav */}
-      <Navbar scrolled={scrolled}>
+      <Navbar scrolled={scrolled} onLogoClick={scrollToTop}>
         <a href="#contact" style={{
           fontSize: '14px', fontWeight: 600, color: '#4A473F',
           textDecoration: 'none', padding: '9px 16px', borderRadius: '100px',
@@ -754,17 +760,21 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
 
           {/* Footer bottom */}
           <div style={{ marginTop: '52px', paddingTop: '32px', borderTop: '1px solid rgba(255,255,255,0.2)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '6px' }}>
-              <div style={{
-                width: '24px', height: '24px', borderRadius: '7px',
-                background: 'rgba(255,255,255,0.2)', display: 'flex',
-                alignItems: 'center', justifyContent: 'center',
-              }}>
-                <span style={{ color: 'white', fontWeight: 900, fontSize: '11px', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>V</span>
-              </div>
-              <span style={{ color: 'white', fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800, fontSize: '15px' }}>Voca</span>
-            </div>
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '14.5px', margin: '0 0 20px' }}>
+            <button
+              onClick={scrollToTop}
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginBottom: '8px',
+                background: 'none', border: 'none', cursor: 'pointer', padding: 0, margin: '0 auto 8px',
+              }}
+            >
+              <img
+                src="https://i.imgur.com/3vT9jwF.jpeg"
+                alt="Voca"
+                style={{ width: '32px', height: '32px', borderRadius: '9px', objectFit: 'cover', boxShadow: '0 2px 10px rgba(0,0,0,0.25)' }}
+              />
+              <span style={{ color: 'white', fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 900, fontSize: '20px', letterSpacing: '-0.02em' }}>Voca</span>
+            </button>
+            <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '16px', margin: '0 0 22px' }}>
               Built for every family on earth.
             </p>
 
@@ -774,42 +784,42 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
                 onClick={() => setModal('terms')}
                 style={{
                   background: 'none', border: 'none', cursor: 'pointer',
-                  fontSize: '11px', color: 'rgba(255,255,255,0.55)',
+                  fontSize: '13.5px', color: 'rgba(255,255,255,0.6)',
                   padding: '4px 8px', borderRadius: '6px', transition: 'color 0.15s',
                   fontFamily: "'DM Sans', system-ui, sans-serif",
                 }}
                 onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,0.9)'}
-                onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.55)'}
+                onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.6)'}
               >
                 Terms of Service
               </button>
-              <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: '11px' }}>·</span>
+              <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: '13.5px' }}>·</span>
               <button
                 onClick={() => setModal('privacy')}
                 style={{
                   background: 'none', border: 'none', cursor: 'pointer',
-                  fontSize: '11px', color: 'rgba(255,255,255,0.55)',
+                  fontSize: '13.5px', color: 'rgba(255,255,255,0.6)',
                   padding: '4px 8px', borderRadius: '6px', transition: 'color 0.15s',
                   fontFamily: "'DM Sans', system-ui, sans-serif",
                 }}
                 onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,0.9)'}
-                onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.55)'}
+                onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.6)'}
               >
                 Privacy Policy
               </button>
-              <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: '11px' }}>·</span>
+              <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: '13.5px' }}>·</span>
               <a href="#contact" style={{
-                fontSize: '11px', color: 'rgba(255,255,255,0.55)',
+                fontSize: '13.5px', color: 'rgba(255,255,255,0.6)',
                 textDecoration: 'none', padding: '4px 8px', borderRadius: '6px',
                 transition: 'color 0.15s',
               }}
                 onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,0.9)'}
-                onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.55)'}
+                onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.6)'}
               >
                 Contact
               </a>
-              <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: '11px' }}>·</span>
-              <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)' }}>© 2026 Voca</span>
+              <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: '13.5px' }}>·</span>
+              <span style={{ fontSize: '13.5px', color: 'rgba(255,255,255,0.4)' }}>© 2026 Voca</span>
             </div>
           </div>
         </div>
