@@ -967,12 +967,12 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
             </div>
 
             {/* Legal links */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: '6px', rowGap: '4px' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: '8px', rowGap: '6px' }}>
               <button
                 onClick={() => setModal('terms')}
                 style={{
                   background: 'none', border: 'none', cursor: 'pointer',
-                  fontSize: '13.5px', color: 'rgba(255,255,255,0.6)',
+                  fontSize: '15.5px', color: 'rgba(255,255,255,0.6)',
                   padding: '4px 8px', borderRadius: '6px', transition: 'color 0.15s',
                   fontFamily: "'DM Sans', system-ui, sans-serif",
                 }}
@@ -981,12 +981,12 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
               >
                 Terms of Service
               </button>
-              <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: '13.5px' }}>·</span>
+              <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: '15.5px' }}>·</span>
               <button
                 onClick={() => setModal('privacy')}
                 style={{
                   background: 'none', border: 'none', cursor: 'pointer',
-                  fontSize: '13.5px', color: 'rgba(255,255,255,0.6)',
+                  fontSize: '15.5px', color: 'rgba(255,255,255,0.6)',
                   padding: '4px 8px', borderRadius: '6px', transition: 'color 0.15s',
                   fontFamily: "'DM Sans', system-ui, sans-serif",
                 }}
@@ -995,9 +995,9 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
               >
                 Privacy Policy
               </button>
-              <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: '13.5px' }}>·</span>
+              <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: '15.5px' }}>·</span>
               <a href="#contact" style={{
-                fontSize: '13.5px', color: 'rgba(255,255,255,0.6)',
+                fontSize: '15.5px', color: 'rgba(255,255,255,0.6)',
                 textDecoration: 'none', padding: '4px 8px', borderRadius: '6px',
                 transition: 'color 0.15s',
               }}
@@ -1006,8 +1006,11 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
               >
                 Contact
               </a>
-              <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: '13.5px' }}>·</span>
-              <span style={{ fontSize: '13.5px', color: 'rgba(255,255,255,0.4)' }}>© 2026 Voca</span>
+            </div>
+
+            {/* Copyright — own line */}
+            <div style={{ marginTop: '10px', fontSize: '15.5px', color: 'rgba(255,255,255,0.4)' }}>
+              © 2026 Voca
             </div>
           </div>
         </div>
