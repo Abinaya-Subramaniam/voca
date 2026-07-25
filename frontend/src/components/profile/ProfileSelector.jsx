@@ -110,10 +110,10 @@ export default function ProfileSelector() {
           onClick={() => navigate('/')}
           className="flex items-center gap-3 mb-6 hover:opacity-75 transition-opacity text-left"
         >
-          <img src="https://i.imgur.com/3vT9jwF.jpeg" alt="Voca" className="w-10 h-10 rounded-xl object-cover shadow-subtle" />
+          <img src="https://i.imgur.com/3vT9jwF.jpeg" alt="Voca" className="w-11 h-11 rounded-xl object-cover shadow-subtle" />
           <div>
-            <h2 className="font-display font-bold text-warm-900 text-xl leading-none"><span style={{ color: '#238A72' }}>V</span>oca</h2>
-            <p className="font-sans text-warm-400 text-xs mt-0.5">Who is communicating today?</p>
+            <h2 className="font-display font-bold text-warm-900 text-2xl leading-none"><span style={{ color: '#238A72' }}>V</span>oca</h2>
+            <p className="font-sans text-warm-400 text-sm mt-1">Who is communicating today?</p>
           </div>
         </button>
 
@@ -125,18 +125,18 @@ export default function ProfileSelector() {
               className="flex items-center gap-3 p-3.5 rounded-xl border border-warm-200 hover:border-teal-500 hover:bg-teal-50 transition-all text-left group"
             >
               <div
-                className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-display font-bold text-base flex-shrink-0"
+                className="w-11 h-11 rounded-lg flex items-center justify-center text-white font-display font-bold text-lg flex-shrink-0"
                 style={{ backgroundColor: profile.avatarColor }}
               >
                 {profile.name.charAt(0).toUpperCase()}
               </div>
               <div className="flex-1">
-                <div className="font-sans font-600 text-warm-900 text-sm">{profile.name}</div>
-                <div className="font-sans text-warm-400 text-xs">
+                <div className="font-sans font-600 text-warm-900 text-base">{profile.name}</div>
+                <div className="font-sans text-warm-400 text-sm">
                   Tap to continue
                 </div>
               </div>
-              <svg className="w-4 h-4 text-warm-300 group-hover:text-teal-500 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg className="w-5 h-5 text-warm-300 group-hover:text-teal-500 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M9 18l6-6-6-6"/>
               </svg>
             </button>
@@ -146,7 +146,7 @@ export default function ProfileSelector() {
         {state.profiles.length < 3 && (
           <button
             onClick={() => setCreating(true)}
-            className="w-full py-3 rounded-xl border-2 border-dashed border-warm-200 font-sans font-500 text-warm-400 hover:border-teal-400 hover:text-teal-500 transition-colors text-sm"
+            className="w-full py-3 rounded-xl border-2 border-dashed border-warm-200 font-sans font-500 text-warm-400 hover:border-teal-400 hover:text-teal-500 transition-colors text-base"
           >
             + Add another profile
           </button>

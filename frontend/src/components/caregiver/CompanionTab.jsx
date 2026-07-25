@@ -86,7 +86,7 @@ export default function CompanionTab() {
     const nextMessages = [...messages, userMsg]
     setMessages(nextMessages)
     setLoading(true)
-    setLiveSteps([{ label: `Consulting ${activeProfile?.name}'s real data` }])
+    setLiveSteps([{ label: `Consulting ${activeProfile?.name}'s data` }])
 
     try {
       const result = await agentChat(
