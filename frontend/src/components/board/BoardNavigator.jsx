@@ -1,11 +1,10 @@
 import { useState } from 'react'
 import { useApp } from '../../context/AppContext'
 import PredictionBar from './PredictionBar'
-import { CATEGORY_CARDS, WORD_TYPES } from '../../data/defaultBoards'
+import { WORD_TYPES } from '../../data/defaultBoards'
 import { markTappedOnBoard } from '../../engine/gapDetector'
 import { getSymbolImageUrl } from '../../services/symbolService'
-
-const CATEGORY_ICON_BY_ID = Object.fromEntries(CATEGORY_CARDS.map(c => [c.category, c.icon]))
+import CategoryIcon from '../shared/CategoryIcon'
 
 const LEGEND = [
   { color: 'bg-orange-300', label: 'Pronoun'    },
@@ -100,12 +99,9 @@ export default function BoardNavigator({ onSymbolTap, onPredict }) {
 
       {/* Board header */}
       <div className="flex items-center gap-2.5 px-3 sm:px-6 py-3 bg-white border-b border-warm-200 flex-shrink-0">
-        <span className="font-sans font-bold text-warm-800 text-base flex items-center gap-1.5">
-          {isAtRoot ? (
-            <>🏠 Home</>
-          ) : (
-            <>{CATEGORY_ICON_BY_ID[currentBoard?.category] || '⭐'} {currentBoard?.name}</>
-          )}
+        <span className="font-sans font-bold text-warm-800 text-base flex items-center gap-2">
+          <CategoryIcon category={isAtRoot ? 'home' : currentBoard?.category} className="w-[18px] h-[18px]" />
+          {isAtRoot ? 'Home' : currentBoard?.name}
         </span>
 
         {/* Colour legend */}

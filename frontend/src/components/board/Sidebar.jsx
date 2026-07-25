@@ -1,6 +1,7 @@
 import { CATEGORY_CARDS } from '../../data/defaultBoards'
 import SidebarItem from '../shared/SidebarItem'
 import SidebarSwitchButton from '../shared/SidebarSwitchButton'
+import CategoryIcon from '../shared/CategoryIcon'
 
 function IdCardIcon() {
   return (
@@ -105,7 +106,7 @@ export default function Sidebar({
         </div>
         <div className="space-y-1 mb-5">
           <SidebarItem
-            icon="🏠"
+            icon={<CategoryIcon category="home" className="w-4 h-4" />}
             label="Home"
             active={isHome}
             onClick={withClose(() => rootBoard && onSelectBoard(rootBoard.id))}
@@ -116,7 +117,7 @@ export default function Sidebar({
             return (
               <SidebarItem
                 key={cat.category}
-                icon={cat.icon}
+                icon={<CategoryIcon category={cat.category} className="w-4 h-4" />}
                 label={cat.name}
                 active={!showJournal && activeBoard?.category === cat.category}
                 onClick={withClose(() => board && onSelectBoard(board.id))}

@@ -2,8 +2,7 @@ import { useApp } from '../../context/AppContext'
 import { updateProfileSettings } from '../../store/profileStore'
 import { createBoard, deleteBoard } from '../../store/boardStore'
 import PageHeader from '../shared/PageHeader'
-
-const BOARD_ICONS = { home: '🏠', feelings: '💛', food: '🍎', school: '📚', emergency: '🆘', custom: '⭐' }
+import CategoryIcon, { CATEGORY_META } from '../shared/CategoryIcon'
 
 export default function BoardEditorTab() {
   const { state, dispatch } = useApp()
@@ -142,13 +141,20 @@ export default function BoardEditorTab() {
               Add board
             </button>
           </div>
-          {boards.map((board, i) => (
+          {boards.map((board, i) => {
+            const meta = CATEGORY_META[board.category] || CATEGORY_META.custom
+            return (
             <div
               key={board.id}
               className={`flex items-center justify-between px-5 py-3.5 hover:bg-warm-50 transition-colors ${i < boards.length - 1 ? 'border-b border-warm-100' : ''}`}
             >
-              <div className="flex items-center gap-2.5">
-                <span className="text-lg">{BOARD_ICONS[board.category] || '⭐'}</span>
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+                  style={{ background: meta.bg }}
+                >
+                  <CategoryIcon category={board.category} className="w-[18px] h-[18px]" />
+                </div>
                 <span className="font-sans font-medium text-warm-800 text-base">{board.name}</span>
               </div>
               {board.category !== 'emergency' && (
@@ -160,7 +166,8 @@ export default function BoardEditorTab() {
                 </button>
               )}
             </div>
-          ))}
+            )
+          })}
         </div>
 
       </div>

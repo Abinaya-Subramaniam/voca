@@ -243,11 +243,11 @@ export const DEFAULT_BOARDS = [
 ]
 
 export const CATEGORY_CARDS = [
-  { category: 'feelings',   name: 'Feelings',    icon: '💛', color: 'bg-yellow-50 border-yellow-200'  },
-  { category: 'food',       name: 'Food & Drink', icon: '🍎', color: 'bg-red-50 border-red-200'        },
-  { category: 'people',     name: 'People',       icon: '👥', color: 'bg-purple-50 border-purple-200'  },
-  { category: 'activities', name: 'Activities',   icon: '⚡', color: 'bg-green-50 border-green-200'   },
-  { category: 'social',     name: 'Social',       icon: '🤝', color: 'bg-teal-50 border-teal-100'      },
-  { category: 'school',     name: 'School',       icon: '📚', color: 'bg-blue-50 border-blue-200'      },
-  { category: 'emergency',  name: 'Emergency',    icon: '🆘', color: 'bg-orange-50 border-orange-200'  },
+  { category: 'feelings',   name: 'Feelings',     color: 'bg-yellow-50 border-yellow-200'  },
+  { category: 'food',       name: 'Food & Drink', color: 'bg-red-50 border-red-200'        },
+  { category: 'people',     name: 'People',       color: 'bg-purple-50 border-purple-200'  },
+  { category: 'activities', name: 'Activities',   color: 'bg-green-50 border-green-200'   },
+  { category: 'social',     name: 'Social',       color: 'bg-teal-50 border-teal-100'      },
+  { category: 'school',     name: 'School',       color: 'bg-blue-50 border-blue-200'      },
+  { category: 'emergency',  name: 'Emergency',    color: 'bg-orange-50 border-orange-200'  },
 ]
