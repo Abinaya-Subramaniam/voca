@@ -1,5 +1,3 @@
-"""Weekly vocabulary coach — one structured Gemini call per profile per week."""
-
 import json
 import re
 

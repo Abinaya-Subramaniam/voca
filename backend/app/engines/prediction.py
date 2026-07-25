@@ -1,5 +1,3 @@
-"""Bigram next-word prediction — personal history weighted 3x over global fallback."""
-
 import json
 from pathlib import Path
 

@@ -1,6 +1,3 @@
-// Gap detection — the 8-second browse timer stays in the browser (it reflects
-// live user behaviour); signals and alert evaluation live on the backend.
-
 import * as api from '../api'
 
 const BROWSE_TIMEOUT_MS = 8000

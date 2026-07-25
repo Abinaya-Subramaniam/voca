@@ -16,7 +16,6 @@ class Settings(BaseSettings):
     gemini_api_key: str = ""
     gemini_model: str = "gemini-2.5-flash"
 
-    # comma-separated list of allowed frontend origins
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
 
     @property

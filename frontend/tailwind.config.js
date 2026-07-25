@@ -23,7 +23,7 @@ export default {
           50:  '#FAFAF8',
           100: '#F2F1EE',
           200: '#E8E6E1',
-          400: '#C4C1BA',
+          400: '#78746D',
           600: '#6B6860',
           900: '#2C2A26',
         },
@@ -36,7 +36,7 @@ export default {
       },
       fontFamily: {
         sans:    ['DM Sans', 'system-ui', 'sans-serif'],
-        display: ['Nunito', 'sans-serif'],
+        display: ['Plus Jakarta Sans', 'sans-serif'],
         mono:    ['DM Mono', 'monospace'],
       },
       borderRadius: {

@@ -1,5 +1,3 @@
-"""Vocabulary gap detection — browse-without-tap signals become weekly alerts."""
-
 import json
 from datetime import datetime, timedelta, timezone
 from pathlib import Path

@@ -1,11 +1,3 @@
-"""Tool layer for the Voca Companion agent.
-
-Tools are built per-request with the DB session and profile bound in a closure,
-so the LLM works against real data scoped to one authorised profile. The single
-action tool stages changes into `AgentContext` — nothing touches the board until
-the caregiver approves via the apply-action endpoint.
-"""
-
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 
@@ -35,7 +27,6 @@ STEP_LABELS = {
 
 @dataclass
 class AgentContext:
-    """Mutable per-request context shared between tool calls."""
     db: Session
     profile: Profile
     pending_action: dict | None = field(default=None)

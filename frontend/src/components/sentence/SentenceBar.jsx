@@ -35,38 +35,38 @@ export default function SentenceBar() {
 
   return (
     <div className="bg-white border-b border-warm-200 flex-shrink-0 shadow-subtle">
-      <div className="flex items-stretch" style={{ minHeight: '72px' }}>
+      <div className="flex items-stretch" style={{ minHeight: '80px' }}>
 
         {/* Symbol chips */}
-        <div className="flex-1 flex items-center gap-2 px-3 py-2 overflow-x-auto">
+        <div className="flex-1 flex items-center gap-2.5 px-4 py-2.5 overflow-x-auto">
           {sentenceBuffer.length === 0 ? (
-            <span className="font-sans text-warm-400 text-sm select-none">
+            <span className="font-sans text-warm-400 text-base select-none">
               Tap symbols to build a sentence...
             </span>
           ) : (
             sentenceBuffer.map((symbol, i) => (
               <div
                 key={i}
-                className="chip-in flex flex-col items-center flex-shrink-0 bg-teal-50 border border-teal-100 rounded-lg px-2 py-1 min-w-[52px] max-w-[64px]"
+                className="chip-in flex flex-col items-center flex-shrink-0 bg-teal-50 border border-teal-100 rounded-xl px-2.5 py-1.5 min-w-[58px] max-w-[70px]"
               >
                 {symbol.imageUrl ? (
                   <img src={symbol.imageUrl} alt={symbol.label}
-                    className="w-8 h-8 object-contain" />
+                    className="w-9 h-9 object-contain" />
                 ) : symbol.symbolId ? (
                   <img
                     src={getSymbolImageUrl(symbol.symbolId)}
                     alt={symbol.label}
-                    className="w-8 h-8 object-contain"
+                    className="w-9 h-9 object-contain"
                     onError={e => { e.target.style.display = 'none' }}
                   />
                 ) : (
-                  <div className="w-8 h-8 flex items-center justify-center">
-                    <span className="text-sm text-teal-600">
+                  <div className="w-9 h-9 flex items-center justify-center">
+                    <span className="text-base text-teal-600">
                       {symbol.label.charAt(0).toUpperCase()}
                     </span>
                   </div>
                 )}
-                <span className="text-[10px] font-sans font-500 text-teal-700 mt-0.5 leading-none text-center w-full truncate">
+                <span className="text-[11.5px] font-sans font-semibold text-teal-700 mt-0.5 leading-none text-center w-full truncate">
                   {symbol.label}
                 </span>
               </div>
@@ -79,7 +79,7 @@ export default function SentenceBar() {
           {sentenceBuffer.length > 0 && (
             <button
               onClick={handleBackspace}
-              className="px-3 text-warm-400 hover:bg-warm-100 hover:text-warm-700 transition-colors text-base font-sans"
+              className="px-3.5 text-warm-400 hover:bg-warm-100 hover:text-warm-700 transition-colors text-lg font-sans"
               title="Remove last word"
             >
               ⌫
@@ -88,7 +88,7 @@ export default function SentenceBar() {
           {sentenceBuffer.length > 0 && (
             <button
               onClick={handleClear}
-              className="px-3 text-sm font-sans font-500 text-warm-500 hover:bg-warm-100 transition-colors border-l border-warm-200"
+              className="px-4 text-sm font-sans font-semibold text-warm-500 hover:bg-warm-100 transition-colors border-l border-warm-200"
             >
               Clear
             </button>
@@ -97,14 +97,17 @@ export default function SentenceBar() {
             onClick={handleSpeak}
             disabled={!sentenceText}
             className={`
-              px-5 font-display font-bold text-sm text-white
-              flex items-center gap-2 transition-all border-l border-teal-600
+              px-6 font-display font-bold text-base text-white
+              flex items-center gap-2 transition-all border-l border-teal-700
               disabled:opacity-40 disabled:cursor-not-allowed
-              ${speaking
-                ? 'bg-teal-600'
-                : 'bg-teal-500 hover:bg-teal-600 active:scale-95'
-              }
+              active:scale-95
             `}
+            style={{
+              background: speaking
+                ? 'linear-gradient(135deg, #238A72, #1A6B58)'
+                : 'linear-gradient(135deg, #34AB92, #1F7A65)',
+              boxShadow: sentenceText ? '0 2px 12px rgba(45,155,131,0.35)' : 'none',
+            }}
           >
             {speaking ? (
               <span className="flex items-end gap-0.5 h-4">
@@ -117,7 +120,7 @@ export default function SentenceBar() {
                 ))}
               </span>
             ) : (
-              <span className="text-base">🔊</span>
+              <span className="text-lg">🔊</span>
             )}
             <span>{speaking ? 'Speaking' : 'Speak'}</span>
           </button>

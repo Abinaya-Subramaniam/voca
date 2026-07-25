@@ -42,7 +42,7 @@ def seed() -> None:
             print("Demo account already seeded — nothing to do.")
             return
 
-        user = User(email=DEMO_EMAIL, password_hash=hash_password(DEMO_PASSWORD))
+        user = User(email=DEMO_EMAIL, name="Demo Caregiver", password_hash=hash_password(DEMO_PASSWORD))
         db.add(user)
         db.flush()
 
@@ -76,14 +76,12 @@ def seed() -> None:
                     profile_id=profile.id, board_id=board.id, label=label, timestamp=when,
                 ))
 
-        # Older history (2 weeks ago)
         for day in range(14, 7, -1):
             when = now - timedelta(days=day)
             when = when.replace(hour=15 + rng.randrange(3), minute=rng.randrange(60))
             symbols, category = rng.choice(SENTENCES)
             add_entry(symbols, category, when)
 
-        # This week — more active
         for day in range(7, -1, -1):
             sessions = 4 if day < 3 else 2
             for sess in range(sessions):
@@ -92,7 +90,6 @@ def seed() -> None:
                 symbols, category = rng.choice(SENTENCES)
                 add_entry(symbols, category, when)
 
-        # Gap signals on Feelings (browsing without tapping)
         feelings = boards_by_category["feelings"]
         for i in range(4):
             when = (now - timedelta(days=i * 2)).replace(hour=16, minute=0)

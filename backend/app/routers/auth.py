@@ -16,7 +16,7 @@ def register(body: RegisterRequest, db: Session = Depends(get_db)):
     if existing:
         raise HTTPException(status.HTTP_409_CONFLICT, "An account with this email already exists")
 
-    user = User(email=body.email.lower(), password_hash=hash_password(body.password))
+    user = User(email=body.email.lower(), name=body.name.strip(), password_hash=hash_password(body.password))
     db.add(user)
     db.commit()
     db.refresh(user)

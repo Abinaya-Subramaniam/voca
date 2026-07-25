@@ -8,10 +8,10 @@ export default function CoachCard({ card }) {
           <span className="text-lg">🎓</span>
         </div>
         <div>
-          <div className="font-display font-bold text-white text-sm leading-none">
+          <div className="font-display font-bold text-white text-base leading-none">
             Vocabulary Coach
           </div>
-          <div className="font-sans text-teal-100 text-xs mt-0.5">
+          <div className="font-sans text-teal-100 text-sm mt-0.5">
             Powered by Gemini AI · Updated this week
           </div>
         </div>
@@ -20,7 +20,7 @@ export default function CoachCard({ card }) {
       <div className="p-4 space-y-4">
 
         {/* Summary */}
-        <p className="font-sans text-warm-700 text-sm leading-relaxed">
+        <p className="font-sans text-warm-700 text-base leading-relaxed">
           {card.summary}
         </p>
 
@@ -28,11 +28,11 @@ export default function CoachCard({ card }) {
         <div className="bg-teal-50 rounded-xl p-3 border border-teal-100">
           <div className="flex items-center gap-1.5 mb-1">
             <span className="text-sm">✅</span>
-            <div className="font-sans font-semibold text-teal-700 text-xs uppercase tracking-wide">
+            <div className="font-sans font-semibold text-teal-700 text-[13px] uppercase tracking-wide">
               Strength
             </div>
           </div>
-          <p className="font-sans text-teal-800 text-sm leading-relaxed">
+          <p className="font-sans text-teal-800 text-base leading-relaxed">
             {card.strength}
           </p>
         </div>
@@ -41,25 +41,25 @@ export default function CoachCard({ card }) {
         <div className="bg-amber-50 rounded-xl p-3 border border-amber-100">
           <div className="flex items-center gap-1.5 mb-1">
             <span className="text-sm">🎯</span>
-            <div className="font-sans font-semibold text-amber-700 text-xs uppercase tracking-wide">
+            <div className="font-sans font-semibold text-amber-700 text-[13px] uppercase tracking-wide">
               Priority this week
             </div>
           </div>
-          <p className="font-sans text-amber-800 text-sm leading-relaxed">
+          <p className="font-sans text-amber-800 text-base leading-relaxed">
             {card.priority}
           </p>
         </div>
 
         {/* Suggestions */}
         <div>
-          <div className="font-sans font-semibold text-warm-600 text-xs uppercase tracking-wide mb-2">
+          <div className="font-sans font-semibold text-warm-600 text-[13px] uppercase tracking-wide mb-2">
             Suggested vocabulary
           </div>
           <div className="flex flex-wrap gap-2">
             {card.suggestions?.map(word => (
               <span
                 key={word}
-                className="inline-flex items-center px-3 py-1.5 bg-teal-50 text-teal-700 rounded-lg text-sm font-medium border border-teal-100 whitespace-nowrap"
+                className="inline-flex items-center px-3 py-1.5 bg-teal-50 text-teal-700 rounded-lg text-base font-medium border border-teal-100 whitespace-nowrap"
               >
                 {word}
               </span>
@@ -69,10 +69,10 @@ export default function CoachCard({ card }) {
 
         {/* Reasoning */}
         <div className="bg-warm-50 rounded-xl p-3 border border-warm-200">
-          <div className="font-sans font-semibold text-warm-500 text-xs uppercase tracking-wide mb-1">
+          <div className="font-sans font-semibold text-warm-500 text-[13px] uppercase tracking-wide mb-1">
             Why these words
           </div>
-          <p className="font-sans text-warm-600 text-xs leading-relaxed">
+          <p className="font-sans text-warm-600 text-sm leading-relaxed">
             {card.reasoning}
           </p>
         </div>

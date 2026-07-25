@@ -15,9 +15,8 @@ class CamelModel(BaseModel):
     )
 
 
-# ── Auth ──────────────────────────────────────────────────────────────────────
-
 class RegisterRequest(CamelModel):
+    name: str = Field(min_length=1, max_length=100)
     email: EmailStr
     password: str = Field(min_length=8, max_length=128)
 
@@ -35,11 +34,11 @@ class TokenResponse(CamelModel):
 
 class UserOut(CamelModel):
     id: str
+    name: str
     email: str
     created_at: datetime
 
 
-# ── Profiles ──────────────────────────────────────────────────────────────────
 
 DEFAULT_SETTINGS = {
     "symbolSize": "medium",
@@ -85,7 +84,6 @@ class ProfileOut(CamelModel):
     created_at: datetime
 
 
-# ── Boards ────────────────────────────────────────────────────────────────────
 
 class BoardSymbolIn(CamelModel):
     symbol_id: str
@@ -123,7 +121,6 @@ class ReorderRequest(CamelModel):
     symbols: list[BoardSymbolOut]
 
 
-# ── Logs ──────────────────────────────────────────────────────────────────────
 
 class SentenceLogCreate(CamelModel):
     board_id: str | None = None
@@ -146,7 +143,6 @@ class TapLogCreate(CamelModel):
     previous_label: str | None = None  # also feeds the bigram prediction table
 
 
-# ── Journal ───────────────────────────────────────────────────────────────────
 
 class JournalEntryCreate(CamelModel):
     mood_symbol: dict[str, Any] | None = None
@@ -161,7 +157,6 @@ class JournalEntryOut(CamelModel):
     created_at: datetime
 
 
-# ── Insights / gaps / coach / predictions ─────────────────────────────────────
 
 class InsightsOut(CamelModel):
     total_this_week: int
@@ -198,7 +193,6 @@ class PredictionsOut(CamelModel):
     predictions: list[str]
 
 
-# ── Agent ─────────────────────────────────────────────────────────────────────
 
 class AgentMessage(CamelModel):
     role: str  # 'user' | 'companion'
@@ -230,13 +224,21 @@ class PendingAction(CamelModel):
 
 
 class AgentChatResponse(CamelModel):
+    id: str
     text: str
     steps: list[AgentStep]
     pending_action: PendingAction | None = None
 
 
-class ApplyActionRequest(CamelModel):
-    action: PendingAction
+class ChatMessageOut(CamelModel):
+    id: str
+    role: str
+    text: str
+    steps: list[AgentStep]
+    pending_action: PendingAction | None = None
+    action_status: str | None = None
+    action_added_count: int | None = None
+    created_at: datetime
 
 
 class ApplyActionResponse(CamelModel):

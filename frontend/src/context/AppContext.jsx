@@ -14,11 +14,6 @@ const initialState = {
   activeBoardId: null,
   sentenceBuffer: [],
   view: 'board',
-  mode: 'user',
-}
-
-function getModeForProfile(profileId) {
-  return sessionStorage.getItem(`voca_mode_${profileId}`) || 'user'
 }
 
 function reducer(state, action) {
@@ -32,7 +27,6 @@ function reducer(state, action) {
         activeProfile: action.activeProfile,
         boards: action.boards,
         activeBoardId: action.boards[0]?.id || null,
-        mode: action.activeProfileId ? getModeForProfile(action.activeProfileId) : 'user',
       }
     }
 
@@ -44,7 +38,6 @@ function reducer(state, action) {
         boards: [],
         activeBoardId: null,
         sentenceBuffer: [],
-        mode: 'user',
       }
     }
 
@@ -56,7 +49,6 @@ function reducer(state, action) {
         boards: action.boards,
         activeBoardId: action.boards[0]?.id || null,
         sentenceBuffer: [],
-        mode: getModeForProfile(action.profile.id),
       }
     }
 
@@ -99,13 +91,6 @@ function reducer(state, action) {
     case 'SET_VIEW':
       return { ...state, view: action.view }
 
-    case 'SET_MODE': {
-      if (state.activeProfileId) {
-        sessionStorage.setItem(`voca_mode_${state.activeProfileId}`, action.mode)
-      }
-      return { ...state, mode: action.mode }
-    }
-
     default:
       return state
   }
@@ -115,6 +100,7 @@ export function AppProvider({ children }) {
   const [state, baseDispatch] = useReducer(reducer, initialState)
   const [authed, setAuthed] = useState(isAuthenticated())
   const [booting, setBooting] = useState(isAuthenticated())
+  const [user, setUser] = useState(null)
   const profileIdRef = useRef(null)
   profileIdRef.current = state.activeProfileId
 
@@ -182,14 +168,18 @@ export function AppProvider({ children }) {
     }
   }, [selectProfile, refreshBoards, refreshProfiles, refreshActiveProfile])
 
-  // Boot: load profiles and restore the active one
+  // Boot: load the account, profiles, and restore the active one
   useEffect(() => {
-    if (!authed) return
+    if (!authed) { setUser(null); return }
     let cancelled = false
     async function boot() {
       try {
-        const profiles = await api.listProfiles()
+        const [profiles, me] = await Promise.all([
+          api.listProfiles(),
+          api.getMe().catch(() => null),
+        ])
         if (cancelled) return
+        setUser(me)
         const storedId = localStorage.getItem(ACTIVE_KEY)
         const resolved = profiles.find(p => p.id === storedId) || null
         if (resolved) {
@@ -225,10 +215,11 @@ export function AppProvider({ children }) {
     authed,
     setAuthed,
     booting,
+    user,
     selectProfile,
     refreshBoards,
     refreshProfiles,
-  }), [state, dispatch, authed, booting, selectProfile, refreshBoards, refreshProfiles])
+  }), [state, dispatch, authed, booting, user, selectProfile, refreshBoards, refreshProfiles])
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>
 }

@@ -1,8 +1,8 @@
 import { useApp } from '../../context/AppContext'
 import { updateProfileSettings } from '../../store/profileStore'
 import { createBoard, deleteBoard } from '../../store/boardStore'
-
-const BOARD_ICONS = { home: '🏠', feelings: '💛', food: '🍎', school: '📚', emergency: '🆘', custom: '⭐' }
+import PageHeader from '../shared/PageHeader'
+import CategoryIcon, { CATEGORY_META } from '../shared/CategoryIcon'
 
 export default function BoardEditorTab() {
   const { state, dispatch } = useApp()
@@ -29,41 +29,61 @@ export default function BoardEditorTab() {
 
   return (
     <div className="flex-1 overflow-y-auto bg-warm-50">
-      <div className="max-w-2xl mx-auto px-4 py-5 space-y-6">
+      <div className="max-w-5xl mx-auto px-8 py-8">
 
-        {/* Header */}
-        <div>
-          <h2 className="font-display font-bold text-warm-900 text-xl leading-none">Board Editor</h2>
-          <p className="font-sans text-warm-400 text-[13.5px] mt-1">
-            Display and accessibility settings for {activeProfile?.name}
-          </p>
-        </div>
+        <PageHeader
+          title="Board Editor"
+          subtitle="Display and accessibility settings for the communication board"
+        />
 
-        {/* Symbol size */}
-        <div className="bg-white rounded-xl p-4 border border-warm-200 shadow-subtle">
-          <label className="block font-sans font-semibold text-warm-700 text-sm mb-3">
-            Symbol size
-          </label>
-          <div className="flex gap-2">
-            {['small', 'medium', 'large'].map(size => (
-              <button
-                key={size}
-                onClick={() => updateSetting('symbolSize', size)}
-                className={`flex-1 py-2.5 rounded-xl text-sm font-medium border-2 transition-all capitalize ${
-                  settings.symbolSize === size
-                    ? 'bg-teal-500 text-white border-teal-500 shadow-subtle'
-                    : 'border-warm-200 text-warm-600 hover:border-teal-300 hover:text-teal-600'
-                }`}
-              >
-                {size}
-              </button>
-            ))}
+        {/* Symbol size + Font size — side by side */}
+        <div className="grid grid-cols-2 gap-5 mb-5">
+          <div className="bg-white rounded-2xl p-5 border border-warm-200 shadow-subtle">
+            <label className="block font-sans font-semibold text-warm-700 text-base mb-3">
+              Symbol size
+            </label>
+            <div className="flex gap-2">
+              {['small', 'medium', 'large'].map(size => (
+                <button
+                  key={size}
+                  onClick={() => updateSetting('symbolSize', size)}
+                  className={`flex-1 py-2.5 rounded-xl text-base font-medium border-2 transition-all capitalize ${
+                    settings.symbolSize === size
+                      ? 'bg-teal-500 text-white border-teal-500 shadow-subtle'
+                      : 'border-warm-200 text-warm-600 hover:border-teal-300 hover:text-teal-600'
+                  }`}
+                >
+                  {size}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-white rounded-2xl p-5 border border-warm-200 shadow-subtle">
+            <label className="block font-sans font-semibold text-warm-700 text-base mb-3">
+              Symbol label size
+            </label>
+            <div className="flex gap-2">
+              {[10, 12, 14, 16].map(size => (
+                <button
+                  key={size}
+                  onClick={() => updateSetting('fontSize', size)}
+                  className={`flex-1 py-2.5 rounded-xl text-base font-medium border-2 transition-all ${
+                    settings.fontSize === size
+                      ? 'bg-teal-500 text-white border-teal-500 shadow-subtle'
+                      : 'border-warm-200 text-warm-600 hover:border-teal-300 hover:text-teal-600'
+                  }`}
+                >
+                  {size}px
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Grid columns */}
-        <div className="bg-white rounded-xl p-4 border border-warm-200 shadow-subtle">
-          <label className="block font-sans font-semibold text-warm-700 text-sm mb-3">
+        <div className="bg-white rounded-2xl p-5 border border-warm-200 shadow-subtle mb-5">
+          <label className="block font-sans font-semibold text-warm-700 text-base mb-3">
             Grid columns
             <span className="ml-2 font-mono text-teal-500 font-bold">{settings.gridColumns || 4}</span>
           </label>
@@ -73,37 +93,15 @@ export default function BoardEditorTab() {
             onChange={e => updateSetting('gridColumns', parseInt(e.target.value))}
             className="w-full accent-teal-500"
           />
-          <div className="flex justify-between text-[13.5px] text-warm-400 mt-1 font-mono">
+          <div className="flex justify-between text-sm text-warm-400 mt-1 font-mono">
             <span>3</span><span>4</span><span>5</span><span>6</span>
           </div>
         </div>
 
-        {/* Font size */}
-        <div className="bg-white rounded-xl p-4 border border-warm-200 shadow-subtle">
-          <label className="block font-sans font-semibold text-warm-700 text-sm mb-3">
-            Symbol label size
-          </label>
-          <div className="flex gap-2">
-            {[10, 12, 14, 16].map(size => (
-              <button
-                key={size}
-                onClick={() => updateSetting('fontSize', size)}
-                className={`flex-1 py-2.5 rounded-xl text-sm font-medium border-2 transition-all ${
-                  settings.fontSize === size
-                    ? 'bg-teal-500 text-white border-teal-500 shadow-subtle'
-                    : 'border-warm-200 text-warm-600 hover:border-teal-300 hover:text-teal-600'
-                }`}
-              >
-                {size}px
-              </button>
-            ))}
-          </div>
-        </div>
-
         {/* Accessibility toggles */}
-        <div className="bg-white rounded-xl border border-warm-200 shadow-subtle overflow-hidden">
-          <div className="px-4 py-3 border-b border-warm-100">
-            <span className="font-sans font-semibold text-warm-700 text-sm">Accessibility</span>
+        <div className="bg-white rounded-2xl border border-warm-200 shadow-subtle overflow-hidden mb-5">
+          <div className="px-5 py-3.5 border-b border-warm-100">
+            <span className="font-sans font-semibold text-warm-700 text-base">Accessibility</span>
           </div>
           {[
             { key: 'highContrast',         label: 'High contrast mode',    desc: 'Dark backgrounds, high visibility' },
@@ -112,11 +110,11 @@ export default function BoardEditorTab() {
           ].map(({ key, label, desc }, i, arr) => (
             <div
               key={key}
-              className={`flex items-center justify-between px-4 py-3 hover:bg-warm-50 transition-colors ${i < arr.length - 1 ? 'border-b border-warm-100' : ''}`}
+              className={`flex items-center justify-between px-5 py-3.5 hover:bg-warm-50 transition-colors ${i < arr.length - 1 ? 'border-b border-warm-100' : ''}`}
             >
               <div>
-                <div className="font-sans font-medium text-warm-800 text-sm">{label}</div>
-                <div className="font-sans text-warm-400 text-[13.5px] mt-0.5">{desc}</div>
+                <div className="font-sans font-medium text-warm-800 text-base">{label}</div>
+                <div className="font-sans text-warm-400 text-sm mt-0.5">{desc}</div>
               </div>
               <button
                 onClick={() => updateSetting(key, !settings[key])}
@@ -129,12 +127,12 @@ export default function BoardEditorTab() {
         </div>
 
         {/* Boards */}
-        <div className="bg-white rounded-xl border border-warm-200 shadow-subtle overflow-hidden">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-warm-100">
-            <span className="font-sans font-semibold text-warm-700 text-sm">Boards</span>
+        <div className="bg-white rounded-2xl border border-warm-200 shadow-subtle overflow-hidden">
+          <div className="flex items-center justify-between px-5 py-3.5 border-b border-warm-100">
+            <span className="font-sans font-semibold text-warm-700 text-base">Boards</span>
             <button
               onClick={handleAddBoard}
-              className="flex items-center gap-1.5 text-[13.5px] font-semibold text-teal-600 hover:text-teal-700 transition-colors"
+              className="flex items-center gap-1.5 text-sm font-semibold text-teal-600 hover:text-teal-700 transition-colors"
             >
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
                 <line x1="12" y1="5" x2="12" y2="19"/>
@@ -143,25 +141,33 @@ export default function BoardEditorTab() {
               Add board
             </button>
           </div>
-          {boards.map((board, i) => (
+          {boards.map((board, i) => {
+            const meta = CATEGORY_META[board.category] || CATEGORY_META.custom
+            return (
             <div
               key={board.id}
-              className={`flex items-center justify-between px-4 py-3 hover:bg-warm-50 transition-colors ${i < boards.length - 1 ? 'border-b border-warm-100' : ''}`}
+              className={`flex items-center justify-between px-5 py-3.5 hover:bg-warm-50 transition-colors ${i < boards.length - 1 ? 'border-b border-warm-100' : ''}`}
             >
-              <div className="flex items-center gap-2.5">
-                <span className="text-lg">{BOARD_ICONS[board.category] || '⭐'}</span>
-                <span className="font-sans font-medium text-warm-800 text-sm">{board.name}</span>
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+                  style={{ background: meta.bg }}
+                >
+                  <CategoryIcon category={board.category} className="w-[18px] h-[18px]" />
+                </div>
+                <span className="font-sans font-medium text-warm-800 text-base">{board.name}</span>
               </div>
               {board.category !== 'emergency' && (
                 <button
                   onClick={() => handleDeleteBoard(board.id)}
-                  className="text-[13.5px] text-warm-400 hover:text-red-500 transition-colors font-medium"
+                  className="text-sm text-warm-400 hover:text-red-500 transition-colors font-medium"
                 >
                   Delete
                 </button>
               )}
             </div>
-          ))}
+            )
+          })}
         </div>
 
       </div>
