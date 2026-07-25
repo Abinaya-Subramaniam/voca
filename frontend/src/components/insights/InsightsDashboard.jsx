@@ -173,7 +173,7 @@ export default function InsightsDashboard() {
           {insights.newVocab.length > 0 && (
             <div className="bg-white rounded-2xl p-5 border border-warm-200 shadow-subtle">
               <div className="flex items-center gap-2 mb-3">
-                <span className="text-base">🌱</span>
+                <span className="text-base"></span>
                 <span className="font-sans font-semibold text-warm-700 text-base">
                   New vocabulary used
                 </span>
@@ -194,7 +194,7 @@ export default function InsightsDashboard() {
           {gapAlerts.length > 0 && (
             <div className={insights.newVocab.length === 0 ? 'col-span-2' : ''}>
               <div className="flex items-center gap-2 mb-2.5">
-                <span className="text-base">🔍</span>
+                <span className="text-base"></span>
                 <span className="font-sans font-semibold text-warm-700 text-base">
                   Vocabulary gaps detected
                 </span>
