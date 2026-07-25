@@ -81,7 +81,10 @@ export const generateCoachCard = (profileId, force = false) =>
   request(`/api/profiles/${profileId}/coach/generate?force=${force}`, { method: 'POST' })
 
 
+export const getAgentMessages = (profileId) => request(`/api/profiles/${profileId}/agent/messages`)
 export const agentChat = (profileId, messages) =>
   request(`/api/profiles/${profileId}/agent/chat`, { method: 'POST', body: { messages } })
-export const applyAgentAction = (profileId, action) =>
-  request(`/api/profiles/${profileId}/agent/apply-action`, { method: 'POST', body: { action } })
+export const applyAgentAction = (profileId, messageId) =>
+  request(`/api/profiles/${profileId}/agent/messages/${messageId}/apply`, { method: 'POST' })
+export const dismissAgentAction = (profileId, messageId) =>
+  request(`/api/profiles/${profileId}/agent/messages/${messageId}/dismiss`, { method: 'POST' })

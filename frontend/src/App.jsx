@@ -20,7 +20,7 @@ import CompanionTab from './components/caregiver/CompanionTab'
 import CaregiverSidebar from './components/caregiver/CaregiverSidebar'
 
 const CAREGIVER_TAB_IDS = ['overview', 'insights', 'boardeditor', 'companion']
-const CAREGIVER_TAB_LABELS = { overview: 'Overview', insights: 'Insights', boardeditor: 'Board Editor', companion: 'Companion' }
+const CAREGIVER_TAB_LABELS = { overview: 'Overview', insights: 'Insights', boardeditor: 'Board Editor', companion: 'Voca Bot' }
 
 function greetingPhrase() {
   const hour = new Date().getHours()
@@ -80,9 +80,6 @@ function homePathFor(authed, activeProfileId) {
   return activeProfileId ? '/board' : '/profiles'
 }
 
-// Guards a route that needs both an authenticated session and an active profile
-// (the board and caregiver dashboards). Redirects to the right earlier step
-// otherwise, so a bookmarked/typed URL always resolves somewhere sensible.
 function RequireProfile({ children }) {
   const { authed, booting, state } = useApp()
   if (!authed) return <Navigate to="/login" replace />
@@ -91,7 +88,6 @@ function RequireProfile({ children }) {
   return children
 }
 
-// ── /  — landing page ──────────────────────────────────────────────────────
 
 function LandingRoute() {
   const navigate = useNavigate()
@@ -113,8 +109,6 @@ function LandingRoute() {
   )
 }
 
-// ── /login ───────────────────────────────────────────────────────────────
-
 function LoginRoute() {
   const navigate = useNavigate()
   const { authed, booting, setAuthed, state } = useApp()
@@ -131,8 +125,6 @@ function LoginRoute() {
     />
   )
 }
-
-// ── /profiles ────────────────────────────────────────────────────────────
 
 function ProfilesRoute() {
   const navigate = useNavigate()
@@ -165,7 +157,6 @@ function ProfilesRoute() {
   )
 }
 
-// ── /board, /board/journal ──────────────────────────────────────────────
 
 function BoardRoute() {
   const navigate = useNavigate()
@@ -252,8 +243,6 @@ function BoardRoute() {
   )
 }
 
-// ── /caregiver/:tab ──────────────────────────────────────────────────────
-
 function CaregiverRoute() {
   const navigate = useNavigate()
   const { tab } = useParams()
@@ -295,8 +284,6 @@ function CaregiverRoute() {
     </div>
   )
 }
-
-// ── App ──────────────────────────────────────────────────────────────────
 
 export default function App() {
   return (

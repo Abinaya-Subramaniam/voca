@@ -215,7 +215,7 @@ const FAQ_ITEMS = [
   },
   {
     q: 'Do I need an internet connection?',
-    a: "Speaking sentences aloud works fully offline, right in your browser. An internet connection is only needed for AI features like the weekly Coach and the Companion agent.",
+    a: "Speaking sentences aloud works fully offline, right in your browser. An internet connection is only needed for AI features like the weekly Coach and the Voca Bot agent.",
   },
   {
     q: 'Is my data private?',

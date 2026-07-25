@@ -151,6 +151,20 @@ class CoachCard(Base):
     generated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
 
+class ChatMessage(Base):
+    __tablename__ = "chat_messages"
+
+    id: Mapped[str] = mapped_column(String(32), primary_key=True, default=new_id)
+    profile_id: Mapped[str] = mapped_column(ForeignKey("profiles.id", ondelete="CASCADE"), index=True)
+    role: Mapped[str] = mapped_column(String(20))  # 'user' | 'companion'
+    text: Mapped[str] = mapped_column(Text)
+    steps: Mapped[list] = mapped_column(JSON, default=list)
+    pending_action: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    action_status: Mapped[str | None] = mapped_column(String(20), nullable=True)  # 'pending' | 'applied' | 'dismissed'
+    action_added_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, index=True)
+
+
 class Bigram(Base):
     __tablename__ = "bigrams"
     __table_args__ = (UniqueConstraint("profile_id", "prev_label", "next_label"),)

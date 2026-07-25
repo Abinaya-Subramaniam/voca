@@ -224,13 +224,21 @@ class PendingAction(CamelModel):
 
 
 class AgentChatResponse(CamelModel):
+    id: str
     text: str
     steps: list[AgentStep]
     pending_action: PendingAction | None = None
 
 
-class ApplyActionRequest(CamelModel):
-    action: PendingAction
+class ChatMessageOut(CamelModel):
+    id: str
+    role: str
+    text: str
+    steps: list[AgentStep]
+    pending_action: PendingAction | None = None
+    action_status: str | None = None
+    action_added_count: int | None = None
+    created_at: datetime
 
 
 class ApplyActionResponse(CamelModel):

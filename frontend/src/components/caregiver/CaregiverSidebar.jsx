@@ -52,7 +52,7 @@ const TABS = [
   { id: 'overview',    label: 'Overview',     icon: <GridIcon />,  tint: 'bg-teal-50'   },
   { id: 'insights',    label: 'Insights',     icon: <ChartIcon />, tint: 'bg-blue-50'   },
   { id: 'boardeditor', label: 'Board Editor', icon: <EditIcon />,  tint: 'bg-yellow-50' },
-  { id: 'companion',   label: 'Companion',    icon: <ChatIcon />,  tint: 'bg-purple-50' },
+  { id: 'companion',   label: 'Voca Bot',     icon: <ChatIcon />,  tint: 'bg-purple-50' },
 ]
 
 export default function CaregiverSidebar({
