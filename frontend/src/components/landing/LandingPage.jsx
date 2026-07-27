@@ -1,6 +1,39 @@
-import { Fragment, useState, useRef } from 'react'
+import { Fragment, useState, useRef, useEffect } from 'react'
 import Navbar from '../shared/Navbar'
 import ProfileMenu from '../shared/ProfileMenu'
+
+const FEATURE_ITEMS = [
+  {
+    icon: '🧠', bg: '#E8F7F4', border: '#B8E8DF', accent: '#2D9B83',
+    title: 'AI word prediction',
+    desc: 'Learns each person\'s unique communication patterns and predicts the next word in real time.',
+  },
+  {
+    icon: '🗂️', bg: '#FDF3E0', border: '#F5DFA0', accent: '#C98A1F',
+    title: 'Auto-organising boards',
+    desc: 'Boards reorder themselves based on real usage — no manual dragging or editing required.',
+  },
+  {
+    icon: '🔍', bg: '#FBE8F0', border: '#F0BDD0', accent: '#C24A78',
+    title: 'Missing vocabulary alerts',
+    desc: 'Flags gaps in the vocabulary and suggests exactly which symbols to add next.',
+  },
+  {
+    icon: '🎓', bg: '#EEE8FB', border: '#D0BEF0', accent: '#7A5AC9',
+    title: 'Weekly AI coaching',
+    desc: 'Personalised guidance for caregivers, powered by Gemini — like a virtual speech therapist.',
+  },
+  {
+    icon: '🤖', bg: '#E8F7F4', border: '#B8E8DF', accent: '#1F8A7A',
+    title: 'Agentic Voca Bot',
+    desc: "Doesn't just chat — takes action on its own, reorganising boards and adding vocabulary for you.",
+  },
+  {
+    icon: '🌐', bg: '#E5F1FB', border: '#BBDAF5', accent: '#3D8FD1',
+    title: 'Free & works offline',
+    desc: 'Speaks fully offline in any modern browser, on any device. No subscriptions, ever.',
+  },
+]
 
 const COMPARISON_ROWS = [
   { feature: 'Word prediction',    typical: 'Static, generic word lists',              voca: 'Learns your patterns in real time' },
@@ -25,6 +58,139 @@ const BTN = {
     fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800,
     cursor: 'pointer', transition: 'all 0.15s',
   },
+}
+
+function FeatureCarousel({ items }) {
+  const [index, setIndex] = useState(0)
+  const [paused, setPaused] = useState(false)
+
+  useEffect(() => {
+    if (paused) return
+    const id = setInterval(() => {
+      setIndex(i => (i + 1) % items.length)
+    }, 4200)
+    return () => clearInterval(id)
+  }, [paused, items.length])
+
+  function go(i) { setIndex(((i % items.length) + items.length) % items.length) }
+  function prev() { go(index - 1) }
+  function next() { go(index + 1) }
+
+  const arrowBase = {
+    position: 'absolute', top: '50%', transform: 'translateY(-50%)',
+    width: '40px', height: '40px', borderRadius: '999px',
+    background: 'white', border: '1.5px solid #E8E6E1', color: '#6B6860',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    cursor: 'pointer', fontSize: '20px', lineHeight: 1, zIndex: 3,
+    boxShadow: '0 4px 14px rgba(44,42,38,0.10)', transition: 'all 0.15s',
+  }
+  function arrowHover(e) { e.currentTarget.style.borderColor = '#2D9B83'; e.currentTarget.style.color = '#2D9B83' }
+  function arrowLeave(e) { e.currentTarget.style.borderColor = '#E8E6E1'; e.currentTarget.style.color = '#6B6860' }
+
+  return (
+    <div
+      style={{ maxWidth: '880px', margin: '0 auto' }}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      <div style={{
+        position: 'relative', borderRadius: '24px', overflow: 'hidden',
+        border: '1.5px solid #E8E6E1', boxShadow: '0 12px 40px rgba(44,42,38,0.06)',
+        background: 'white',
+      }}>
+        <div style={{
+          display: 'flex',
+          transform: `translateX(-${index * 100}%)`,
+          transition: 'transform 0.6s cubic-bezier(0.65,0,0.35,1)',
+        }}>
+          {items.map(({ icon, bg, border, accent, title, desc }) => (
+            <div key={title} style={{ flex: '0 0 100%', width: '100%' }}>
+              <div style={{
+                position: 'relative', overflow: 'hidden',
+                background: `linear-gradient(135deg, ${bg} 0%, white 70%)`,
+                minHeight: '280px',
+              }}>
+                {/* drifting decorative blobs */}
+                <div className="feature-bg-blob" style={{
+                  position: 'absolute', top: '-40px', right: '-30px',
+                  width: '160px', height: '160px', borderRadius: '50%',
+                  background: border, opacity: 0.35, filter: 'blur(1px)',
+                }} />
+                <div className="feature-bg-blob" style={{
+                  position: 'absolute', bottom: '-36px', left: '6%',
+                  width: '90px', height: '90px', borderRadius: '50%',
+                  background: border, opacity: 0.25, animationDelay: '-3s',
+                }} />
+
+                {/* wavy accent line threading behind the content */}
+                <svg
+                  viewBox="0 0 400 40" preserveAspectRatio="none"
+                  style={{ position: 'absolute', bottom: '18px', left: 0, width: '100%', height: '32px', opacity: 0.5 }}
+                >
+                  <path d="M0,20 Q50,2 100,20 T200,20 T300,20 T400,20" fill="none" stroke={accent} strokeWidth="2" />
+                </svg>
+
+                <div
+                  className="flex flex-col md:flex-row items-center text-center md:text-left"
+                  style={{ position: 'relative', zIndex: 1, gap: '32px', padding: 'clamp(36px, 6vw, 56px)' }}
+                >
+                  <div className="feature-icon-blob" style={{
+                    width: '104px', height: '104px', flexShrink: 0,
+                    background: `linear-gradient(145deg, ${accent}, ${border})`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '46px', boxShadow: `0 14px 30px ${accent}40`,
+                  }}>
+                    {icon}
+                  </div>
+                  <div>
+                    <div style={{
+                      fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 900,
+                      fontSize: '1.6rem', color: '#2C2A26', marginBottom: '10px', letterSpacing: '-0.01em',
+                    }}>
+                      {title}
+                    </div>
+                    <div style={{ fontSize: '17px', color: '#6B6860', lineHeight: 1.6, maxWidth: '480px' }}>
+                      {desc}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <button
+          onClick={prev} aria-label="Previous feature"
+          style={{ ...arrowBase, left: '16px' }}
+          onMouseEnter={arrowHover} onMouseLeave={arrowLeave}
+        >
+          ‹
+        </button>
+        <button
+          onClick={next} aria-label="Next feature"
+          style={{ ...arrowBase, right: '16px' }}
+          onMouseEnter={arrowHover} onMouseLeave={arrowLeave}
+        >
+          ›
+        </button>
+      </div>
+
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '22px' }}>
+        {items.map((item, i) => (
+          <button
+            key={item.title}
+            onClick={() => go(i)}
+            aria-label={`Go to ${item.title}`}
+            style={{
+              width: i === index ? '28px' : '8px', height: '8px', borderRadius: '999px',
+              background: i === index ? '#2D9B83' : '#E8E6E1', border: 'none',
+              cursor: 'pointer', transition: 'all 0.3s', padding: 0,
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  )
 }
 
 function Modal({ title, onClose, children }) {
@@ -116,7 +282,7 @@ function PrivacyContent() {
       <p>Voca does not collect, transmit, or store any personal data on external servers. The following data is stored <strong>only in your browser</strong>:</p>
       <ul style={{ paddingLeft: '18px', marginTop: '6px' }}>
         <li>Profile names and avatar colours</li>
-        <li>Symbol boards and customisations</li>
+        <li>Symbol boards and customizations</li>
         <li>Communication logs and journal entries</li>
         <li>Tap history (used for on-device AI features)</li>
         <li>Settings and preferences</li>
@@ -238,7 +404,7 @@ const FAQ_ITEMS = [
     a: 'Yes — tablet, phone, or laptop, in any modern browser. There\'s nothing to install and no app store required.',
   },
   {
-    q: 'Can I customise the symbol boards?',
+    q: 'Can I customize the symbol boards?',
     a: 'Yes. The Caregiver dashboard lets you add, edit, reorder, and reorganise boards and symbols at any time.',
   },
 ]
@@ -416,7 +582,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
             >
               Start communicating →
             </button>
-            <a href="#how-it-works" style={{
+            <a href="#features" style={{
               padding: '16px 26px', background: 'white', color: '#6B6860',
               border: '1.5px solid #E8E6E1', borderRadius: '14px', fontSize: '17px',
               fontWeight: 500, cursor: 'pointer', textDecoration: 'none',
@@ -539,70 +705,48 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
         </div>
       </section>
 
-      {/* How it works */}
-      <section id="how-it-works" style={{
-        background: 'white', borderTop: '1px solid #E8E6E1', borderBottom: '1px solid #E8E6E1',
-        padding: 'clamp(48px, 8vw, 72px) clamp(1.25rem, 5vw, 2rem)',
+      {/* Features */}
+      <section id="features" style={{
+        position: 'relative', overflow: 'hidden',
+        background: 'linear-gradient(180deg, #F1FAF6 0%, #ECF8F2 100%)',
+        padding: 'clamp(72px, 10vw, 100px) 0',
       }}>
-        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+        <svg
+          viewBox="0 0 1440 74" preserveAspectRatio="none"
+          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '56px', display: 'block' }}
+        >
+          <path d="M0,40 C240,90 480,0 720,20 C960,40 1200,90 1440,40 L1440,0 L0,0 Z" fill="#FAFAF8" />
+        </svg>
+        <svg
+          viewBox="0 0 1440 74" preserveAspectRatio="none"
+          style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '56px', display: 'block', transform: 'scaleY(-1)' }}
+        >
+          <path d="M0,40 C240,90 480,0 720,20 C960,40 1200,90 1440,40 L1440,74 L0,74 Z" fill="white" />
+        </svg>
+
+        <div style={{ position: 'relative', zIndex: 1, maxWidth: '1100px', margin: '0 auto', padding: '0 clamp(1.25rem, 5vw, 2rem)' }}>
           <div style={{ textAlign: 'center', marginBottom: '52px' }}>
             <div style={{
               display: 'inline-block', padding: '4px 14px',
-              background: '#E8F7F4', borderRadius: '100px',
+              background: 'white', borderRadius: '100px',
               fontSize: '11px', fontWeight: 600, color: '#2D9B83',
               letterSpacing: '0.06em', marginBottom: '16px',
             }}>
-              HOW IT WORKS
+              FEATURES
             </div>
             <h2 style={{
               fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 900,
               fontSize: 'clamp(1.9rem, 5vw, 2.6rem)', color: '#2C2A26', margin: '0 0 12px',
               letterSpacing: '-0.02em',
             }}>
-              Simple to use. Intelligent underneath.
+              Everything you need, built in.
             </h2>
             <p style={{ fontSize: '1.3rem', color: '#6B6860', margin: 0 }}>
-              Three steps between a thought and a spoken word.
+              No plug-ins, no upsells — just one AAC app that keeps getting smarter.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              { step: '01', emoji: '🟦', title: 'Tap symbols', desc: 'Choose from thousands of pictographic symbols organised into context boards — home, school, feelings, food.' },
-              { step: '02', emoji: '💬', title: 'Build sentences', desc: 'Symbols build up in the sentence bar. AI predicts what comes next based on personal communication patterns.' },
-              { step: '03', emoji: '🔊', title: 'Speak', desc: "One tap reads the sentence aloud using the browser's built-in voice. No internet needed. Works on any device." },
-            ].map(({ step, emoji, title, desc }) => (
-              <div key={step} style={{
-                background: '#FAFAF8', borderRadius: '16px', padding: '28px 24px',
-                border: '1.5px solid #E8E6E1', position: 'relative',
-              }}>
-                <div style={{
-                  position: 'absolute', top: '20px', right: '20px',
-                  fontFamily: 'DM Mono, monospace', fontSize: '12.5px',
-                  color: '#C4C1BA', fontWeight: 500,
-                }}>
-                  {step}
-                </div>
-                <div style={{ fontSize: '2rem', marginBottom: '16px' }}>{emoji}</div>
-                <div style={{
-                  fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800,
-                  fontSize: '1.35rem', color: '#2C2A26', marginBottom: '10px',
-                }}>
-                  {title}
-                </div>
-                <div style={{ fontSize: '17.5px', color: '#6B6860', lineHeight: 1.6 }}>{desc}</div>
-              </div>
-            ))}
-          </div>
-
-          <div style={{ textAlign: 'center', marginTop: '40px' }}>
-            <button onClick={onEnter} style={BTN.primary}
-              onMouseEnter={e => { e.currentTarget.style.background = '#238A72'; e.currentTarget.style.transform = 'translateY(-1px)' }}
-              onMouseLeave={e => { e.currentTarget.style.background = '#2D9B83'; e.currentTarget.style.transform = 'translateY(0)' }}
-            >
-              Try it now →
-            </button>
-          </div>
+          <FeatureCarousel items={FEATURE_ITEMS} />
         </div>
       </section>
 
