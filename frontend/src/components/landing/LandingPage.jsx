@@ -4,11 +4,19 @@ import ProfileMenu from '../shared/ProfileMenu'
 
 const COMPARISON_ROWS = [
   { feature: 'Word prediction',    typical: 'Static, generic word lists',              voca: 'Learns your patterns in real time' },
-  { feature: 'Board layout',       typical: 'Fixed grid — manual editing only',        voca: 'Auto-reorders itself by real usage' },
+  { feature: 'Board layout',       typical: 'Fixed grid — manual editing only',        voca: 'AI auto-reorders your board by real usage' },
   { feature: 'Missing vocabulary', typical: 'No signal when a word is missing',        voca: 'Flags gaps, suggests exactly what to add' },
   { feature: 'Coaching & guidance', typical: "None — you're on your own",              voca: 'Weekly AI coaching, powered by Gemini' },
   { feature: 'Cost',               typical: '$50–150/hr for therapist consultations',  voca: 'Free. Always.' },
 ]
+
+function renderWithAIEmphasis(text) {
+  return text.split(/(AI)/g).map((part, i) =>
+    part === 'AI'
+      ? <strong key={i} style={{ fontWeight: 900, color: '#8CE0C8' }}>AI</strong>
+      : part
+  )
+}
 
 const BTN = {
   primary: {
@@ -210,16 +218,16 @@ function ContactForm() {
 
 const FAQ_ITEMS = [
   {
+    q: 'What is an AAC board?',
+    a: "AAC stands for Augmentative and Alternative Communication. An AAC board is a grid of symbols and words that a non-verbal or minimally verbal person taps to build sentences, which are then spoken aloud — giving them a voice when speech is difficult or impossible.",
+  },
+  {
     q: 'Is Voca really free?',
     a: 'Yes — completely free, with no subscriptions, trials, or hidden costs. Voca is built as an accessibility tool, not a business.',
   },
   {
-    q: 'Do I need an internet connection?',
-    a: "Speaking sentences aloud works fully offline, right in your browser. An internet connection is only needed for AI features like the weekly Coach and the Voca Bot agent.",
-  },
-  {
-    q: 'Is my data private?',
-    a: 'Yes. Profiles, boards, and communication logs stay on your own device. Nothing is sold or shared with third parties.',
+    q: 'What is the Voca Bot?',
+    a: "It's an agentic assistant built into Voca — instead of just answering questions, it takes action on its own: adding missing vocabulary, reorganising boards, and surfacing suggestions proactively, without you having to ask.",
   },
   {
     q: 'What age group is Voca designed for?',
@@ -598,7 +606,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
         </div>
       </section>
 
-      {/* Journal feature */}
+      {/* Journal feature — commented out, keep for later
       <section id="journal" style={{ padding: 'clamp(48px, 8vw, 72px) clamp(1.25rem, 5vw, 2rem)', maxWidth: '1100px', margin: '0 auto' }}>
         <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-10 lg:gap-[60px]">
           <div style={{ position: 'relative' }}>
@@ -724,6 +732,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
           </div>
         </div>
       </section>
+      */}
 
       {/* AI features — Voca vs. typical AAC apps */}
       <section id="ai-features" style={{ padding: 'clamp(48px, 8vw, 72px) clamp(1.25rem, 5vw, 2rem)', maxWidth: '1100px', margin: '0 auto' }}>
@@ -781,21 +790,15 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
               </div>
               <div style={{
                 background: 'white', padding: '20px 16px', borderTop: '1px solid #F0EFEA',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', textAlign: 'center',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center',
               }}>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#C4C1BA" strokeWidth="2.5" strokeLinecap="round" style={{ flexShrink: 0 }}>
-                  <line x1="5" y1="12" x2="19" y2="12" />
-                </svg>
                 <span style={{ fontSize: '15px', color: '#6B6860', lineHeight: 1.5 }}>{row.typical}</span>
               </div>
               <div style={{
                 background: '#14523F', padding: '20px 16px', borderTop: '1px solid rgba(255,255,255,0.1)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', textAlign: 'center',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center',
               }}>
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8CE0C8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-                <span style={{ fontSize: '15px', fontWeight: 600, color: 'white', lineHeight: 1.5 }}>{row.voca}</span>
+                <span style={{ fontSize: '15px', fontWeight: 600, color: 'white', lineHeight: 1.5 }}>{renderWithAIEmphasis(row.voca)}</span>
               </div>
             </Fragment>
           ))}
@@ -829,7 +832,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
                   <span style={{ fontSize: '13.5px', color: '#6B6860', lineHeight: 1.4 }}>{row.typical}</span>
                 </div>
                 <div style={{ background: '#14523F', padding: '7px 10px 11px' }}>
-                  <span style={{ fontSize: '13.5px', fontWeight: 600, color: 'white', lineHeight: 1.4 }}>{row.voca}</span>
+                  <span style={{ fontSize: '13.5px', fontWeight: 600, color: 'white', lineHeight: 1.4 }}>{renderWithAIEmphasis(row.voca)}</span>
                 </div>
               </div>
             </div>
