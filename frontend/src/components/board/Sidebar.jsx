@@ -1,6 +1,5 @@
 import { CATEGORY_CARDS } from '../../data/defaultBoards'
 import SidebarItem from '../shared/SidebarItem'
-import SidebarSwitchButton from '../shared/SidebarSwitchButton'
 import CategoryIcon from '../shared/CategoryIcon'
 
 function IdCardIcon() {
@@ -14,28 +13,19 @@ function IdCardIcon() {
   )
 }
 
-function SwitchUserIcon() {
+function LogOutIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-      <circle cx="9" cy="7" r="4"/>
-      <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-      <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-    </svg>
-  )
-}
-
-function ShieldIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+      <polyline points="16 17 21 12 16 7" />
+      <line x1="21" y1="12" x2="9" y2="12" />
     </svg>
   )
 }
 
 export default function Sidebar({
   activeProfile, boards, activeBoardId, showJournal,
-  onSelectBoard, onLogoClick, onJournalToggle, onWhoAmI, onSwitchProfile, onSwitchToCaregiver,
+  onSelectBoard, onLogoClick, onJournalToggle, onWhoAmI, onLogout,
   mobileOpen = false, onMobileClose,
 }) {
   const rootBoard   = boards.find(b => b.isRoot === true || b.category === 'home') || boards[0]
@@ -149,19 +139,16 @@ export default function Sidebar({
       </nav>
 
       {/* Footer */}
-      <div className="px-3 py-3 border-t border-warm-100 flex-shrink-0 space-y-1">
+      <div className="px-3 py-3 border-t border-warm-100 flex-shrink-0">
         <button
-          onClick={withClose(onSwitchProfile)}
+          onClick={withClose(onLogout)}
           className="w-full flex items-center gap-3 px-2.5 py-2.5 rounded-xl text-[13.5px] font-sans font-semibold text-warm-500 hover:bg-warm-100 hover:text-warm-800 transition-all text-left"
         >
           <span className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0">
-            <SwitchUserIcon />
+            <LogOutIcon />
           </span>
-          Switch user
+          Log out
         </button>
-        <div className="pt-1">
-          <SidebarSwitchButton icon={<ShieldIcon />} label="Caregiver View" onClick={withClose(onSwitchToCaregiver)} />
-        </div>
       </div>
       </aside>
     </>

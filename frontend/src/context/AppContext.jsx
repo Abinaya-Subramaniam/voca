@@ -1,10 +1,8 @@
 import { createContext, useContext, useReducer, useEffect, useMemo, useCallback, useRef, useState } from 'react'
 import * as api from '../api'
-import { isAuthenticated, onUnauthorized } from '../api/client'
+import { isAuthenticated, onUnauthorized, getActiveScope, ACTIVE_PROFILE_KEY } from '../api/client'
 
 const AppContext = createContext(null)
-
-const ACTIVE_KEY = 'voca_active_profile'
 
 const initialState = {
   profiles: [],
@@ -106,11 +104,11 @@ export function AppProvider({ children }) {
 
   const selectProfile = useCallback(async (profileId) => {
     if (!profileId) {
-      localStorage.removeItem(ACTIVE_KEY)
+      localStorage.removeItem(ACTIVE_PROFILE_KEY)
       baseDispatch({ type: 'CLEAR_ACTIVE_PROFILE' })
       return
     }
-    localStorage.setItem(ACTIVE_KEY, profileId)
+    localStorage.setItem(ACTIVE_PROFILE_KEY, profileId)
     const [profile, boards] = await Promise.all([
       api.getProfile(profileId),
       api.listBoards(profileId),
@@ -171,31 +169,54 @@ export function AppProvider({ children }) {
   // Boot: load the account, profiles, and restore the active one
   useEffect(() => {
     if (!authed) { setUser(null); return }
+    // Covers the gap between a fresh login resolving and this effect's INIT
+    // landing — without it, activeProfileId is briefly null while booting is
+    // already false, which can bounce a brand-new kid session through /profiles.
+    setBooting(true)
     let cancelled = false
+
+    // A board session is scoped to exactly one profile — it can't call listProfiles
+    // or getMe (both require a caregiver token), and must never enumerate siblings.
+    async function bootBoard() {
+      const profileId = localStorage.getItem(ACTIVE_PROFILE_KEY)
+      if (!profileId) { setAuthed(false); return }
+      const [profile, boards] = await Promise.all([
+        api.getProfile(profileId),
+        api.listBoards(profileId),
+      ])
+      if (cancelled) return
+      setUser(null)
+      baseDispatch({ type: 'INIT', profiles: [], activeProfileId: profile.id, activeProfile: profile, boards })
+    }
+
+    async function bootCaregiver() {
+      const [profiles, me] = await Promise.all([
+        api.listProfiles(),
+        api.getMe().catch(() => null),
+      ])
+      if (cancelled) return
+      setUser(me)
+      const storedId = localStorage.getItem(ACTIVE_PROFILE_KEY)
+      const resolved = profiles.find(p => p.id === storedId) || null
+      if (resolved) {
+        const boards = await api.listBoards(resolved.id)
+        if (cancelled) return
+        baseDispatch({
+          type: 'INIT',
+          profiles,
+          activeProfileId: resolved.id,
+          activeProfile: resolved,
+          boards,
+        })
+        api.optimiseLayout(resolved.id).catch(() => {})
+      } else {
+        baseDispatch({ type: 'INIT', profiles, activeProfileId: null, activeProfile: null, boards: [] })
+      }
+    }
+
     async function boot() {
       try {
-        const [profiles, me] = await Promise.all([
-          api.listProfiles(),
-          api.getMe().catch(() => null),
-        ])
-        if (cancelled) return
-        setUser(me)
-        const storedId = localStorage.getItem(ACTIVE_KEY)
-        const resolved = profiles.find(p => p.id === storedId) || null
-        if (resolved) {
-          const boards = await api.listBoards(resolved.id)
-          if (cancelled) return
-          baseDispatch({
-            type: 'INIT',
-            profiles,
-            activeProfileId: resolved.id,
-            activeProfile: resolved,
-            boards,
-          })
-          api.optimiseLayout(resolved.id).catch(() => {})
-        } else {
-          baseDispatch({ type: 'INIT', profiles, activeProfileId: null, activeProfile: null, boards: [] })
-        }
+        await (getActiveScope() === 'board' ? bootBoard() : bootCaregiver())
       } catch (err) {
         console.error('Boot failed:', err)
       } finally {

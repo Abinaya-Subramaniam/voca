@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from ..auth import get_owned_profile
+from ..auth import get_board_profile, get_owned_profile
 from ..database import get_db
 from ..engines.gap_detector import current_week, get_gap_alerts, record_gap_signal
 from ..engines.insights import compute_insights
@@ -21,7 +21,7 @@ def insights(profile: Profile = Depends(get_owned_profile), db: Session = Depend
 @router.post("/gaps/signal", status_code=status.HTTP_201_CREATED)
 def gap_signal(
     body: GapSignalCreate,
-    profile: Profile = Depends(get_owned_profile),
+    profile: Profile = Depends(get_board_profile),
     db: Session = Depends(get_db),
 ):
     record_gap_signal(db, profile.id, body.board_id)

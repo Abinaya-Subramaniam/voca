@@ -167,42 +167,31 @@ export default function InsightsDashboard() {
           )}
         </div>
 
-        {/* New vocabulary + Gap alerts */}
-        <div className="grid grid-cols-2 gap-5 items-start">
+        {/* Vocabulary gaps */}
+        <div>
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-base">🔍</span>
+            <span className="font-sans font-semibold text-warm-700 text-base">
+              Vocabulary gaps detected
+            </span>
+            {gapAlerts.length > 0 && (
+              <span className="text-[12.5px] font-sans text-warm-400 ml-auto">
+                {gapAlerts.length} {gapAlerts.length === 1 ? 'board needs' : 'boards need'} attention
+              </span>
+            )}
+          </div>
 
-          {insights.newVocab.length > 0 && (
-            <div className="bg-white rounded-2xl p-5 border border-warm-200 shadow-subtle">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-base"></span>
-                <span className="font-sans font-semibold text-warm-700 text-base">
-                  New vocabulary used
-                </span>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {insights.newVocab.slice(0, 12).map((word, i) => (
-                  <span
-                    key={word + i}
-                    className="inline-flex items-center px-3 py-1 bg-teal-50 text-teal-700 rounded-lg text-sm font-medium border border-teal-100 whitespace-nowrap"
-                  >
-                    {word}
-                  </span>
-                ))}
-              </div>
+          {gapAlerts.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {gapAlerts.map((alert, i) => (
+                <GapAlert key={i} alert={alert} />
+              ))}
             </div>
-          )}
-
-          {gapAlerts.length > 0 && (
-            <div className={insights.newVocab.length === 0 ? 'col-span-2' : ''}>
-              <div className="flex items-center gap-2 mb-2.5">
-                <span className="text-base"></span>
-                <span className="font-sans font-semibold text-warm-700 text-base">
-                  Vocabulary gaps detected
-                </span>
-              </div>
-              <div className="space-y-2">
-                {gapAlerts.map((alert, i) => (
-                  <GapAlert key={i} alert={alert} />
-                ))}
+          ) : (
+            <div className="bg-warm-100 rounded-2xl p-6 border border-warm-200 text-center">
+              <div className="text-xl mb-1">✅</div>
+              <div className="font-sans text-base text-warm-500">
+                No vocabulary gaps right now — nice work!
               </div>
             </div>
           )}

@@ -8,6 +8,7 @@ import AuthPage from './components/auth/AuthPage'
 import InsightsDashboard from './components/insights/InsightsDashboard'
 import ProfileMenu from './components/shared/ProfileMenu'
 import { logout } from './api'
+import { getActiveScope, clearToken } from './api/client'
 import { recordTap } from './engine/predictionEngine'
 import { startBrowseTimer, markTappedOnBoard } from './engine/gapDetector'
 import BoardNavigator from './components/board/BoardNavigator'
@@ -20,7 +21,7 @@ import CompanionTab from './components/caregiver/CompanionTab'
 import CaregiverSidebar from './components/caregiver/CaregiverSidebar'
 
 const CAREGIVER_TAB_IDS = ['overview', 'insights', 'boardeditor', 'companion']
-const CAREGIVER_TAB_LABELS = { overview: 'Overview', insights: 'Insights', boardeditor: 'Board Editor', companion: 'Voca Bot' }
+const CAREGIVER_TAB_LABELS = { overview: 'Overview', insights: 'Insights', boardeditor: 'Settings', companion: 'Voca Bot' }
 
 function greetingPhrase() {
   const hour = new Date().getHours()
@@ -74,16 +75,34 @@ function LoadingScreen() {
   )
 }
 
-// Where "take me home" should land, based on auth + whether a profile is active.
+// Where "take me home" should land, based on auth scope + whether a profile is active.
 function homePathFor(authed, activeProfileId) {
   if (!authed) return '/login'
-  return activeProfileId ? '/board' : '/profiles'
+  if (getActiveScope() === 'board') return '/board'
+  return activeProfileId ? '/caregiver/overview' : '/profiles'
 }
 
-function RequireProfile({ children }) {
+// Client-side convenience only — the real boundary is the backend rejecting a
+// caregiver token on every board-only endpoint, even if this guard were
+// somehow bypassed. A caregiver session never lands on the AAC board/journal/
+// who-am-i view — that's reachable only by the kid logging in themselves.
+function RequireKid({ children }) {
   const { authed, booting, state } = useApp()
   if (!authed) return <Navigate to="/login" replace />
   if (booting) return <LoadingScreen />
+  if (getActiveScope() !== 'board') return <Navigate to="/profiles" replace />
+  if (!state.activeProfileId) return <Navigate to="/login" replace />
+  return children
+}
+
+// Client-side convenience only — the real boundary is the backend rejecting a
+// board-session token on every caregiver-only endpoint (403s), even if this
+// guard were somehow bypassed.
+function RequireCaregiver({ children }) {
+  const { authed, booting, state } = useApp()
+  if (!authed) return <Navigate to="/login" replace />
+  if (booting) return <LoadingScreen />
+  if (getActiveScope() === 'board') return <Navigate to="/board" replace />
   if (!state.activeProfileId) return <Navigate to="/profiles" replace />
   return children
 }
@@ -98,11 +117,14 @@ function LandingRoute() {
     setAuthed(false)
   }
 
+  // A kid session has no caregiver `user` (that requires a caregiver token) —
+  // fall back to the active profile's own name so the account menu shows the
+  // kid's name instead of the generic "Account" placeholder.
   return (
     <LandingPage
       onEnter={() => navigate(homePathFor(authed, state.activeProfileId))}
       authed={authed}
-      userName={user?.name}
+      userName={user?.name || state.activeProfile?.name}
       userEmail={user?.email}
       onLogout={handleLogout}
     />
@@ -132,6 +154,8 @@ function ProfilesRoute() {
 
   if (!authed) return <Navigate to="/login" replace />
   if (booting) return <LoadingScreen />
+  // A kid session must never see the list of profiles under the account.
+  if (getActiveScope() === 'board') return <Navigate to="/board" replace />
 
   function handleLogout() {
     logout()
@@ -161,8 +185,14 @@ function ProfilesRoute() {
 function BoardRoute() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { state, dispatch } = useApp()
+  const { state, dispatch, setAuthed } = useApp()
   const { activeProfileId, activeProfile, boards, activeBoardId, sentenceBuffer } = state
+
+  function handleLogout() {
+    clearToken()
+    setAuthed(false)
+    navigate('/login')
+  }
   const [showWhoIAm, setShowWhoIAm] = useState(false)
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const showJournal = location.pathname === '/board/journal'
@@ -209,8 +239,7 @@ function BoardRoute() {
         onLogoClick={() => navigate('/')}
         onJournalToggle={() => navigate(showJournal ? '/board' : '/board/journal')}
         onWhoAmI={() => setShowWhoIAm(true)}
-        onSwitchProfile={() => { dispatch({ type: 'SET_ACTIVE_PROFILE', profileId: null }); navigate('/profiles') }}
-        onSwitchToCaregiver={() => navigate('/caregiver/overview')}
+        onLogout={handleLogout}
         mobileOpen={mobileNavOpen}
         onMobileClose={() => setMobileNavOpen(false)}
       />
@@ -265,7 +294,7 @@ function CaregiverRoute() {
         activeProfile={activeProfile}
         activeTab={tab}
         onTabChange={id => navigate(`/caregiver/${id}`)}
-        onSwitchToUser={() => navigate('/board')}
+        onManageKids={() => navigate('/profiles')}
         onLogoClick={() => navigate('/')}
         userName={user?.name}
         userEmail={user?.email}
@@ -291,10 +320,10 @@ export default function App() {
       <Route path="/" element={<LandingRoute />} />
       <Route path="/login" element={<LoginRoute />} />
       <Route path="/profiles" element={<ProfilesRoute />} />
-      <Route path="/board" element={<RequireProfile><BoardRoute /></RequireProfile>} />
-      <Route path="/board/journal" element={<RequireProfile><BoardRoute /></RequireProfile>} />
+      <Route path="/board" element={<RequireKid><BoardRoute /></RequireKid>} />
+      <Route path="/board/journal" element={<RequireKid><BoardRoute /></RequireKid>} />
       <Route path="/caregiver" element={<Navigate to="/caregiver/overview" replace />} />
-      <Route path="/caregiver/:tab" element={<RequireProfile><CaregiverRoute /></RequireProfile>} />
+      <Route path="/caregiver/:tab" element={<RequireCaregiver><CaregiverRoute /></RequireCaregiver>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )

@@ -47,6 +47,13 @@ class Profile(Base):
     who_i_am: Mapped[dict] = mapped_column(JSON, default=dict)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
+    # Kid's own login — nullable because profiles created before this feature
+    # existed have none set yet; a caregiver configures them via Settings.
+    username: Mapped[str | None] = mapped_column(String(50), unique=True, index=True, nullable=True)
+    pin_hash: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    failed_pin_attempts: Mapped[int] = mapped_column(Integer, default=0)
+    locked_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
     user: Mapped[User] = relationship(back_populates="profiles")
     boards: Mapped[list["Board"]] = relationship(back_populates="profile", cascade="all, delete-orphan")
 
@@ -163,6 +170,24 @@ class ChatMessage(Base):
     action_status: Mapped[str | None] = mapped_column(String(20), nullable=True)  # 'pending' | 'applied' | 'dismissed'
     action_added_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, index=True)
+
+
+class BoardSession(Base):
+    """A revocable session scoped to exactly one profile, created each time the
+    individual logs in with their own username/PIN (never the caregiver's login,
+    which can reach insights, coaching, and board-editing endpoints). Lets a
+    caregiver see and revoke a specific device from Settings without changing
+    the PIN itself."""
+    __tablename__ = "board_sessions"
+
+    id: Mapped[str] = mapped_column(String(32), primary_key=True, default=new_id)
+    profile_id: Mapped[str] = mapped_column(ForeignKey("profiles.id", ondelete="CASCADE"), index=True)
+    created_by_user_id: Mapped[str] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    device_label: Mapped[str] = mapped_column(String(100), default="")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    last_seen_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    revoked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
 
 class Bigram(Base):

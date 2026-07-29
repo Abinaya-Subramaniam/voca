@@ -8,8 +8,9 @@ from sqlalchemy.orm import Session
 from ..engines.gap_detector import get_gap_alerts
 from ..engines.gap_detector import current_week
 from ..engines.insights import compute_insights
-from ..models import Board, CoachCard, CommunicationLog, JournalEntry, Profile
+from ..models import Board, CoachCard, CommunicationLog, Profile
 from ..services.arasaac import resolve_symbol_id, symbol_image_url
+from ..services.journal import get_recent_moods
 
 WORD_TYPES = {"pronoun", "verb", "noun", "descriptor", "social", "question", "none"}
 
@@ -110,12 +111,7 @@ def build_tools(ctx: AgentContext) -> list:
     def get_journal_moods(limit: int = 5) -> dict:
         """Get the individual's recent journal moods (date + mood only). Journal
         sentences are private and never shared with caregivers."""
-        entries = db.scalars(
-            select(JournalEntry)
-            .where(JournalEntry.profile_id == profile.id)
-            .order_by(JournalEntry.created_at.desc())
-            .limit(limit)
-        ).all()
+        entries = get_recent_moods(db, profile.id, limit)
         return {
             "moods": [
                 {

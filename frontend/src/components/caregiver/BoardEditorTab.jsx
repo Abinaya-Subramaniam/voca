@@ -1,13 +1,25 @@
+import { useState } from 'react'
 import { useApp } from '../../context/AppContext'
+import * as api from '../../api'
 import { updateProfileSettings } from '../../store/profileStore'
 import { createBoard, deleteBoard } from '../../store/boardStore'
 import PageHeader from '../shared/PageHeader'
 import CategoryIcon, { CATEGORY_META } from '../shared/CategoryIcon'
 
+function randomPin() {
+  return String(Math.floor(Math.random() * 10000)).padStart(4, '0')
+}
+
 export default function BoardEditorTab() {
   const { state, dispatch } = useApp()
   const { activeProfile, activeProfileId, boards } = state
   const settings = activeProfile?.settings || {}
+
+  const [newUsername, setNewUsername] = useState(activeProfile?.username || '')
+  const [usernameError, setUsernameError] = useState(null)
+  const [resettingPin, setResettingPin] = useState(false)
+  const [pendingPin, setPendingPin] = useState(randomPin())
+  const [revealedPin, setRevealedPin] = useState(null)
 
   async function updateSetting(key, value) {
     await updateProfileSettings(activeProfileId, { [key]: value })
@@ -27,14 +39,96 @@ export default function BoardEditorTab() {
     dispatch({ type: 'REFRESH_BOARDS' })
   }
 
+  async function handleSaveUsername() {
+    setUsernameError(null)
+    try {
+      await api.updateProfile(activeProfileId, { username: newUsername.trim().toLowerCase() })
+      dispatch({ type: 'REFRESH_ACTIVE_PROFILE' })
+    } catch (err) {
+      setUsernameError(err.message)
+    }
+  }
+
+  async function confirmPinReset() {
+    await api.updateProfile(activeProfileId, { pin: pendingPin })
+    setRevealedPin(pendingPin)
+    setResettingPin(false)
+  }
+
   return (
     <div className="flex-1 overflow-y-auto bg-warm-50">
       <div className="max-w-5xl mx-auto px-8 py-8">
 
         <PageHeader
-          title="Board Editor"
-          subtitle="Display and accessibility settings for the communication board"
+          title="Settings"
+          subtitle="Kid login, display, and accessibility settings for the communication board"
         />
+
+        {/* Kid login */}
+        <div className="bg-white rounded-2xl border border-warm-200 shadow-subtle p-5 mb-5">
+          <div className="mb-4">
+            <span className="font-sans font-semibold text-warm-700 text-lg">Kid login</span>
+          </div>
+
+          <label className="block font-sans font-semibold text-warm-700 text-base mb-2">Username</label>
+          <div className="flex gap-2 mb-1">
+            <input
+              className="flex-1 border border-warm-200 rounded-xl px-4 py-2.5 font-sans text-warm-900 text-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              value={newUsername}
+              onChange={e => setNewUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
+            />
+            <button
+              onClick={handleSaveUsername}
+              disabled={!newUsername.trim() || newUsername === activeProfile?.username}
+              className="px-4 py-2.5 rounded-xl bg-teal-500 text-white font-sans font-semibold text-base hover:bg-teal-600 disabled:opacity-40 transition-colors"
+            >
+              Save
+            </button>
+          </div>
+          {usernameError && <p className="text-sm font-sans text-red-500 mb-2">{usernameError}</p>}
+
+          <div className="border-t border-warm-100 mt-4 pt-4">
+            <label className="block font-sans font-semibold text-warm-700 text-base mb-2">PIN</label>
+            {revealedPin && (
+              <div className="bg-teal-50 border border-teal-100 rounded-xl px-4 py-3 mb-3">
+                <div className="font-sans text-teal-700 text-xs mb-1">New PIN — write it down, it won't be shown again</div>
+                <div className="font-display font-bold text-teal-900 text-xl tracking-[0.3em]">{revealedPin}</div>
+              </div>
+            )}
+            {resettingPin ? (
+              <div className="flex items-center gap-2">
+                <input
+                  className="border border-warm-200 rounded-xl px-4 py-2.5 font-sans text-warm-900 text-lg text-center tracking-[0.4em] w-32 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  maxLength={4}
+                  value={pendingPin}
+                  onChange={e => setPendingPin(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                />
+                <button
+                  onClick={confirmPinReset}
+                  disabled={!/^\d{4}$/.test(pendingPin)}
+                  className="px-4 py-2.5 rounded-xl bg-teal-500 text-white font-sans font-semibold text-base hover:bg-teal-600 disabled:opacity-40 transition-colors"
+                >
+                  Confirm reset
+                </button>
+                <button
+                  onClick={() => setResettingPin(false)}
+                  className="px-4 py-2.5 rounded-xl border border-warm-200 text-warm-600 font-sans text-base hover:bg-warm-50 transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => { setPendingPin(randomPin()); setResettingPin(true); setRevealedPin(null) }}
+                className="px-4 py-2.5 rounded-xl border border-warm-200 text-warm-600 font-sans font-semibold text-base hover:border-teal-400 hover:text-teal-600 transition-colors"
+              >
+                Reset PIN
+              </button>
+            )}
+          </div>
+        </div>
 
         {/* Symbol size + Font size — side by side */}
         <div className="grid grid-cols-2 gap-5 mb-5">
