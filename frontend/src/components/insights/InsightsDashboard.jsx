@@ -114,7 +114,7 @@ export default function InsightsDashboard() {
               AI Vocabulary Coach
             </span>
             <span className="text-[12.5px] font-sans text-warm-400 ml-auto">
-              Powered by Gemini
+              Powered by AI
             </span>
             {coachCard && !loadingCoach && (
               <button

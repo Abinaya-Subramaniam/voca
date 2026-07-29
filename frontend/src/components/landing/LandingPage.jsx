@@ -21,7 +21,7 @@ const FEATURE_ITEMS = [
   {
     icon: '🎓', bg: '#EEE8FB', border: '#D0BEF0', accent: '#7A5AC9',
     title: 'Weekly AI coaching',
-    desc: 'Personalised guidance for caregivers, powered by Gemini — like a virtual speech therapist.',
+    desc: 'Personalised guidance for caregivers, powered by AI — like a virtual speech therapist.',
   },
   {
     icon: '🤖', bg: '#E8F7F4', border: '#B8E8DF', accent: '#1F8A7A',
@@ -39,7 +39,7 @@ const COMPARISON_ROWS = [
   { feature: 'Word prediction',    typical: 'Static, generic word lists',              voca: 'Learns your patterns in real time' },
   { feature: 'Board layout',       typical: 'Fixed grid — manual editing only',        voca: 'AI auto-reorders your board by real usage' },
   { feature: 'Missing vocabulary', typical: 'No signal when a word is missing',        voca: 'Flags gaps, suggests exactly what to add' },
-  { feature: 'Coaching & guidance', typical: "None — you're on your own",              voca: 'Weekly AI coaching, powered by Gemini' },
+  { feature: 'Coaching & guidance', typical: "None — you're on your own",              voca: 'Weekly AI coaching, built in' },
   { feature: 'Cost',               typical: '$50–150/hr for therapist consultations',  voca: 'Free. Always.' },
 ]
 
@@ -254,7 +254,7 @@ function TermsContent() {
       <span style={s}>3. Third-Party Services</span>
       <p>Voca uses the following third-party services:</p>
       <ul style={{ paddingLeft: '18px', marginTop: '6px' }}>
-        <li><strong>Google Gemini API</strong> — anonymised communication summaries are sent to generate coaching advice. No names or identifying information are included.</li>
+        <li><strong>OpenAI API</strong> (with Google Gemini as an automatic fallback) — anonymised communication summaries are sent to generate coaching advice. No names or identifying information are included.</li>
         <li><strong>ARASAAC</strong> — pictographic symbols are loaded from the ARASAAC open-access library under the Creative Commons BY-NC-SA licence.</li>
         <li><strong>Web Speech API</strong> — text-to-speech runs entirely in your browser. No audio is transmitted.</li>
       </ul>
@@ -288,8 +288,8 @@ function PrivacyContent() {
         <li>Settings and preferences</li>
       </ul>
 
-      <span style={s}>Gemini AI Coach</span>
-      <p>When the weekly AI Coach runs, an <strong>anonymised</strong> summary of communication patterns (word counts, categories, timing) is sent to Google's Gemini API. No names, journal entries, or identifiable information are included. Google's data handling is governed by the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" style={{ color: '#2D9B83' }}>Google Privacy Policy</a>.</p>
+      <span style={s}>AI Coach</span>
+      <p>When the weekly AI Coach runs, an <strong>anonymised</strong> summary of communication patterns (word counts, categories, timing) is sent to OpenAI's API, with Google's Gemini used as an automatic fallback if OpenAI is unavailable. No names, journal entries, or identifiable information are included. Data handling is governed by the <a href="https://openai.com/policies/privacy-policy" target="_blank" rel="noopener noreferrer" style={{ color: '#2D9B83' }}>OpenAI Privacy Policy</a> and the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" style={{ color: '#2D9B83' }}>Google Privacy Policy</a>.</p>
 
       <span style={s}>ARASAAC Symbols</span>
       <p>Symbol images are loaded directly from ARASAAC's public servers. ARASAAC may log image requests as part of standard web server operation.</p>

@@ -13,6 +13,9 @@ class Settings(BaseSettings):
     jwt_algorithm: str = "HS256"
     jwt_expiry_days: int = 7
 
+    openai_api_key: str = ""
+    openai_model: str = "gpt-4o-mini"
+
     gemini_api_key: str = ""
     gemini_model: str = "gemini-2.5-flash"
 

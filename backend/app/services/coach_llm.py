@@ -2,11 +2,8 @@ import json
 import re
 
 from langchain_core.messages import HumanMessage
-from langchain_google_genai import ChatGoogleGenerativeAI
 
-from ..config import get_settings
-
-settings = get_settings()
+from .llm import build_chat_llm
 
 
 def _build_prompt(summary: dict, gap_alerts: list[dict]) -> str:
@@ -27,14 +24,7 @@ Reply with ONLY this JSON, no extra text, no markdown, no code fences:
 
 
 def generate_coach_card(summary: dict, gap_alerts: list[dict]) -> dict:
-    if not settings.gemini_api_key:
-        raise RuntimeError("GEMINI_API_KEY is not configured on the server.")
-
-    llm = ChatGoogleGenerativeAI(
-        model=settings.gemini_model,
-        temperature=0.4,
-        google_api_key=settings.gemini_api_key,
-    )
+    llm = build_chat_llm()
     response = llm.invoke([HumanMessage(content=_build_prompt(summary, gap_alerts))])
     text = response.content if isinstance(response.content, str) else str(response.content)
 
