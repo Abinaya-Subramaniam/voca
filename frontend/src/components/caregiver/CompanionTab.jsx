@@ -135,7 +135,7 @@ export default function CompanionTab() {
     }
   }
 
-  const hasKey = true  // the Gemini key lives on the backend now
+  const hasKey = true  // the AI provider key lives on the backend now
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden bg-warm-50">

@@ -174,7 +174,7 @@ const AWARENESS_CARDS = [
 ]
 
 const HOW_TO_STEPS = [
-  { Icon: ClipboardIcon, title: 'Set up boards', desc: 'Customise symbols by topic in Board Editor — feelings, food, school, and more.' },
+  { Icon: ClipboardIcon, title: 'Set up boards', desc: 'Customize symbols by topic in Board Editor — feelings, food, school, and more.' },
   { Icon: EyeIcon, title: "Watch, don't correct", desc: 'Let your child explore freely. Model the symbol yourself instead of correcting their choice.' },
   { Icon: BarChartIcon, title: 'Check Insights weekly', desc: 'See which topics come up most and generate a personalised AI coaching card.' },
   { Icon: SearchIcon, title: 'Act on gap alerts', desc: 'When Voca flags a vocabulary gap, add that symbol to the board within a day.' },

@@ -17,12 +17,14 @@ function HeartIcon(p) {
     </svg>
   )
 }
-function AppleIcon(p) {
+function CupIcon(p) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}>
-      <circle cx="12" cy="14" r="7" />
-      <path d="M12 7c0-2 1-3 2-4" />
-      <path d="M9 4.2c1 .3 1.6 1 1.8 1.8" />
+      <path d="M17 8h1a4 4 0 1 1 0 8h-1" />
+      <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8z" />
+      <line x1="6" y1="2" x2="6" y2="4" />
+      <line x1="10" y1="2" x2="10" y2="4" />
+      <line x1="14" y1="2" x2="14" y2="4" />
     </svg>
   )
 }
@@ -78,7 +80,7 @@ function StarIcon(p) {
 export const CATEGORY_META = {
   home:       { Icon: HomeIcon,  color: '#238A72', bg: '#E8F7F4' },
   feelings:   { Icon: HeartIcon, color: '#CA8A04', bg: '#FEF6E0' },
-  food:       { Icon: AppleIcon, color: '#DC2626', bg: '#FDECEA' },
+  food:       { Icon: CupIcon,   color: '#DC2626', bg: '#FDECEA' },
   school:     { Icon: BookIcon,  color: '#2563EB', bg: '#EAF1FE' },
   emergency:  { Icon: AlertIcon, color: '#EA580C', bg: '#FEF0E6' },
   people:     { Icon: UsersIcon, color: '#9333EA', bg: '#F6EDFE' },

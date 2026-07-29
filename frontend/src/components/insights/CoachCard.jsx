@@ -12,7 +12,7 @@ export default function CoachCard({ card }) {
             Vocabulary Coach
           </div>
           <div className="font-sans text-teal-100 text-sm mt-0.5">
-            Powered by Gemini AI · Updated this week
+            Powered by AI · Updated this week
           </div>
         </div>
       </div>

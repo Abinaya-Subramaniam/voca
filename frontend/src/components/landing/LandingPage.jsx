@@ -1,14 +1,55 @@
-import { Fragment, useState, useRef } from 'react'
+import { Fragment, useState, useRef, useEffect } from 'react'
 import Navbar from '../shared/Navbar'
 import ProfileMenu from '../shared/ProfileMenu'
 
+const FEATURE_ITEMS = [
+  {
+    icon: '🧠', bg: '#E8F7F4', border: '#B8E8DF', accent: '#2D9B83',
+    title: 'AI word prediction',
+    desc: 'Learns each person\'s unique communication patterns and predicts the next word in real time.',
+  },
+  {
+    icon: '🗂️', bg: '#FDF3E0', border: '#F5DFA0', accent: '#C98A1F',
+    title: 'Auto-organising boards',
+    desc: 'Boards reorder themselves based on real usage — no manual dragging or editing required.',
+  },
+  {
+    icon: '🔍', bg: '#FBE8F0', border: '#F0BDD0', accent: '#C24A78',
+    title: 'Missing vocabulary alerts',
+    desc: 'Flags gaps in the vocabulary and suggests exactly which symbols to add next.',
+  },
+  {
+    icon: '🎓', bg: '#EEE8FB', border: '#D0BEF0', accent: '#7A5AC9',
+    title: 'Weekly AI coaching',
+    desc: 'Personalised guidance for caregivers, powered by AI — like a virtual speech therapist.',
+  },
+  {
+    icon: '🤖', bg: '#E8F7F4', border: '#B8E8DF', accent: '#1F8A7A',
+    title: 'Agentic Voca Bot',
+    desc: "Doesn't just chat — takes action on its own, reorganising boards and adding vocabulary for you.",
+  },
+  {
+    icon: '🌐', bg: '#E5F1FB', border: '#BBDAF5', accent: '#3D8FD1',
+    title: 'Free & works offline',
+    desc: 'Speaks fully offline in any modern browser, on any device. No subscriptions, ever.',
+  },
+]
+
 const COMPARISON_ROWS = [
   { feature: 'Word prediction',    typical: 'Static, generic word lists',              voca: 'Learns your patterns in real time' },
-  { feature: 'Board layout',       typical: 'Fixed grid — manual editing only',        voca: 'Auto-reorders itself by real usage' },
+  { feature: 'Board layout',       typical: 'Fixed grid — manual editing only',        voca: 'AI auto-reorders your board by real usage' },
   { feature: 'Missing vocabulary', typical: 'No signal when a word is missing',        voca: 'Flags gaps, suggests exactly what to add' },
-  { feature: 'Coaching & guidance', typical: "None — you're on your own",              voca: 'Weekly AI coaching, powered by Gemini' },
+  { feature: 'Coaching & guidance', typical: "None — you're on your own",              voca: 'Weekly AI coaching, built in' },
   { feature: 'Cost',               typical: '$50–150/hr for therapist consultations',  voca: 'Free. Always.' },
 ]
+
+function renderWithAIEmphasis(text) {
+  return text.split(/(AI)/g).map((part, i) =>
+    part === 'AI'
+      ? <strong key={i} style={{ fontWeight: 900, color: '#8CE0C8' }}>AI</strong>
+      : part
+  )
+}
 
 const BTN = {
   primary: {
@@ -17,6 +58,139 @@ const BTN = {
     fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800,
     cursor: 'pointer', transition: 'all 0.15s',
   },
+}
+
+function FeatureCarousel({ items }) {
+  const [index, setIndex] = useState(0)
+  const [paused, setPaused] = useState(false)
+
+  useEffect(() => {
+    if (paused) return
+    const id = setInterval(() => {
+      setIndex(i => (i + 1) % items.length)
+    }, 4200)
+    return () => clearInterval(id)
+  }, [paused, items.length])
+
+  function go(i) { setIndex(((i % items.length) + items.length) % items.length) }
+  function prev() { go(index - 1) }
+  function next() { go(index + 1) }
+
+  const arrowBase = {
+    position: 'absolute', top: '50%', transform: 'translateY(-50%)',
+    width: '40px', height: '40px', borderRadius: '999px',
+    background: 'white', border: '1.5px solid #E8E6E1', color: '#6B6860',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    cursor: 'pointer', fontSize: '20px', lineHeight: 1, zIndex: 3,
+    boxShadow: '0 4px 14px rgba(44,42,38,0.10)', transition: 'all 0.15s',
+  }
+  function arrowHover(e) { e.currentTarget.style.borderColor = '#2D9B83'; e.currentTarget.style.color = '#2D9B83' }
+  function arrowLeave(e) { e.currentTarget.style.borderColor = '#E8E6E1'; e.currentTarget.style.color = '#6B6860' }
+
+  return (
+    <div
+      style={{ maxWidth: '880px', margin: '0 auto' }}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      <div style={{
+        position: 'relative', borderRadius: '24px', overflow: 'hidden',
+        border: '1.5px solid #E8E6E1', boxShadow: '0 12px 40px rgba(44,42,38,0.06)',
+        background: 'white',
+      }}>
+        <div style={{
+          display: 'flex',
+          transform: `translateX(-${index * 100}%)`,
+          transition: 'transform 0.6s cubic-bezier(0.65,0,0.35,1)',
+        }}>
+          {items.map(({ icon, bg, border, accent, title, desc }) => (
+            <div key={title} style={{ flex: '0 0 100%', width: '100%' }}>
+              <div style={{
+                position: 'relative', overflow: 'hidden',
+                background: `linear-gradient(135deg, ${bg} 0%, white 70%)`,
+                minHeight: '280px',
+              }}>
+                {/* drifting decorative blobs */}
+                <div className="feature-bg-blob" style={{
+                  position: 'absolute', top: '-40px', right: '-30px',
+                  width: '160px', height: '160px', borderRadius: '50%',
+                  background: border, opacity: 0.35, filter: 'blur(1px)',
+                }} />
+                <div className="feature-bg-blob" style={{
+                  position: 'absolute', bottom: '-36px', left: '6%',
+                  width: '90px', height: '90px', borderRadius: '50%',
+                  background: border, opacity: 0.25, animationDelay: '-3s',
+                }} />
+
+                {/* wavy accent line threading behind the content */}
+                <svg
+                  viewBox="0 0 400 40" preserveAspectRatio="none"
+                  style={{ position: 'absolute', bottom: '18px', left: 0, width: '100%', height: '32px', opacity: 0.5 }}
+                >
+                  <path d="M0,20 Q50,2 100,20 T200,20 T300,20 T400,20" fill="none" stroke={accent} strokeWidth="2" />
+                </svg>
+
+                <div
+                  className="flex flex-col md:flex-row items-center text-center md:text-left"
+                  style={{ position: 'relative', zIndex: 1, gap: '32px', padding: 'clamp(36px, 6vw, 56px)' }}
+                >
+                  <div className="feature-icon-blob" style={{
+                    width: '104px', height: '104px', flexShrink: 0,
+                    background: `linear-gradient(145deg, ${accent}, ${border})`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '46px', boxShadow: `0 14px 30px ${accent}40`,
+                  }}>
+                    {icon}
+                  </div>
+                  <div>
+                    <div style={{
+                      fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 900,
+                      fontSize: '1.6rem', color: '#2C2A26', marginBottom: '10px', letterSpacing: '-0.01em',
+                    }}>
+                      {title}
+                    </div>
+                    <div style={{ fontSize: '17px', color: '#6B6860', lineHeight: 1.6, maxWidth: '480px' }}>
+                      {desc}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <button
+          onClick={prev} aria-label="Previous feature"
+          style={{ ...arrowBase, left: '16px' }}
+          onMouseEnter={arrowHover} onMouseLeave={arrowLeave}
+        >
+          ‹
+        </button>
+        <button
+          onClick={next} aria-label="Next feature"
+          style={{ ...arrowBase, right: '16px' }}
+          onMouseEnter={arrowHover} onMouseLeave={arrowLeave}
+        >
+          ›
+        </button>
+      </div>
+
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '22px' }}>
+        {items.map((item, i) => (
+          <button
+            key={item.title}
+            onClick={() => go(i)}
+            aria-label={`Go to ${item.title}`}
+            style={{
+              width: i === index ? '28px' : '8px', height: '8px', borderRadius: '999px',
+              background: i === index ? '#2D9B83' : '#E8E6E1', border: 'none',
+              cursor: 'pointer', transition: 'all 0.3s', padding: 0,
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  )
 }
 
 function Modal({ title, onClose, children }) {
@@ -80,7 +254,7 @@ function TermsContent() {
       <span style={s}>3. Third-Party Services</span>
       <p>Voca uses the following third-party services:</p>
       <ul style={{ paddingLeft: '18px', marginTop: '6px' }}>
-        <li><strong>Google Gemini API</strong> — anonymised communication summaries are sent to generate coaching advice. No names or identifying information are included.</li>
+        <li><strong>OpenAI API</strong> (with Google Gemini as an automatic fallback) — anonymised communication summaries are sent to generate coaching advice. No names or identifying information are included.</li>
         <li><strong>ARASAAC</strong> — pictographic symbols are loaded from the ARASAAC open-access library under the Creative Commons BY-NC-SA licence.</li>
         <li><strong>Web Speech API</strong> — text-to-speech runs entirely in your browser. No audio is transmitted.</li>
       </ul>
@@ -108,14 +282,14 @@ function PrivacyContent() {
       <p>Voca does not collect, transmit, or store any personal data on external servers. The following data is stored <strong>only in your browser</strong>:</p>
       <ul style={{ paddingLeft: '18px', marginTop: '6px' }}>
         <li>Profile names and avatar colours</li>
-        <li>Symbol boards and customisations</li>
+        <li>Symbol boards and customizations</li>
         <li>Communication logs and journal entries</li>
         <li>Tap history (used for on-device AI features)</li>
         <li>Settings and preferences</li>
       </ul>
 
-      <span style={s}>Gemini AI Coach</span>
-      <p>When the weekly AI Coach runs, an <strong>anonymised</strong> summary of communication patterns (word counts, categories, timing) is sent to Google's Gemini API. No names, journal entries, or identifiable information are included. Google's data handling is governed by the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" style={{ color: '#2D9B83' }}>Google Privacy Policy</a>.</p>
+      <span style={s}>AI Coach</span>
+      <p>When the weekly AI Coach runs, an <strong>anonymised</strong> summary of communication patterns (word counts, categories, timing) is sent to OpenAI's API, with Google's Gemini used as an automatic fallback if OpenAI is unavailable. No names, journal entries, or identifiable information are included. Data handling is governed by the <a href="https://openai.com/policies/privacy-policy" target="_blank" rel="noopener noreferrer" style={{ color: '#2D9B83' }}>OpenAI Privacy Policy</a> and the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" style={{ color: '#2D9B83' }}>Google Privacy Policy</a>.</p>
 
       <span style={s}>ARASAAC Symbols</span>
       <p>Symbol images are loaded directly from ARASAAC's public servers. ARASAAC may log image requests as part of standard web server operation.</p>
@@ -210,16 +384,16 @@ function ContactForm() {
 
 const FAQ_ITEMS = [
   {
+    q: 'What is an AAC board?',
+    a: "AAC stands for Augmentative and Alternative Communication. An AAC board is a grid of symbols and words that a non-verbal or minimally verbal person taps to build sentences, which are then spoken aloud — giving them a voice when speech is difficult or impossible.",
+  },
+  {
     q: 'Is Voca really free?',
     a: 'Yes — completely free, with no subscriptions, trials, or hidden costs. Voca is built as an accessibility tool, not a business.',
   },
   {
-    q: 'Do I need an internet connection?',
-    a: "Speaking sentences aloud works fully offline, right in your browser. An internet connection is only needed for AI features like the weekly Coach and the Voca Bot agent.",
-  },
-  {
-    q: 'Is my data private?',
-    a: 'Yes. Profiles, boards, and communication logs stay on your own device. Nothing is sold or shared with third parties.',
+    q: 'What is the Voca Bot?',
+    a: "It's an agentic assistant built into Voca — instead of just answering questions, it takes action on its own: adding missing vocabulary, reorganising boards, and surfacing suggestions proactively, without you having to ask.",
   },
   {
     q: 'What age group is Voca designed for?',
@@ -230,7 +404,7 @@ const FAQ_ITEMS = [
     a: 'Yes — tablet, phone, or laptop, in any modern browser. There\'s nothing to install and no app store required.',
   },
   {
-    q: 'Can I customise the symbol boards?',
+    q: 'Can I customize the symbol boards?',
     a: 'Yes. The Caregiver dashboard lets you add, edit, reorder, and reorganise boards and symbols at any time.',
   },
 ]
@@ -408,7 +582,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
             >
               Start communicating →
             </button>
-            <a href="#how-it-works" style={{
+            <a href="#features" style={{
               padding: '16px 26px', background: 'white', color: '#6B6860',
               border: '1.5px solid #E8E6E1', borderRadius: '14px', fontSize: '17px',
               fontWeight: 500, cursor: 'pointer', textDecoration: 'none',
@@ -531,74 +705,52 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
         </div>
       </section>
 
-      {/* How it works */}
-      <section id="how-it-works" style={{
-        background: 'white', borderTop: '1px solid #E8E6E1', borderBottom: '1px solid #E8E6E1',
-        padding: 'clamp(48px, 8vw, 72px) clamp(1.25rem, 5vw, 2rem)',
+      {/* Features */}
+      <section id="features" style={{
+        position: 'relative', overflow: 'hidden',
+        background: 'linear-gradient(180deg, #F1FAF6 0%, #ECF8F2 100%)',
+        padding: 'clamp(72px, 10vw, 100px) 0',
       }}>
-        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+        <svg
+          viewBox="0 0 1440 74" preserveAspectRatio="none"
+          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '56px', display: 'block' }}
+        >
+          <path d="M0,40 C240,90 480,0 720,20 C960,40 1200,90 1440,40 L1440,0 L0,0 Z" fill="#FAFAF8" />
+        </svg>
+        <svg
+          viewBox="0 0 1440 74" preserveAspectRatio="none"
+          style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '56px', display: 'block', transform: 'scaleY(-1)' }}
+        >
+          <path d="M0,40 C240,90 480,0 720,20 C960,40 1200,90 1440,40 L1440,74 L0,74 Z" fill="white" />
+        </svg>
+
+        <div style={{ position: 'relative', zIndex: 1, maxWidth: '1100px', margin: '0 auto', padding: '0 clamp(1.25rem, 5vw, 2rem)' }}>
           <div style={{ textAlign: 'center', marginBottom: '52px' }}>
             <div style={{
               display: 'inline-block', padding: '4px 14px',
-              background: '#E8F7F4', borderRadius: '100px',
+              background: 'white', borderRadius: '100px',
               fontSize: '11px', fontWeight: 600, color: '#2D9B83',
               letterSpacing: '0.06em', marginBottom: '16px',
             }}>
-              HOW IT WORKS
+              FEATURES
             </div>
             <h2 style={{
               fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 900,
               fontSize: 'clamp(1.9rem, 5vw, 2.6rem)', color: '#2C2A26', margin: '0 0 12px',
               letterSpacing: '-0.02em',
             }}>
-              Simple to use. Intelligent underneath.
+              Everything you need, built in.
             </h2>
             <p style={{ fontSize: '1.3rem', color: '#6B6860', margin: 0 }}>
-              Three steps between a thought and a spoken word.
+              No plug-ins, no upsells — just one AAC app that keeps getting smarter.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              { step: '01', emoji: '🟦', title: 'Tap symbols', desc: 'Choose from thousands of pictographic symbols organised into context boards — home, school, feelings, food.' },
-              { step: '02', emoji: '💬', title: 'Build sentences', desc: 'Symbols build up in the sentence bar. AI predicts what comes next based on personal communication patterns.' },
-              { step: '03', emoji: '🔊', title: 'Speak', desc: "One tap reads the sentence aloud using the browser's built-in voice. No internet needed. Works on any device." },
-            ].map(({ step, emoji, title, desc }) => (
-              <div key={step} style={{
-                background: '#FAFAF8', borderRadius: '16px', padding: '28px 24px',
-                border: '1.5px solid #E8E6E1', position: 'relative',
-              }}>
-                <div style={{
-                  position: 'absolute', top: '20px', right: '20px',
-                  fontFamily: 'DM Mono, monospace', fontSize: '12.5px',
-                  color: '#C4C1BA', fontWeight: 500,
-                }}>
-                  {step}
-                </div>
-                <div style={{ fontSize: '2rem', marginBottom: '16px' }}>{emoji}</div>
-                <div style={{
-                  fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800,
-                  fontSize: '1.35rem', color: '#2C2A26', marginBottom: '10px',
-                }}>
-                  {title}
-                </div>
-                <div style={{ fontSize: '17.5px', color: '#6B6860', lineHeight: 1.6 }}>{desc}</div>
-              </div>
-            ))}
-          </div>
-
-          <div style={{ textAlign: 'center', marginTop: '40px' }}>
-            <button onClick={onEnter} style={BTN.primary}
-              onMouseEnter={e => { e.currentTarget.style.background = '#238A72'; e.currentTarget.style.transform = 'translateY(-1px)' }}
-              onMouseLeave={e => { e.currentTarget.style.background = '#2D9B83'; e.currentTarget.style.transform = 'translateY(0)' }}
-            >
-              Try it now →
-            </button>
-          </div>
+          <FeatureCarousel items={FEATURE_ITEMS} />
         </div>
       </section>
 
-      {/* Journal feature */}
+      {/* Journal feature — commented out, keep for later
       <section id="journal" style={{ padding: 'clamp(48px, 8vw, 72px) clamp(1.25rem, 5vw, 2rem)', maxWidth: '1100px', margin: '0 auto' }}>
         <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-10 lg:gap-[60px]">
           <div style={{ position: 'relative' }}>
@@ -724,6 +876,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
           </div>
         </div>
       </section>
+      */}
 
       {/* AI features — Voca vs. typical AAC apps */}
       <section id="ai-features" style={{ padding: 'clamp(48px, 8vw, 72px) clamp(1.25rem, 5vw, 2rem)', maxWidth: '1100px', margin: '0 auto' }}>
@@ -781,21 +934,15 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
               </div>
               <div style={{
                 background: 'white', padding: '20px 16px', borderTop: '1px solid #F0EFEA',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', textAlign: 'center',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center',
               }}>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#C4C1BA" strokeWidth="2.5" strokeLinecap="round" style={{ flexShrink: 0 }}>
-                  <line x1="5" y1="12" x2="19" y2="12" />
-                </svg>
                 <span style={{ fontSize: '15px', color: '#6B6860', lineHeight: 1.5 }}>{row.typical}</span>
               </div>
               <div style={{
                 background: '#14523F', padding: '20px 16px', borderTop: '1px solid rgba(255,255,255,0.1)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', textAlign: 'center',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center',
               }}>
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8CE0C8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-                <span style={{ fontSize: '15px', fontWeight: 600, color: 'white', lineHeight: 1.5 }}>{row.voca}</span>
+                <span style={{ fontSize: '15px', fontWeight: 600, color: 'white', lineHeight: 1.5 }}>{renderWithAIEmphasis(row.voca)}</span>
               </div>
             </Fragment>
           ))}
@@ -829,7 +976,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
                   <span style={{ fontSize: '13.5px', color: '#6B6860', lineHeight: 1.4 }}>{row.typical}</span>
                 </div>
                 <div style={{ background: '#14523F', padding: '7px 10px 11px' }}>
-                  <span style={{ fontSize: '13.5px', fontWeight: 600, color: 'white', lineHeight: 1.4 }}>{row.voca}</span>
+                  <span style={{ fontSize: '13.5px', fontWeight: 600, color: 'white', lineHeight: 1.4 }}>{renderWithAIEmphasis(row.voca)}</span>
                 </div>
               </div>
             </div>
@@ -967,12 +1114,12 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
             </div>
 
             {/* Legal links */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: '6px', rowGap: '4px' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: '8px', rowGap: '6px' }}>
               <button
                 onClick={() => setModal('terms')}
                 style={{
                   background: 'none', border: 'none', cursor: 'pointer',
-                  fontSize: '13.5px', color: 'rgba(255,255,255,0.6)',
+                  fontSize: '15.5px', color: 'rgba(255,255,255,0.6)',
                   padding: '4px 8px', borderRadius: '6px', transition: 'color 0.15s',
                   fontFamily: "'DM Sans', system-ui, sans-serif",
                 }}
@@ -981,12 +1128,12 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
               >
                 Terms of Service
               </button>
-              <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: '13.5px' }}>·</span>
+              <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: '15.5px' }}>·</span>
               <button
                 onClick={() => setModal('privacy')}
                 style={{
                   background: 'none', border: 'none', cursor: 'pointer',
-                  fontSize: '13.5px', color: 'rgba(255,255,255,0.6)',
+                  fontSize: '15.5px', color: 'rgba(255,255,255,0.6)',
                   padding: '4px 8px', borderRadius: '6px', transition: 'color 0.15s',
                   fontFamily: "'DM Sans', system-ui, sans-serif",
                 }}
@@ -995,9 +1142,9 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
               >
                 Privacy Policy
               </button>
-              <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: '13.5px' }}>·</span>
+              <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: '15.5px' }}>·</span>
               <a href="#contact" style={{
-                fontSize: '13.5px', color: 'rgba(255,255,255,0.6)',
+                fontSize: '15.5px', color: 'rgba(255,255,255,0.6)',
                 textDecoration: 'none', padding: '4px 8px', borderRadius: '6px',
                 transition: 'color 0.15s',
               }}
@@ -1006,8 +1153,11 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
               >
                 Contact
               </a>
-              <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: '13.5px' }}>·</span>
-              <span style={{ fontSize: '13.5px', color: 'rgba(255,255,255,0.4)' }}>© 2026 Voca</span>
+            </div>
+
+            {/* Copyright — own line */}
+            <div style={{ marginTop: '10px', fontSize: '15.5px', color: 'rgba(255,255,255,0.4)' }}>
+              © 2026 Voca
             </div>
           </div>
         </div>
