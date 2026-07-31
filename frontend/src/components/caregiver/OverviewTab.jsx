@@ -44,15 +44,6 @@ function SearchIcon(p) {
     </svg>
   )
 }
-function GraduationCapIcon(p) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}>
-      <path d="M2 9.5 12 5l10 4.5-10 4.5-10-4.5z" />
-      <path d="M6 11.5V16c0 1.7 2.7 3 6 3s6-1.3 6-3v-4.5" />
-      <path d="M22 9.5V15" />
-    </svg>
-  )
-}
 function CheckIcon(p) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...p}>
@@ -122,14 +113,6 @@ export default function OverviewTab() {
     queryFn: () => api.listJournalMoods(activeProfileId),
     enabled: !!activeProfileId,
   })
-  const { data: coachCard = null } = useQuery({
-    queryKey: ['coach', activeProfileId],
-    queryFn: () => api.getCoachCard(activeProfileId).catch(err => {
-      if (err.status === 404) return null
-      throw err
-    }),
-    enabled: !!activeProfileId,
-  })
   const lastMood = journalMoods[0]?.moodSymbol || null
 
   if (!insights) {
@@ -168,51 +151,26 @@ export default function OverviewTab() {
           />
         </div>
 
-        {/* ── Coach card + New vocab ── */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6 lg:mb-8">
-          <div className={`rounded-2xl p-4 sm:p-5 border ${insights.newVocab.length === 0 ? 'sm:col-span-2' : ''} ${coachCard ? 'bg-teal-50 border-teal-100' : 'bg-warm-100 border-warm-200'}`}>
-            <div className="flex items-start gap-3">
-              <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${coachCard ? 'bg-white/70 text-teal-600' : 'bg-white text-warm-400'}`}>
-                <GraduationCapIcon className="w-[18px] h-[18px]" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="font-sans font-semibold text-warm-800 text-sm sm:text-base">
-                  {coachCard ? 'AI coach card ready' : 'Coach card not yet generated'}
-                </div>
-                {coachCard?.priority && (
-                  <div className="font-sans text-warm-500 text-sm mt-1 leading-relaxed">
-                    {coachCard.priority}
-                  </div>
-                )}
-                {!coachCard && (
-                  <div className="font-sans text-warm-400 text-sm mt-1">
-                    Open Insights to generate this week's coaching advice
-                  </div>
-                )}
-              </div>
+        {/* ── New vocab ── */}
+        {insights.newVocab.length > 0 && (
+          <div className="bg-white rounded-2xl p-4 sm:p-5 border border-warm-200 shadow-subtle mb-6 lg:mb-8">
+            <div className="flex items-center gap-2 mb-3">
+              <SproutIcon className="w-4 h-4 text-teal-600" />
+              <span className="font-sans font-semibold text-warm-700 text-sm sm:text-base">New words this week</span>
+              <span className="ml-auto font-mono text-teal-500 font-bold text-base">{insights.newVocab.length}</span>
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {insights.newVocab.slice(0, 10).map((word, i) => (
+                <span key={word + i} className="inline-flex items-center px-2.5 py-1 bg-teal-50 text-teal-700 rounded-lg text-sm font-medium border border-teal-100">
+                  {word}
+                </span>
+              ))}
+              {insights.newVocab.length > 10 && (
+                <span className="text-sm text-warm-400 self-center">+{insights.newVocab.length - 10} more</span>
+              )}
             </div>
           </div>
-
-          {insights.newVocab.length > 0 && (
-            <div className="bg-white rounded-2xl p-4 sm:p-5 border border-warm-200 shadow-subtle">
-              <div className="flex items-center gap-2 mb-3">
-                <SproutIcon className="w-4 h-4 text-teal-600" />
-                <span className="font-sans font-semibold text-warm-700 text-sm sm:text-base">New words this week</span>
-                <span className="ml-auto font-mono text-teal-500 font-bold text-base">{insights.newVocab.length}</span>
-              </div>
-              <div className="flex flex-wrap gap-1.5">
-                {insights.newVocab.slice(0, 10).map((word, i) => (
-                  <span key={word + i} className="inline-flex items-center px-2.5 py-1 bg-teal-50 text-teal-700 rounded-lg text-sm font-medium border border-teal-100">
-                    {word}
-                  </span>
-                ))}
-                {insights.newVocab.length > 10 && (
-                  <span className="text-sm text-warm-400 self-center">+{insights.newVocab.length - 10} more</span>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
+        )}
 
         {/* ── How to get the most from Voca ── */}
         <div>

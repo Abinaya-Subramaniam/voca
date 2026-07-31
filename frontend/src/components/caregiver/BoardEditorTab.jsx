@@ -61,13 +61,13 @@ export default function BoardEditorTab() {
 
         <PageHeader
           title="Settings"
-          subtitle="Kid login, display, and accessibility settings for the communication board"
+          subtitle="Communicator login, display, and accessibility settings for the communication board"
         />
 
-        {/* Kid login */}
+        {/* Communicator login */}
         <div className="bg-white rounded-2xl border border-warm-200 shadow-subtle p-5 mb-5">
           <div className="mb-4">
-            <span className="font-sans font-semibold text-warm-700 text-lg">Kid login</span>
+            <span className="font-sans font-semibold text-warm-700 text-lg">Communicator login</span>
           </div>
 
           <label className="block font-sans font-semibold text-warm-700 text-base mb-2">Username</label>

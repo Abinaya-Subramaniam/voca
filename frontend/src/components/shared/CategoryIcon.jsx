@@ -76,6 +76,16 @@ function StarIcon(p) {
     </svg>
   )
 }
+function HashIcon(p) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}>
+      <line x1="4" y1="9" x2="20" y2="9" />
+      <line x1="4" y1="15" x2="20" y2="15" />
+      <line x1="10" y1="3" x2="8" y2="21" />
+      <line x1="16" y1="3" x2="14" y2="21" />
+    </svg>
+  )
+}
 
 export const CATEGORY_META = {
   home:       { Icon: HomeIcon,  color: '#238A72', bg: '#E8F7F4' },
@@ -86,6 +96,7 @@ export const CATEGORY_META = {
   people:     { Icon: UsersIcon, color: '#9333EA', bg: '#F6EDFE' },
   activities: { Icon: ZapIcon,   color: '#16A34A', bg: '#EAF7EC' },
   social:     { Icon: ChatIcon,  color: '#238A72', bg: '#E8F7F4' },
+  numbers:    { Icon: HashIcon,  color: '#0891B2', bg: '#E5F8FB' },
   custom:     { Icon: StarIcon,  color: '#6B6860', bg: '#F2F1EE' },
 }
 

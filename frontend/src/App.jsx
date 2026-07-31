@@ -21,7 +21,7 @@ import CompanionTab from './components/caregiver/CompanionTab'
 import CaregiverSidebar from './components/caregiver/CaregiverSidebar'
 
 const CAREGIVER_TAB_IDS = ['overview', 'insights', 'boardeditor', 'companion']
-const CAREGIVER_TAB_LABELS = { overview: 'Overview', insights: 'Insights', boardeditor: 'Settings', companion: 'Voca Bot' }
+const CAREGIVER_TAB_LABELS = { overview: 'Overview', insights: 'Vocab Coach', boardeditor: 'Settings', companion: 'Voca Bot' }
 
 function greetingPhrase() {
   const hour = new Date().getHours()
@@ -170,7 +170,6 @@ function ProfilesRoute() {
           <span className="font-display font-bold text-warm-900 text-lg"><span style={{ color: '#238A72' }}>V</span>oca</span>
         </button>
         <div className="flex items-center gap-3">
-          <span className="text-sm text-warm-400 font-sans">Select a profile</span>
           <ProfileMenu name={user?.name} email={user?.email} onLogout={handleLogout} />
         </div>
       </header>
@@ -321,7 +320,8 @@ export default function App() {
       <Route path="/login" element={<LoginRoute />} />
       <Route path="/profiles" element={<ProfilesRoute />} />
       <Route path="/board" element={<RequireKid><BoardRoute /></RequireKid>} />
-      <Route path="/board/journal" element={<RequireKid><BoardRoute /></RequireKid>} />
+      {/* Journal hidden for now — restore <RequireKid><BoardRoute /></RequireKid> to bring it back */}
+      <Route path="/board/journal" element={<Navigate to="/board" replace />} />
       <Route path="/caregiver" element={<Navigate to="/caregiver/overview" replace />} />
       <Route path="/caregiver/:tab" element={<RequireCaregiver><CaregiverRoute /></RequireCaregiver>} />
       <Route path="*" element={<Navigate to="/" replace />} />

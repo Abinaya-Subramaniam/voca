@@ -25,7 +25,7 @@ function LogOutIcon() {
 
 export default function Sidebar({
   activeProfile, boards, activeBoardId, showJournal,
-  onSelectBoard, onLogoClick, onJournalToggle, onWhoAmI, onLogout,
+  onSelectBoard, onLogoClick, onWhoAmI, onLogout,
   mobileOpen = false, onMobileClose,
 }) {
   const rootBoard   = boards.find(b => b.isRoot === true || b.category === 'home') || boards[0]
@@ -121,13 +121,7 @@ export default function Sidebar({
           More
         </div>
         <div className="space-y-1">
-          <SidebarItem
-            icon="📔"
-            label="Journal"
-            active={showJournal}
-            onClick={withClose(onJournalToggle)}
-            tint="bg-pink-50"
-          />
+          {/* Journal hidden for now — re-add the SidebarItem below to bring it back */}
           <SidebarItem
             icon={<IdCardIcon />}
             label="Who Am I"

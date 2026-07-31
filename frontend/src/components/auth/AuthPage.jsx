@@ -61,7 +61,7 @@ function PasswordField({ id, label, value, onChange, autoComplete, placeholder, 
   return (
     <div className="mb-4">
       <div className="flex items-baseline justify-between mb-1.5">
-        <label htmlFor={id} className="font-sans font-semibold text-warm-700 text-xs">
+        <label htmlFor={id} className="font-sans font-semibold text-warm-700 text-sm">
           {label}
         </label>
       </div>
@@ -204,27 +204,27 @@ export default function AuthPage({ onAuthed, onBackToLanding }) {
             onMouseEnter={e => { e.currentTarget.style.borderColor = '#2D9B83'; e.currentTarget.style.color = '#2D9B83'; e.currentTarget.style.background = 'rgba(255,255,255,0.9)' }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(232,230,225,0.9)'; e.currentTarget.style.color = '#4A473F'; e.currentTarget.style.background = 'rgba(255,255,255,0.55)' }}
           >
-            ← Back to Home
+            Back to Home
           </button>
         )}
       </Navbar>
 
       <div className="flex-1 overflow-y-auto flex items-center justify-center p-4 py-8">
-      <div className="bg-white rounded-2xl shadow-raised p-8 w-full max-w-sm border border-warm-200 my-auto">
+      <div className="bg-white rounded-2xl shadow-raised p-8 w-full max-w-md border border-warm-200 my-auto">
 
         <img src="https://i.imgur.com/3vT9jwF.jpeg" alt="Voca" className="w-12 h-12 rounded-xl object-cover mb-4 shadow-subtle" />
 
-        {/* I'm a caregiver / I'm a kid */}
-        <div className="flex gap-1 p-1 mb-6 bg-warm-100 rounded-xl">
+        {/* I'm a caregiver / I'm a communicator */}
+        <div className="flex gap-2 p-2 mb-7 bg-warm-100 rounded-xl">
           {[
             { id: 'caregiver', label: "I'm a caregiver" },
-            { id: 'kid', label: "I'm a kid" },
+            { id: 'kid', label: "I'm a communicator" },
           ].map(opt => (
             <button
               key={opt.id}
               type="button"
               onClick={() => switchLoginAs(opt.id)}
-              className={`flex-1 py-2.5 rounded-lg font-sans text-base font-semibold transition-colors ${
+              className={`flex-1 py-3 px-3 rounded-lg font-sans text-base font-semibold text-center whitespace-nowrap transition-colors ${
                 loginAs === opt.id
                   ? 'bg-white text-teal-600 shadow-subtle'
                   : 'text-warm-500 hover:text-warm-700'
@@ -246,7 +246,7 @@ export default function AuthPage({ onAuthed, onBackToLanding }) {
 
             <form onSubmit={handleKidSubmit} noValidate>
               <div className="mb-4">
-                <label htmlFor="kidUsername" className="block font-sans font-semibold text-warm-700 text-xs mb-1.5">
+                <label htmlFor="kidUsername" className="block font-sans font-semibold text-warm-700 text-sm mb-1.5">
                   Username
                 </label>
                 <div className="relative">
@@ -271,7 +271,7 @@ export default function AuthPage({ onAuthed, onBackToLanding }) {
               </div>
 
               <div className="mb-4">
-                <label htmlFor="kidPin" className="block font-sans font-semibold text-warm-700 text-xs mb-1.5">
+                <label htmlFor="kidPin" className="block font-sans font-semibold text-warm-700 text-sm mb-1.5">
                   PIN
                 </label>
                 <input
@@ -359,7 +359,7 @@ export default function AuthPage({ onAuthed, onBackToLanding }) {
 
           {/* Email */}
           <div className="mb-4">
-            <label htmlFor="email" className="block font-sans font-semibold text-warm-700 text-xs mb-1.5">
+            <label htmlFor="email" className="block font-sans font-semibold text-warm-700 text-sm mb-1.5">
               Email
             </label>
             <div className="relative">

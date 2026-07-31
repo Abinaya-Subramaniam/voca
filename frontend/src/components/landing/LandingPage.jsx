@@ -36,8 +36,8 @@ const FEATURE_ITEMS = [
 ]
 
 const COMPARISON_ROWS = [
-  { feature: 'Word prediction',    typical: 'Static, generic word lists',              voca: 'Learns your patterns in real time' },
-  { feature: 'Board layout',       typical: 'Fixed grid — manual editing only',        voca: 'AI auto-reorders your board by real usage' },
+  { feature: 'Word prediction',    typical: 'Static, generic word lists',              voca: 'Learns patterns in real time' },
+  { feature: 'Board layout',       typical: 'Fixed grid, manual editing only',        voca: 'AI auto-reorders your board by real usage' },
   { feature: 'Missing vocabulary', typical: 'No signal when a word is missing',        voca: 'Flags gaps, suggests exactly what to add' },
   { feature: 'Coaching & guidance', typical: "None — you're on your own",              voca: 'Weekly AI coaching, built in' },
   { feature: 'Cost',               typical: '$50–150/hr for therapist consultations',  voca: 'Free. Always.' },
@@ -363,7 +363,7 @@ function ContactForm() {
         <textarea
           required rows={5} value={message} onChange={e => setMessage(e.target.value)}
           style={{ ...FORM_INPUT, resize: 'vertical' }}
-          placeholder="Questions, feedback, or partnership enquiries — we'd love to hear from you."
+          placeholder="Questions, feedback, or partnership enquiries, we'd love to hear from you."
           onFocus={focusStyle} onBlur={blurStyle}
         />
       </div>
@@ -371,7 +371,7 @@ function ContactForm() {
         onMouseEnter={e => { e.currentTarget.style.background = '#238A72' }}
         onMouseLeave={e => { e.currentTarget.style.background = '#2D9B83' }}
       >
-        Send message →
+        Send Message
       </button>
       {sent && (
         <p style={{ fontSize: '15px', color: '#6B6860', textAlign: 'center', margin: 0 }}>
@@ -434,7 +434,7 @@ function FAQItem({ q, a, open, onToggle }) {
         </span>
       </button>
       {open && (
-        <p style={{ fontSize: '16px', color: '#6B6860', lineHeight: 1.7, margin: '0 4px 20px', maxWidth: '640px' }}>
+        <p style={{ fontSize: '18px', fontWeight: 500, color: '#4A473F', lineHeight: 1.7, margin: '0 4px 20px', maxWidth: '640px' }}>
           {a}
         </p>
       )}
@@ -580,7 +580,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
               onMouseEnter={e => { e.currentTarget.style.background = '#238A72'; e.currentTarget.style.transform = 'translateY(-1px)' }}
               onMouseLeave={e => { e.currentTarget.style.background = '#2D9B83'; e.currentTarget.style.transform = 'translateY(0)' }}
             >
-              Start communicating →
+              Start communicating
             </button>
             <a href="#features" style={{
               padding: '16px 26px', background: 'white', color: '#6B6860',
@@ -911,12 +911,12 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
           {/* Header row */}
           <div style={{ background: 'white', padding: '18px 20px' }} />
           <div style={{ background: 'white', padding: '18px 16px', textAlign: 'center' }}>
-            <span style={{ fontSize: '14.5px', fontWeight: 700, color: '#6B6860', letterSpacing: '0.02em' }}>
+            <span style={{ fontSize: '17px', fontWeight: 800, color: '#6B6860', letterSpacing: '0.02em' }}>
               Typical AAC apps
             </span>
           </div>
           <div style={{ background: '#14523F', padding: '18px 16px', textAlign: 'center' }}>
-            <span style={{ fontSize: '14.5px', fontWeight: 800, color: 'white', letterSpacing: '0.02em' }}>
+            <span style={{ fontSize: '17px', fontWeight: 900, color: 'white', letterSpacing: '0.02em' }}>
               Voca
             </span>
           </div>
@@ -928,7 +928,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
                 background: 'white', padding: '20px', borderTop: '1px solid #F0EFEA',
                 display: 'flex', alignItems: 'center',
               }}>
-                <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800, fontSize: '15px', color: '#2C2A26' }}>
+                <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800, fontSize: '15px', color: '#14523F' }}>
                   {row.feature}
                 </span>
               </div>
@@ -957,17 +957,17 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
           {/* Header row */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
             <div style={{ background: 'white', padding: '9px 10px', textAlign: 'center', borderRight: '1px solid #F0EFEA' }}>
-              <span style={{ fontSize: '12px', fontWeight: 700, color: '#6B6860', letterSpacing: '0.02em' }}>TYPICAL</span>
+              <span style={{ fontSize: '13.5px', fontWeight: 800, color: '#6B6860', letterSpacing: '0.02em' }}>TYPICAL</span>
             </div>
             <div style={{ background: '#14523F', padding: '9px 10px', textAlign: 'center' }}>
-              <span style={{ fontSize: '12px', fontWeight: 800, color: 'white', letterSpacing: '0.02em' }}>VOCA</span>
+              <span style={{ fontSize: '13.5px', fontWeight: 900, color: 'white', letterSpacing: '0.02em' }}>VOCA</span>
             </div>
           </div>
 
           {COMPARISON_ROWS.map(row => (
             <div key={row.feature}>
               <div style={{ background: '#FAFAF8', padding: '6px 10px', borderTop: '1px solid #E8E6E1' }}>
-                <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800, fontSize: '13px', color: '#2C2A26' }}>
+                <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800, fontSize: '13px', color: '#14523F' }}>
                   {row.feature}
                 </span>
               </div>
@@ -988,7 +988,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
             onMouseEnter={e => { e.currentTarget.style.background = '#238A72'; e.currentTarget.style.transform = 'translateY(-1px)' }}
             onMouseLeave={e => { e.currentTarget.style.background = '#2D9B83'; e.currentTarget.style.transform = 'translateY(0)' }}
           >
-            Start for free →
+            Start for free
           </button>
         </div>
       </section>
@@ -1018,7 +1018,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
               Get in touch
             </h2>
             <p style={{ fontSize: '1.15rem', color: '#6B6860', margin: 0 }}>
-              Questions, feedback, or partnership enquiries — we'd love to hear from you.
+              Questions, feedback, or partnership enquiries, we'd love to hear from you.
             </p>
           </div>
 
@@ -1052,7 +1052,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
             onMouseEnter={e => { e.currentTarget.style.background = '#E8F7F4'; e.currentTarget.style.transform = 'translateY(-2px)' }}
             onMouseLeave={e => { e.currentTarget.style.background = 'white'; e.currentTarget.style.transform = 'translateY(0)' }}
           >
-            Open Voca →
+            Open Voca
           </button>
 
           {/* Footer bottom */}

@@ -174,5 +174,23 @@
       { "position": 14, "symbolId": "7251",  "label": "nice",  "wordType": "social" },
       { "position": 15, "symbolId": "31408", "label": "proud", "wordType": "social" }
     ]
+  },
+  {
+    "name": "Numbers",
+    "category": "numbers",
+    "isRoot": false,
+    "gridColumns": 5,
+    "symbols": [
+      { "position": 0, "symbolId": "2626", "label": "0", "wordType": "noun" },
+      { "position": 1, "symbolId": "2627", "label": "1", "wordType": "noun" },
+      { "position": 2, "symbolId": "2628", "label": "2", "wordType": "noun" },
+      { "position": 3, "symbolId": "2629", "label": "3", "wordType": "noun" },
+      { "position": 4, "symbolId": "2630", "label": "4", "wordType": "noun" },
+      { "position": 5, "symbolId": "2631", "label": "5", "wordType": "noun" },
+      { "position": 6, "symbolId": "2632", "label": "6", "wordType": "noun" },
+      { "position": 7, "symbolId": "2633", "label": "7", "wordType": "noun" },
+      { "position": 8, "symbolId": "2634", "label": "8", "wordType": "noun" },
+      { "position": 9, "symbolId": "2635", "label": "9", "wordType": "noun" }
+    ]
   }
 ]

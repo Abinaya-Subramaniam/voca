@@ -13,12 +13,17 @@ function GridIcon() {
   )
 }
 
-function ChartIcon() {
+function RobotIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <line x1="12" y1="20" x2="12" y2="10" />
-      <line x1="18" y1="20" x2="18" y2="4" />
-      <line x1="6" y1="20" x2="6" y2="16" />
+      <rect x="4" y="9" width="16" height="11" rx="3" />
+      <path d="M12 9V5" />
+      <circle cx="12" cy="3.5" r="1.5" fill="currentColor" stroke="none" />
+      <circle cx="9" cy="14.5" r="1.25" fill="currentColor" stroke="none" />
+      <circle cx="15" cy="14.5" r="1.25" fill="currentColor" stroke="none" />
+      <path d="M9 17.5c.8.6 1.9.9 3 .9s2.2-.3 3-.9" />
+      <path d="M2 13h2" />
+      <path d="M20 13h2" />
     </svg>
   )
 }
@@ -53,7 +58,7 @@ function UsersIcon() {
 
 const TABS = [
   { id: 'overview',    label: 'Overview',     icon: <GridIcon />,  tint: 'bg-teal-50'   },
-  { id: 'insights',    label: 'Insights',     icon: <ChartIcon />, tint: 'bg-blue-50'   },
+  { id: 'insights',    label: 'Vocab Coach', icon: <RobotIcon />, tint: 'bg-blue-50' },
   { id: 'boardeditor', label: 'Settings',     icon: <SettingsIcon />, tint: 'bg-yellow-50' },
   { id: 'companion',   label: 'Voca Bot',     icon: <ChatIcon />,  tint: 'bg-purple-50' },
 ]
@@ -140,11 +145,11 @@ export default function CaregiverSidebar({
         </div>
       </nav>
 
-      {/* Footer — switch which kid you're managing, or add another */}
+      {/* Footer — switch which communicator you're managing, or add another */}
       <div className="px-3 py-3 border-t border-warm-100 flex-shrink-0">
         <SidebarSwitchButton
           icon={<UsersIcon />}
-          label="Manage kids"
+          label="Manage communicators"
           onClick={withClose(onManageKids)}
         />
       </div>
