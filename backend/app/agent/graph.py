@@ -54,9 +54,6 @@ def _extract_text(content) -> str:
     return ""
 
 
-# Boilerplate the model uses (echoing propose_symbols_for_board's own tool note) when it
-# claims an approval card exists. Used to catch cases where it says this without actually
-# having called the tool this turn — small models occasionally skip the call and hallucinate.
 _APPROVAL_CLAIM_PHRASES = ("approval card", "awaiting your confirm", "awaiting caregiver")
 
 
