@@ -39,7 +39,7 @@ const COMPARISON_ROWS = [
   { feature: 'Word prediction',    typical: 'Static, generic word lists',              voca: 'Learns patterns in real time' },
   { feature: 'Board layout',       typical: 'Fixed grid, manual editing only',        voca: 'AI auto-reorders your board by real usage' },
   { feature: 'Missing vocabulary', typical: 'No signal when a word is missing',        voca: 'Flags gaps, suggests exactly what to add' },
-  { feature: 'Coaching & guidance', typical: "None — you're on your own",              voca: 'Weekly AI coaching, built in' },
+  { feature: 'Coaching & guidance', typical: "None, you're on your own",              voca: 'Weekly AI coaching, built in' },
   { feature: 'Cost',               typical: '$50–150/hr for therapist consultations',  voca: 'Free. Always.' },
 ]
 
@@ -58,6 +58,47 @@ const BTN = {
     fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800,
     cursor: 'pointer', transition: 'all 0.15s',
   },
+}
+
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+
+// Fades + slides a section up into place the first time it scrolls into view —
+// skipped entirely for users who've asked for reduced motion.
+function Reveal({ children, delay = 0 }) {
+  const ref = useRef(null)
+  const [visible, setVisible] = useState(() => prefersReducedMotion())
+
+  useEffect(() => {
+    if (visible) return
+    const node = ref.current
+    if (!node) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true)
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.15, rootMargin: '0px 0px -60px 0px' }
+    )
+    observer.observe(node)
+    return () => observer.disconnect()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? 'translateY(0)' : 'translateY(28px)',
+        transition: `opacity 0.7s ease-out ${delay}s, transform 0.7s ease-out ${delay}s`,
+      }}
+    >
+      {children}
+    </div>
+  )
 }
 
 function FeatureCarousel({ items }) {
@@ -103,55 +144,29 @@ function FeatureCarousel({ items }) {
           transform: `translateX(-${index * 100}%)`,
           transition: 'transform 0.6s cubic-bezier(0.65,0,0.35,1)',
         }}>
-          {items.map(({ icon, bg, border, accent, title, desc }) => (
+          {items.map(({ icon, bg, border, title, desc }) => (
             <div key={title} style={{ flex: '0 0 100%', width: '100%' }}>
-              <div style={{
-                position: 'relative', overflow: 'hidden',
-                background: `linear-gradient(135deg, ${bg} 0%, white 70%)`,
-                minHeight: '280px',
-              }}>
-                {/* drifting decorative blobs */}
-                <div className="feature-bg-blob" style={{
-                  position: 'absolute', top: '-40px', right: '-30px',
-                  width: '160px', height: '160px', borderRadius: '50%',
-                  background: border, opacity: 0.35, filter: 'blur(1px)',
-                }} />
-                <div className="feature-bg-blob" style={{
-                  position: 'absolute', bottom: '-36px', left: '6%',
-                  width: '90px', height: '90px', borderRadius: '50%',
-                  background: border, opacity: 0.25, animationDelay: '-3s',
-                }} />
-
-                {/* wavy accent line threading behind the content */}
-                <svg
-                  viewBox="0 0 400 40" preserveAspectRatio="none"
-                  style={{ position: 'absolute', bottom: '18px', left: 0, width: '100%', height: '32px', opacity: 0.5 }}
-                >
-                  <path d="M0,20 Q50,2 100,20 T200,20 T300,20 T400,20" fill="none" stroke={accent} strokeWidth="2" />
-                </svg>
-
-                <div
-                  className="flex flex-col md:flex-row items-center text-center md:text-left"
-                  style={{ position: 'relative', zIndex: 1, gap: '32px', padding: 'clamp(36px, 6vw, 56px)' }}
-                >
-                  <div className="feature-icon-blob" style={{
-                    width: '104px', height: '104px', flexShrink: 0,
-                    background: `linear-gradient(145deg, ${accent}, ${border})`,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '46px', boxShadow: `0 14px 30px ${accent}40`,
+              <div
+                className="flex flex-col md:flex-row items-center text-center md:text-left"
+                style={{ background: 'white', minHeight: '260px', gap: '32px', padding: 'clamp(36px, 6vw, 56px)' }}
+              >
+                <div style={{
+                  width: '84px', height: '84px', flexShrink: 0, borderRadius: '20px',
+                  background: bg, border: `1.5px solid ${border}`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '36px',
+                }}>
+                  {icon}
+                </div>
+                <div>
+                  <div style={{
+                    fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800,
+                    fontSize: '1.5rem', color: '#2C2A26', marginBottom: '10px', letterSpacing: '-0.01em',
                   }}>
-                    {icon}
+                    {title}
                   </div>
-                  <div>
-                    <div style={{
-                      fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 900,
-                      fontSize: '1.6rem', color: '#2C2A26', marginBottom: '10px', letterSpacing: '-0.01em',
-                    }}>
-                      {title}
-                    </div>
-                    <div style={{ fontSize: '17px', color: '#6B6860', lineHeight: 1.6, maxWidth: '480px' }}>
-                      {desc}
-                    </div>
+                  <div style={{ fontSize: '17px', color: '#6B6860', lineHeight: 1.6, maxWidth: '480px' }}>
+                    {desc}
                   </div>
                 </div>
               </div>
@@ -679,6 +694,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
       </section>
 
       {/* Stats bar */}
+      <Reveal>
       <section style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 clamp(1.25rem, 5vw, 2rem) 60px' }}>
         <div
           className="grid grid-cols-1 sm:grid-cols-3"
@@ -704,51 +720,35 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
           ))}
         </div>
       </section>
+      </Reveal>
 
       {/* Features */}
-      <section id="features" style={{
-        position: 'relative', overflow: 'hidden',
-        background: 'linear-gradient(180deg, #F1FAF6 0%, #ECF8F2 100%)',
-        padding: 'clamp(72px, 10vw, 100px) 0',
-      }}>
-        <svg
-          viewBox="0 0 1440 74" preserveAspectRatio="none"
-          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '56px', display: 'block' }}
-        >
-          <path d="M0,40 C240,90 480,0 720,20 C960,40 1200,90 1440,40 L1440,0 L0,0 Z" fill="#FAFAF8" />
-        </svg>
-        <svg
-          viewBox="0 0 1440 74" preserveAspectRatio="none"
-          style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '56px', display: 'block', transform: 'scaleY(-1)' }}
-        >
-          <path d="M0,40 C240,90 480,0 720,20 C960,40 1200,90 1440,40 L1440,74 L0,74 Z" fill="white" />
-        </svg>
-
-        <div style={{ position: 'relative', zIndex: 1, maxWidth: '1100px', margin: '0 auto', padding: '0 clamp(1.25rem, 5vw, 2rem)' }}>
-          <div style={{ textAlign: 'center', marginBottom: '52px' }}>
-            <div style={{
-              display: 'inline-block', padding: '4px 14px',
-              background: 'white', borderRadius: '100px',
-              fontSize: '11px', fontWeight: 600, color: '#2D9B83',
-              letterSpacing: '0.06em', marginBottom: '16px',
-            }}>
-              FEATURES
-            </div>
-            <h2 style={{
-              fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 900,
-              fontSize: 'clamp(1.9rem, 5vw, 2.6rem)', color: '#2C2A26', margin: '0 0 12px',
-              letterSpacing: '-0.02em',
-            }}>
-              Everything you need, built in.
-            </h2>
-            <p style={{ fontSize: '1.3rem', color: '#6B6860', margin: 0 }}>
-              No plug-ins, no upsells — just one AAC app that keeps getting smarter.
-            </p>
+      <Reveal>
+      <section id="features" style={{ padding: 'clamp(48px, 8vw, 72px) clamp(1.25rem, 5vw, 2rem)', maxWidth: '1100px', margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+          <div style={{
+            display: 'inline-block', padding: '4px 14px',
+            background: '#E8F7F4', borderRadius: '100px',
+            fontSize: '11px', fontWeight: 600, color: '#2D9B83',
+            letterSpacing: '0.06em', marginBottom: '16px',
+          }}>
+            FEATURES
           </div>
-
-          <FeatureCarousel items={FEATURE_ITEMS} />
+          <h2 style={{
+            fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 900,
+            fontSize: 'clamp(1.9rem, 5vw, 2.6rem)', color: '#2C2A26', margin: '0 0 12px',
+            letterSpacing: '-0.02em',
+          }}>
+            Everything you need, built in.
+          </h2>
+          <p style={{ fontSize: '1.15rem', color: '#6B6860', margin: 0 }}>
+            No plug-ins, no upsells — just one AAC app that keeps getting smarter.
+          </p>
         </div>
+
+        <FeatureCarousel items={FEATURE_ITEMS} />
       </section>
+      </Reveal>
 
       {/* Journal feature — commented out, keep for later
       <section id="journal" style={{ padding: 'clamp(48px, 8vw, 72px) clamp(1.25rem, 5vw, 2rem)', maxWidth: '1100px', margin: '0 auto' }}>
@@ -879,6 +879,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
       */}
 
       {/* AI features — Voca vs. typical AAC apps */}
+      <Reveal>
       <section id="ai-features" style={{ padding: 'clamp(48px, 8vw, 72px) clamp(1.25rem, 5vw, 2rem)', maxWidth: '1100px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '48px' }}>
           <div style={{
@@ -992,10 +993,14 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
           </button>
         </div>
       </section>
+      </Reveal>
 
-      <FAQSection />
+      <Reveal>
+        <FAQSection />
+      </Reveal>
 
       {/* Contact Us */}
+      <Reveal>
       <section id="contact" style={{
         background: 'white', borderTop: '1px solid #E8E6E1', borderBottom: '1px solid #E8E6E1',
         padding: 'clamp(48px, 8vw, 72px) clamp(1.25rem, 5vw, 2rem)',
@@ -1026,6 +1031,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
 
         </div>
       </section>
+      </Reveal>
 
       {/* Footer CTA */}
       <section style={{ background: '#2D9B83', padding: 'clamp(56px, 10vw, 80px) clamp(1.25rem, 5vw, 2rem)', textAlign: 'center' }}>
