@@ -20,8 +20,6 @@ app.add_middleware(
 
 @app.on_event("startup")
 def startup() -> None:
-    # Dev convenience: create any missing tables. Production schema changes go
-    # through Alembic (`alembic upgrade head`).
     Base.metadata.create_all(bind=engine)
 
 
