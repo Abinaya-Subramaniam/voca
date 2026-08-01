@@ -52,7 +52,12 @@
       { "position": 4, "symbolId": "2462",  "label": "apple",  "wordType": "noun" },
       { "position": 5, "symbolId": "2530",  "label": "banana", "wordType": "noun" },
       { "position": 6, "symbolId": "6911",  "label": "rice",   "wordType": "noun" },
-      { "position": 7, "symbolId": "8312",  "label": "cookie", "wordType": "noun" }
+      { "position": 7, "symbolId": "8312",  "label": "cookie", "wordType": "noun" },
+      { "position": 8, "symbolId": "2527",  "label": "pizza",   "wordType": "noun" },
+      { "position": 9, "symbolId": "2427",  "label": "egg",     "wordType": "noun" },
+      { "position": 10, "symbolId": "2541", "label": "cheese",  "wordType": "noun" },
+      { "position": 11, "symbolId": "2888", "label": "orange",  "wordType": "noun" },
+      { "position": 12, "symbolId": "4952", "label": "chicken", "wordType": "noun" }
     ]
   },
   {
@@ -68,7 +73,15 @@
       { "position": 4, "symbolId": "2380",  "label": "write",   "wordType": "verb" },
       { "position": 5, "symbolId": "7141",  "label": "read",    "wordType": "verb" },
       { "position": 6, "symbolId": "8088",  "label": "draw",    "wordType": "verb" },
-      { "position": 7, "symbolId": "37810", "label": "learn",   "wordType": "verb" }
+      { "position": 7, "symbolId": "37810", "label": "learn",   "wordType": "verb" },
+      { "position": 8, "symbolId": "2440",  "label": "pencil",   "wordType": "noun" },
+      { "position": 9, "symbolId": "11228", "label": "homework", "wordType": "noun" },
+      { "position": 10, "symbolId": "32554", "label": "class",    "wordType": "noun" },
+      { "position": 11, "symbolId": "9847",  "label": "question", "wordType": "noun" },
+      { "position": 12, "symbolId": "9031",  "label": "answer",   "wordType": "noun" },
+      { "position": 13, "symbolId": "7190",  "label": "computer", "wordType": "noun" },
+      { "position": 14, "symbolId": "2475",  "label": "backpack", "wordType": "noun" },
+      { "position": 15, "symbolId": "28825", "label": "test",     "wordType": "noun" }
     ]
   },
   {
@@ -82,7 +95,12 @@
       { "position": 2, "symbolId": "32648", "label": "help",   "wordType": "social" },
       { "position": 3, "symbolId": "7196",  "label": "stop",   "wordType": "social" },
       { "position": 4, "symbolId": "30620", "label": "hurts",  "wordType": "descriptor" },
-      { "position": 5, "symbolId": "5921",  "label": "toilet", "wordType": "noun" }
+      { "position": 5, "symbolId": "5921",  "label": "toilet", "wordType": "noun" },
+      { "position": 6, "symbolId": "2367",  "label": "pain",   "wordType": "descriptor" },
+      { "position": 7, "symbolId": "7040",  "label": "sick",   "wordType": "descriptor" },
+      { "position": 8, "symbolId": "35535", "label": "scared", "wordType": "descriptor" },
+      { "position": 9, "symbolId": "6647",  "label": "hot",    "wordType": "descriptor" },
+      { "position": 10, "symbolId": "2433", "label": "cold",   "wordType": "descriptor" }
     ]
   },
   {
@@ -98,7 +116,15 @@
       { "position": 4, "symbolId": "23710", "label": "grandma", "wordType": "noun" },
       { "position": 5, "symbolId": "23718", "label": "grandpa", "wordType": "noun" },
       { "position": 6, "symbolId": "6060",  "label": "baby",    "wordType": "noun" },
-      { "position": 7, "symbolId": "25790", "label": "friend",  "wordType": "noun" }
+      { "position": 7, "symbolId": "25790", "label": "friend",  "wordType": "noun" },
+      { "position": 8, "symbolId": "30271", "label": "aunt",   "wordType": "noun" },
+      { "position": 9, "symbolId": "30255", "label": "uncle",  "wordType": "noun" },
+      { "position": 10, "symbolId": "30340", "label": "cousin", "wordType": "noun" },
+      { "position": 11, "symbolId": "7114",  "label": "pet",    "wordType": "noun" },
+      { "position": 12, "symbolId": "38351", "label": "family", "wordType": "noun" },
+      { "position": 13, "symbolId": "37228", "label": "neighbor", "wordType": "noun" },
+      { "position": 14, "symbolId": "6050",  "label": "nurse",    "wordType": "noun" },
+      { "position": 15, "symbolId": "6561",  "label": "doctor",   "wordType": "noun" }
     ]
   },
   {
@@ -114,7 +140,15 @@
       { "position": 4, "symbolId": "6960",  "label": "sing",  "wordType": "verb" },
       { "position": 5, "symbolId": "35747", "label": "dance", "wordType": "verb" },
       { "position": 6, "symbolId": "29123", "label": "watch", "wordType": "verb" },
-      { "position": 7, "symbolId": "4550",  "label": "hug",   "wordType": "verb" }
+      { "position": 7, "symbolId": "4550",  "label": "hug",   "wordType": "verb" },
+      { "position": 8, "symbolId": "2348",  "label": "paint",     "wordType": "verb" },
+      { "position": 9, "symbolId": "6617",  "label": "climb",     "wordType": "verb" },
+      { "position": 10, "symbolId": "9017", "label": "kick",      "wordType": "verb" },
+      { "position": 11, "symbolId": "6543", "label": "throw",     "wordType": "verb" },
+      { "position": 12, "symbolId": "6935", "label": "ride bike", "wordType": "verb" },
+      { "position": 13, "symbolId": "8043", "label": "color", "wordType": "verb" },
+      { "position": 14, "symbolId": "2713", "label": "build", "wordType": "verb" },
+      { "position": 15, "symbolId": "8087", "label": "catch", "wordType": "verb" }
     ]
   },
   {
@@ -130,7 +164,33 @@
       { "position": 4, "symbolId": "11625", "label": "sorry",     "wordType": "social" },
       { "position": 5, "symbolId": "36914", "label": "wait",      "wordType": "social" },
       { "position": 6, "symbolId": "37163", "label": "again",     "wordType": "social" },
-      { "position": 7, "symbolId": "28429", "label": "finished",  "wordType": "social" }
+      { "position": 7, "symbolId": "28429", "label": "finished",  "wordType": "social" },
+      { "position": 8, "symbolId": "38900", "label": "share",   "wordType": "social" },
+      { "position": 9, "symbolId": "6630",  "label": "turn",    "wordType": "social" },
+      { "position": 10, "symbolId": "6936", "label": "welcome", "wordType": "social" },
+      { "position": 11, "symbolId": "37721", "label": "love",    "wordType": "social" },
+      { "position": 12, "symbolId": "6517", "label": "talk",    "wordType": "social" },
+      { "position": 13, "symbolId": "25618", "label": "care",  "wordType": "social" },
+      { "position": 14, "symbolId": "7251",  "label": "nice",  "wordType": "social" },
+      { "position": 15, "symbolId": "31408", "label": "proud", "wordType": "social" }
+    ]
+  },
+  {
+    "name": "Numbers",
+    "category": "numbers",
+    "isRoot": false,
+    "gridColumns": 5,
+    "symbols": [
+      { "position": 0, "symbolId": "2626", "label": "0", "wordType": "noun" },
+      { "position": 1, "symbolId": "2627", "label": "1", "wordType": "noun" },
+      { "position": 2, "symbolId": "2628", "label": "2", "wordType": "noun" },
+      { "position": 3, "symbolId": "2629", "label": "3", "wordType": "noun" },
+      { "position": 4, "symbolId": "2630", "label": "4", "wordType": "noun" },
+      { "position": 5, "symbolId": "2631", "label": "5", "wordType": "noun" },
+      { "position": 6, "symbolId": "2632", "label": "6", "wordType": "noun" },
+      { "position": 7, "symbolId": "2633", "label": "7", "wordType": "noun" },
+      { "position": 8, "symbolId": "2634", "label": "8", "wordType": "noun" },
+      { "position": 9, "symbolId": "2635", "label": "9", "wordType": "noun" }
     ]
   }
 ]

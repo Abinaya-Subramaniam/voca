@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from ..auth import get_owned_profile
+from ..auth import get_owned_profile, get_shared_profile
 from ..database import get_db
 from ..models import Board, BoardSymbol, Profile
 from ..schemas import BoardCreate, BoardOut, BoardSymbolIn, BoardUpdate, ReorderRequest
@@ -18,7 +18,7 @@ def _get_board(db: Session, profile: Profile, board_id: str) -> Board:
 
 
 @router.get("", response_model=list[BoardOut])
-def list_boards(profile: Profile = Depends(get_owned_profile), db: Session = Depends(get_db)):
+def list_boards(profile: Profile = Depends(get_shared_profile), db: Session = Depends(get_db)):
     return db.scalars(
         select(Board).where(Board.profile_id == profile.id).order_by(Board.is_root.desc(), Board.name)
     ).all()

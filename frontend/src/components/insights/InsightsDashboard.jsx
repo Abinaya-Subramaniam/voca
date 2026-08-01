@@ -5,20 +5,6 @@ import PageHeader from '../shared/PageHeader'
 import CoachCard from './CoachCard'
 import GapAlert from './GapAlert'
 
-function MetricCard({ label, value, valueColor, note, noteColor }) {
-  return (
-    <div className="bg-white rounded-2xl p-5 border border-warm-200 shadow-subtle">
-      <div className="font-sans text-warm-400 text-sm font-medium mb-2">{label}</div>
-      <div className={`font-mono font-bold leading-none ${valueColor || 'text-warm-900'}`} style={{ fontSize: '2.3rem' }}>
-        {value}
-      </div>
-      <div className={`text-sm font-sans font-medium mt-2.5 ${noteColor || 'text-warm-400'}`}>
-        {note}
-      </div>
-    </div>
-  )
-}
-
 export default function InsightsDashboard() {
   const { state } = useApp()
   const { activeProfileId, activeProfile } = state
@@ -67,60 +53,26 @@ export default function InsightsDashboard() {
     )
   }
 
-  const trend      = insights.totalThisWeek - insights.totalLastWeek
-  const trendLabel = trend > 0 ? `+${trend}` : trend < 0 ? `${trend}` : '—'
-  const trendColor = trend > 0 ? 'text-semantic-success' : trend < 0 ? 'text-semantic-error' : 'text-warm-400'
-
   return (
     <div className="flex-1 overflow-y-auto bg-warm-50">
       <div className="max-w-5xl mx-auto px-8 py-8">
 
         <PageHeader
-          title="Insights"
-          subtitle={`Last 7 days of communication for ${activeProfile?.name || 'them'}`}
+          title="Vocab Coach"
+          subtitle={`This week's coaching and vocabulary insights for ${activeProfile?.name || 'them'}`}
         />
-
-        {/* Metric cards */}
-        <div className="grid grid-cols-4 gap-4 mb-7">
-          <MetricCard
-            label="Sentences this week"
-            value={insights.totalThisWeek}
-            note={`${trendLabel} vs last week`}
-            noteColor={trendColor}
-          />
-          <MetricCard
-            label="New words this week"
-            value={insights.newVocab.length}
-            valueColor="text-teal-500"
-            note="used for first time"
-          />
-          <MetricCard
-            label="Most active time"
-            value={insights.peakTime}
-            note="peak communication"
-          />
-          <MetricCard
-            label="Longest sentence"
-            value={insights.longestSentence}
-            note="symbols in one go"
-          />
-        </div>
 
         {/* Coach card */}
         <div className="mb-7">
           <div className="flex items-center gap-2 mb-2.5">
-            <span className="text-base">🎓</span>
-            <span className="font-sans font-semibold text-warm-700 text-base">
-              AI Vocabulary Coach
-            </span>
-            <span className="text-[12.5px] font-sans text-warm-400 ml-auto">
+            <span className="text-[12.5px] font-sans text-warm-400">
               Powered by AI
             </span>
             {coachCard && !loadingCoach && (
               <button
                 onClick={() => refreshCoach.mutate()}
                 disabled={refreshCoach.isPending}
-                className="text-[12.5px] font-sans text-warm-400 hover:text-teal-500 transition-colors disabled:opacity-50"
+                className="ml-auto text-[12.5px] font-sans text-warm-400 hover:text-teal-500 transition-colors disabled:opacity-50"
               >
                 {refreshCoach.isPending ? 'Refreshing...' : '↻ Refresh'}
               </button>
@@ -167,42 +119,31 @@ export default function InsightsDashboard() {
           )}
         </div>
 
-        {/* New vocabulary + Gap alerts */}
-        <div className="grid grid-cols-2 gap-5 items-start">
+        {/* Vocabulary gaps */}
+        <div>
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-base">🔍</span>
+            <span className="font-sans font-semibold text-warm-700 text-base">
+              Vocabulary gaps detected
+            </span>
+            {gapAlerts.length > 0 && (
+              <span className="text-[12.5px] font-sans text-warm-400 ml-auto">
+                {gapAlerts.length} {gapAlerts.length === 1 ? 'board needs' : 'boards need'} attention
+              </span>
+            )}
+          </div>
 
-          {insights.newVocab.length > 0 && (
-            <div className="bg-white rounded-2xl p-5 border border-warm-200 shadow-subtle">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-base"></span>
-                <span className="font-sans font-semibold text-warm-700 text-base">
-                  New vocabulary used
-                </span>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {insights.newVocab.slice(0, 12).map((word, i) => (
-                  <span
-                    key={word + i}
-                    className="inline-flex items-center px-3 py-1 bg-teal-50 text-teal-700 rounded-lg text-sm font-medium border border-teal-100 whitespace-nowrap"
-                  >
-                    {word}
-                  </span>
-                ))}
-              </div>
+          {gapAlerts.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {gapAlerts.map((alert, i) => (
+                <GapAlert key={i} alert={alert} />
+              ))}
             </div>
-          )}
-
-          {gapAlerts.length > 0 && (
-            <div className={insights.newVocab.length === 0 ? 'col-span-2' : ''}>
-              <div className="flex items-center gap-2 mb-2.5">
-                <span className="text-base"></span>
-                <span className="font-sans font-semibold text-warm-700 text-base">
-                  Vocabulary gaps detected
-                </span>
-              </div>
-              <div className="space-y-2">
-                {gapAlerts.map((alert, i) => (
-                  <GapAlert key={i} alert={alert} />
-                ))}
+          ) : (
+            <div className="bg-warm-100 rounded-2xl p-6 border border-warm-200 text-center">
+              <div className="text-xl mb-1">✅</div>
+              <div className="font-sans text-base text-warm-500">
+                No vocabulary gaps right now — nice work!
               </div>
             </div>
           )}

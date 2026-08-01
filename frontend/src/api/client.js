@@ -1,16 +1,38 @@
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
-const TOKEN_KEY = 'voca_token'
+const CAREGIVER_TOKEN_KEY = 'voca_token'
+const BOARD_TOKEN_KEY = 'voca_board_token'
+const ACTIVE_SCOPE_KEY = 'voca_active_scope' // 'caregiver' | 'board'
+export const ACTIVE_PROFILE_KEY = 'voca_active_profile'
 
-export function getToken() {
-  return localStorage.getItem(TOKEN_KEY)
+export function getActiveScope() {
+  return localStorage.getItem(ACTIVE_SCOPE_KEY) || 'caregiver'
 }
 
-export function setToken(token) {
-  localStorage.setItem(TOKEN_KEY, token)
+export function getToken() {
+  return getActiveScope() === 'board'
+    ? localStorage.getItem(BOARD_TOKEN_KEY)
+    : localStorage.getItem(CAREGIVER_TOKEN_KEY)
+}
+
+export function setCaregiverToken(token) {
+  localStorage.setItem(CAREGIVER_TOKEN_KEY, token)
+  localStorage.setItem(ACTIVE_SCOPE_KEY, 'caregiver')
+}
+
+export function setBoardToken(token) {
+  // Physically discard the caregiver bearer credential — leaving it in storage
+  // during a kid session means anyone with devtools can replay it directly
+  // against the API, bypassing any UI-level gate.
+  localStorage.removeItem(CAREGIVER_TOKEN_KEY)
+  localStorage.setItem(BOARD_TOKEN_KEY, token)
+  localStorage.setItem(ACTIVE_SCOPE_KEY, 'board')
 }
 
 export function clearToken() {
-  localStorage.removeItem(TOKEN_KEY)
+  localStorage.removeItem(CAREGIVER_TOKEN_KEY)
+  localStorage.removeItem(BOARD_TOKEN_KEY)
+  localStorage.removeItem(ACTIVE_SCOPE_KEY)
+  localStorage.removeItem(ACTIVE_PROFILE_KEY)
 }
 
 export function isAuthenticated() {

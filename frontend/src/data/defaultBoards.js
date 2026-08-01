@@ -249,5 +249,6 @@ export const CATEGORY_CARDS = [
   { category: 'activities', name: 'Activities',   color: 'bg-green-50 border-green-200'   },
   { category: 'social',     name: 'Social',       color: 'bg-teal-50 border-teal-100'      },
   { category: 'school',     name: 'School',       color: 'bg-blue-50 border-blue-200'      },
+  { category: 'numbers',    name: 'Numbers',      color: 'bg-cyan-50 border-cyan-200'      },
   { category: 'emergency',  name: 'Emergency',    color: 'bg-orange-50 border-orange-200'  },
 ]

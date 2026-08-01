@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { login, register } from '../../api'
+import { login, register, kidLogin } from '../../api'
 import Navbar from '../shared/Navbar'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -61,7 +61,7 @@ function PasswordField({ id, label, value, onChange, autoComplete, placeholder, 
   return (
     <div className="mb-4">
       <div className="flex items-baseline justify-between mb-1.5">
-        <label htmlFor={id} className="font-sans font-semibold text-warm-700 text-xs">
+        <label htmlFor={id} className="font-sans font-semibold text-warm-700 text-sm">
           {label}
         </label>
       </div>
@@ -100,6 +100,7 @@ function PasswordField({ id, label, value, onChange, autoComplete, placeholder, 
 }
 
 export default function AuthPage({ onAuthed, onBackToLanding }) {
+  const [loginAs, setLoginAs] = useState('caregiver') // 'caregiver' | 'kid'
   const [mode, setMode] = useState('login')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -110,6 +111,12 @@ export default function AuthPage({ onAuthed, onBackToLanding }) {
   const [touched, setTouched] = useState(false)
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
+
+  const [kidUsername, setKidUsername] = useState('')
+  const [kidPin, setKidPin] = useState('')
+  const [kidTouched, setKidTouched] = useState(false)
+  const [kidError, setKidError] = useState(null)
+  const [kidLoading, setKidLoading] = useState(false)
 
   const isRegister = mode === 'register'
   const nameValid = name.trim().length > 0
@@ -154,6 +161,35 @@ export default function AuthPage({ onAuthed, onBackToLanding }) {
     }
   }
 
+  function switchLoginAs(next) {
+    setLoginAs(next)
+    setError(null)
+    setKidError(null)
+    setTouched(false)
+    setKidTouched(false)
+  }
+
+  const kidUsernameValid = kidUsername.trim().length >= 3
+  const kidPinValid = /^\d{4}$/.test(kidPin)
+  const kidCanSubmit = kidUsernameValid && kidPinValid && !kidLoading
+
+  async function handleKidSubmit(e) {
+    e.preventDefault()
+    setKidTouched(true)
+    if (!kidCanSubmit) return
+
+    setKidError(null)
+    setKidLoading(true)
+    try {
+      await kidLogin(kidUsername.trim(), kidPin)
+      onAuthed(null)
+    } catch (err) {
+      setKidError(err.message)
+    } finally {
+      setKidLoading(false)
+    }
+  }
+
   return (
     <div className="min-h-screen flex flex-col" style={{ background: 'var(--color-bg)' }}>
       <Navbar onLogoClick={onBackToLanding}>
@@ -168,16 +204,117 @@ export default function AuthPage({ onAuthed, onBackToLanding }) {
             onMouseEnter={e => { e.currentTarget.style.borderColor = '#2D9B83'; e.currentTarget.style.color = '#2D9B83'; e.currentTarget.style.background = 'rgba(255,255,255,0.9)' }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(232,230,225,0.9)'; e.currentTarget.style.color = '#4A473F'; e.currentTarget.style.background = 'rgba(255,255,255,0.55)' }}
           >
-            ← Back to Home
+            Back to Home
           </button>
         )}
       </Navbar>
 
-      <div className="flex-1 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-raised p-8 w-full max-w-sm border border-warm-200">
+      <div className="flex-1 overflow-y-auto flex items-center justify-center p-4 py-8">
+      <div className="bg-white rounded-2xl shadow-raised p-8 w-full max-w-md border border-warm-200 my-auto">
 
         <img src="https://i.imgur.com/3vT9jwF.jpeg" alt="Voca" className="w-12 h-12 rounded-xl object-cover mb-4 shadow-subtle" />
 
+        {/* I'm a caregiver / I'm a communicator */}
+        <div className="flex gap-2 p-2 mb-7 bg-warm-100 rounded-xl">
+          {[
+            { id: 'caregiver', label: "I'm a caregiver" },
+            { id: 'kid', label: "I'm a communicator" },
+          ].map(opt => (
+            <button
+              key={opt.id}
+              type="button"
+              onClick={() => switchLoginAs(opt.id)}
+              className={`flex-1 py-3 px-3 rounded-lg font-sans text-base font-semibold text-center whitespace-nowrap transition-colors ${
+                loginAs === opt.id
+                  ? 'bg-white text-teal-600 shadow-subtle'
+                  : 'text-warm-500 hover:text-warm-700'
+              }`}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+
+        {loginAs === 'kid' ? (
+          <>
+            <h2 className="font-display font-bold text-warm-900 text-2xl mb-1">
+              Log in
+            </h2>
+            <p className="font-sans text-warm-500 text-sm mb-6">
+              Ask your caregiver for your username and PIN.
+            </p>
+
+            <form onSubmit={handleKidSubmit} noValidate>
+              <div className="mb-4">
+                <label htmlFor="kidUsername" className="block font-sans font-semibold text-warm-700 text-sm mb-1.5">
+                  Username
+                </label>
+                <div className="relative">
+                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-warm-400 pointer-events-none">
+                    <UserIcon />
+                  </span>
+                  <input
+                    id="kidUsername"
+                    name="kidUsername"
+                    type="text"
+                    required
+                    autoComplete="username"
+                    className={`w-full border rounded-xl pl-10 pr-4 py-3 font-sans text-warm-900 text-base focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent placeholder:text-warm-400 transition-colors ${
+                      kidTouched && !kidUsernameValid ? 'border-red-300' : 'border-warm-200'
+                    }`}
+                    placeholder="e.g. layla"
+                    value={kidUsername}
+                    onChange={e => setKidUsername(e.target.value)}
+                    autoFocus
+                  />
+                </div>
+              </div>
+
+              <div className="mb-4">
+                <label htmlFor="kidPin" className="block font-sans font-semibold text-warm-700 text-sm mb-1.5">
+                  PIN
+                </label>
+                <input
+                  id="kidPin"
+                  name="kidPin"
+                  type="password"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  maxLength={4}
+                  required
+                  autoComplete="current-password"
+                  className={`w-full border rounded-xl px-4 py-3 font-sans text-warm-900 text-2xl text-center tracking-[0.5em] focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent placeholder:text-warm-300 placeholder:tracking-normal placeholder:text-base transition-colors ${
+                    kidTouched && !kidPinValid ? 'border-red-300' : 'border-warm-200'
+                  }`}
+                  placeholder="4-digit PIN"
+                  value={kidPin}
+                  onChange={e => setKidPin(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                />
+              </div>
+
+              {kidError && (
+                <div className="bg-red-50 border border-red-100 rounded-xl px-4 py-2.5 text-[13.5px] font-sans text-red-600 mb-4">
+                  {kidError}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={kidTouched ? !kidCanSubmit : kidLoading}
+                className="w-full py-3 rounded-xl bg-teal-500 text-white font-display font-bold hover:bg-teal-600 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-subtle flex items-center justify-center gap-2"
+              >
+                {kidLoading && (
+                  <svg className="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" opacity="0.25" />
+                    <path d="M22 12a10 10 0 0 0-10-10" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+                  </svg>
+                )}
+                {kidLoading ? 'Please wait...' : 'Log in'}
+              </button>
+            </form>
+          </>
+        ) : (
+        <>
         <h2 className="font-display font-bold text-warm-900 text-2xl mb-1">
           {isRegister ? 'Create your account' : 'Welcome back'}
         </h2>
@@ -222,7 +359,7 @@ export default function AuthPage({ onAuthed, onBackToLanding }) {
 
           {/* Email */}
           <div className="mb-4">
-            <label htmlFor="email" className="block font-sans font-semibold text-warm-700 text-xs mb-1.5">
+            <label htmlFor="email" className="block font-sans font-semibold text-warm-700 text-sm mb-1.5">
               Email
             </label>
             <div className="relative">
@@ -316,6 +453,8 @@ export default function AuthPage({ onAuthed, onBackToLanding }) {
         >
           {isRegister ? 'Already have an account? Sign in' : 'No account yet? Create one'}
         </button>
+        </>
+        )}
 
       </div>
       </div>

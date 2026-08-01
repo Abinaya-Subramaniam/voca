@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from ..auth import get_owned_profile
+from ..auth import get_board_profile, get_owned_profile
 from ..database import get_db
 from ..engines.prediction import get_predictions, record_bigram
 from ..models import CommunicationLog, Profile, TapLog
@@ -14,7 +14,7 @@ router = APIRouter(prefix="/api/profiles/{profile_id}", tags=["logs"])
 @router.post("/sentences", response_model=SentenceLogOut, status_code=status.HTTP_201_CREATED)
 def log_sentence(
     body: SentenceLogCreate,
-    profile: Profile = Depends(get_owned_profile),
+    profile: Profile = Depends(get_board_profile),
     db: Session = Depends(get_db),
 ):
     entry = CommunicationLog(
@@ -46,7 +46,7 @@ def list_sentences(
 @router.post("/taps", status_code=status.HTTP_201_CREATED)
 def log_tap(
     body: TapLogCreate,
-    profile: Profile = Depends(get_owned_profile),
+    profile: Profile = Depends(get_board_profile),
     db: Session = Depends(get_db),
 ):
     db.add(TapLog(profile_id=profile.id, board_id=body.board_id, label=body.label))
@@ -59,7 +59,7 @@ def log_tap(
 def predictions(
     last_label: str | None = None,
     count: int = 3,
-    profile: Profile = Depends(get_owned_profile),
+    profile: Profile = Depends(get_board_profile),
     db: Session = Depends(get_db),
 ):
     return {"predictions": get_predictions(db, profile.id, last_label, count)}

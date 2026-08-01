@@ -66,6 +66,8 @@ DEFAULT_WHO_I_AM = {
 class ProfileCreate(CamelModel):
     name: str = Field(min_length=1, max_length=100)
     avatar_color: str = "#2D9B83"
+    username: str = Field(min_length=3, max_length=30, pattern=r"^[a-zA-Z0-9_]+$")
+    pin: str = Field(pattern=r"^\d{4}$")
 
 
 class ProfileUpdate(CamelModel):
@@ -73,6 +75,12 @@ class ProfileUpdate(CamelModel):
     avatar_color: str | None = None
     settings: dict[str, Any] | None = None
     who_i_am: dict[str, Any] | None = None
+    username: str | None = Field(default=None, min_length=3, max_length=30, pattern=r"^[a-zA-Z0-9_]+$")
+    pin: str | None = Field(default=None, pattern=r"^\d{4}$")
+
+
+class WhoIAmUpdate(CamelModel):
+    who_i_am: dict[str, Any]
 
 
 class ProfileOut(CamelModel):
@@ -82,6 +90,7 @@ class ProfileOut(CamelModel):
     settings: dict[str, Any]
     who_i_am: dict[str, Any]
     created_at: datetime
+    username: str | None = None
 
 
 
@@ -191,6 +200,31 @@ class CoachCardOut(CamelModel):
 
 class PredictionsOut(CamelModel):
     predictions: list[str]
+
+
+class BoardSessionOut(CamelModel):
+    id: str
+    device_label: str
+    created_at: datetime
+    last_seen_at: datetime | None
+    expires_at: datetime
+    revoked_at: datetime | None
+
+
+class KidLoginRequest(CamelModel):
+    username: str
+    pin: str = Field(pattern=r"^\d{4}$")
+
+
+class KidLoginResponse(CamelModel):
+    access_token: str
+    profile: ProfileOut
+
+
+class JournalMoodOut(CamelModel):
+    id: str
+    created_at: datetime
+    mood_symbol: dict[str, Any] | None
 
 
 

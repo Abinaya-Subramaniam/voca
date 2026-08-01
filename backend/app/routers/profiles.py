@@ -1,15 +1,15 @@
 import json
 from pathlib import Path
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from ..auth import get_current_user, get_owned_profile
+from ..auth import get_current_user, get_owned_profile, get_shared_profile, hash_password
 from ..database import get_db
 from ..engines.layout_optimiser import run_layout_optimiser
 from ..models import Board, BoardSymbol, Profile, User
-from ..schemas import DEFAULT_SETTINGS, DEFAULT_WHO_I_AM, ProfileCreate, ProfileOut, ProfileUpdate
+from ..schemas import DEFAULT_SETTINGS, DEFAULT_WHO_I_AM, ProfileCreate, ProfileOut, ProfileUpdate, WhoIAmUpdate
 
 router = APIRouter(prefix="/api/profiles", tags=["profiles"])
 
@@ -51,12 +51,18 @@ def create_profile(
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
+    username = body.username.strip().lower()
+    if db.scalar(select(Profile).where(Profile.username == username)):
+        raise HTTPException(status.HTTP_409_CONFLICT, "That username is already taken")
+
     profile = Profile(
         user_id=user.id,
         name=body.name,
         avatar_color=body.avatar_color,
         settings=dict(DEFAULT_SETTINGS),
         who_i_am=dict(DEFAULT_WHO_I_AM),
+        username=username,
+        pin_hash=hash_password(body.pin),
     )
     db.add(profile)
     db.flush()
@@ -67,7 +73,9 @@ def create_profile(
 
 
 @router.get("/{profile_id}", response_model=ProfileOut)
-def get_profile(profile: Profile = Depends(get_owned_profile)):
+def get_profile(profile: Profile = Depends(get_shared_profile)):
+    """Read-only profile info — needed by both the caregiver dashboard and the
+    kid's own board boot (settings like font size/contrast, who-i-am, avatar)."""
     return profile
 
 
@@ -85,6 +93,19 @@ def update_profile(
         profile.settings = {**profile.settings, **body.settings}
     if body.who_i_am is not None:
         profile.who_i_am = {**profile.who_i_am, **body.who_i_am}
+    if body.username is not None:
+        username = body.username.strip().lower()
+        if username != profile.username:
+            conflict = db.scalar(
+                select(Profile).where(Profile.username == username).where(Profile.id != profile.id)
+            )
+            if conflict:
+                raise HTTPException(status.HTTP_409_CONFLICT, "That username is already taken")
+            profile.username = username
+    if body.pin is not None:
+        profile.pin_hash = hash_password(body.pin)
+        profile.failed_pin_attempts = 0
+        profile.locked_until = None
     db.commit()
     db.refresh(profile)
     return profile
@@ -96,8 +117,24 @@ def delete_profile(profile: Profile = Depends(get_owned_profile), db: Session = 
     db.commit()
 
 
+@router.patch("/{profile_id}/who-i-am", response_model=ProfileOut)
+def update_who_i_am(
+    body: WhoIAmUpdate,
+    profile: Profile = Depends(get_shared_profile),
+    db: Session = Depends(get_db),
+):
+    """The individual's own self-description card — editable from their own
+    board session (the 'Who Am I' card), not just by the caregiver. Kept as
+    its own endpoint rather than opening the general profile PATCH (name,
+    avatar, username, PIN) to a board-scoped token."""
+    profile.who_i_am = {**profile.who_i_am, **body.who_i_am}
+    db.commit()
+    db.refresh(profile)
+    return profile
+
+
 @router.post("/{profile_id}/optimise-layout")
-def optimise_layout(profile: Profile = Depends(get_owned_profile), db: Session = Depends(get_db)):
+def optimise_layout(profile: Profile = Depends(get_shared_profile), db: Session = Depends(get_db)):
     changed = run_layout_optimiser(db, profile)
     db.commit()
     return {"changed": changed}
