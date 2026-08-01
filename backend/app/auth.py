@@ -62,11 +62,6 @@ def get_current_user(
     db: Session = Depends(get_db),
 ) -> User:
     payload = _decode(credentials)
-    # Tokens minted before the scope claim existed have no "scope" key — treat that as
-    # caregiver so existing sessions keep working. A board-session token always sets
-    # scope="board" explicitly, so this check must run before any DB lookup: Profile.id
-    # and User.id are both uuid4().hex from the same generator, so a board token's `sub`
-    # (a profile id) could otherwise coincidentally resolve as a User row.
     if payload.get("scope", "caregiver") != "caregiver":
         raise HTTPException(status.HTTP_403_FORBIDDEN, "Caregiver login required")
 

@@ -6,7 +6,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
-    # sqlite for local dev; point at managed Postgres in production
+    # sqlite for local dev; will point at managed Postgres in production
     database_url: str = "sqlite:///./voca.db"
 
     jwt_secret: str = "change-me-in-production"

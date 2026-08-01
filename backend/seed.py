@@ -1,9 +1,3 @@
-"""Seeds the demo account: demo@voca.app / voca-demo-123 with the Layla profile,
-three weeks of communication history, tap logs, and gap signals on Feelings.
-
-Run:  python seed.py
-"""
-
 import random
 from datetime import datetime, timedelta, timezone
 
