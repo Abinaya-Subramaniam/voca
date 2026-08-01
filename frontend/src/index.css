@@ -107,6 +107,16 @@ body.high-contrast .symbol-card span {
   animation: fadeUp 0.2s ease-out forwards;
 }
 
+/* Landing feature slider: slides in from the right on each auto-advance */
+@keyframes featureSlide {
+  from { opacity: 0; transform: translateX(28px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.feature-slide {
+  animation: featureSlide 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 /* Speaking pulse */
 @keyframes speakPulse {
   0%, 100% { opacity: 1; transform: scaleY(1); }

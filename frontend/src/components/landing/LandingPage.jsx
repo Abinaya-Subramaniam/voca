@@ -4,34 +4,149 @@ import ProfileMenu from '../shared/ProfileMenu'
 
 const FEATURE_ITEMS = [
   {
-    icon: '🧠', bg: '#E8F7F4', border: '#B8E8DF', accent: '#2D9B83',
+    icon: 'brain',
+    screenshot: 'https://i.imgur.com/sm7w2s3.png',
     title: 'AI word prediction',
-    desc: 'Learns each person\'s unique communication patterns and predicts the next word in real time.',
+    desc: "Learns each person's unique communication patterns over time and predicts their next word as they build each sentence.",
   },
   {
-    icon: '🗂️', bg: '#FDF3E0', border: '#F5DFA0', accent: '#C98A1F',
-    title: 'Auto-organising boards',
-    desc: 'Boards reorder themselves based on real usage — no manual dragging or editing required.',
-  },
-  {
-    icon: '🔍', bg: '#FBE8F0', border: '#F0BDD0', accent: '#C24A78',
-    title: 'Missing vocabulary alerts',
-    desc: 'Flags gaps in the vocabulary and suggests exactly which symbols to add next.',
-  },
-  {
-    icon: '🎓', bg: '#EEE8FB', border: '#D0BEF0', accent: '#7A5AC9',
-    title: 'Weekly AI coaching',
-    desc: 'Personalised guidance for caregivers, powered by AI — like a virtual speech therapist.',
-  },
-  {
-    icon: '🤖', bg: '#E8F7F4', border: '#B8E8DF', accent: '#1F8A7A',
+    icon: 'bot',
+    screenshot: 'https://i.imgur.com/VXuEczO.png',
     title: 'Agentic Voca Bot',
-    desc: "Doesn't just chat — takes action on its own, reorganising boards and adding vocabulary for you.",
+    desc: "Doesn't just chat. It takes action on its own, adding missing words and reorganising boards as usage changes.",
   },
   {
-    icon: '🌐', bg: '#E5F1FB', border: '#BBDAF5', accent: '#3D8FD1',
-    title: 'Free & works offline',
-    desc: 'Speaks fully offline in any modern browser, on any device. No subscriptions, ever.',
+    icon: 'dual',
+    screenshot: 'https://i.imgur.com/5LSj5fE.png',
+    title: 'Two dashboards, one app',
+    desc: 'Caregivers get a dashboard to manage boards and coaching, while each communicator logs into their own private, secure AAC board.',
+  },
+  {
+    icon: 'layout',
+    screenshot: 'https://i.imgur.com/ZPEtQT9.png',
+    title: 'Auto-organizing boards',
+    desc: 'Boards reorder themselves automatically based on real usage, so the most-used symbols are always easy to find.',
+  },
+  {
+    icon: 'search',
+    screenshot: 'https://i.imgur.com/GWYKTOM.png',
+    title: 'Missing vocabulary alerts',
+    desc: "Flags gaps in the vocabulary as they come up and suggests exactly which symbols to add next, no guesswork required.",
+  },
+  {
+    icon: 'cap',
+    screenshot: 'https://i.imgur.com/0bPuhoj.png',
+    title: 'Weekly AI coaching',
+    desc: 'Personalized AI guidance for caregivers every week, highlighting progress and practical next steps, like a speech therapist on call.',
+  },
+]
+
+function FeatureIcon({ name, size = 26 }) {
+  const p = { width: size, height: size, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.6, strokeLinecap: 'round', strokeLinejoin: 'round' }
+  switch (name) {
+    case 'brain':
+      return (
+        <svg {...p}>
+          <path d="M9 4.5a2.5 2.5 0 0 0-2.5 2.5v.2A3 3 0 0 0 4 10v1a3 3 0 0 0 1.3 2.5A3 3 0 0 0 7 19a2.4 2.4 0 0 0 2 1V4.5Z" />
+          <path d="M15 4.5a2.5 2.5 0 0 1 2.5 2.5v.2a3 3 0 0 1 2.5 3.3v1a3 3 0 0 1-1.3 2.5A3 3 0 0 1 17 19a2.4 2.4 0 0 1-2 1V4.5Z" />
+        </svg>
+      )
+    case 'layout':
+      return (
+        <svg {...p}>
+          <rect x="3.5" y="4" width="17" height="16" rx="2.5" />
+          <path d="M3.5 9.5h17" />
+          <path d="M9 9.5V20" />
+        </svg>
+      )
+    case 'search':
+      return (
+        <svg {...p}>
+          <circle cx="10.5" cy="10.5" r="6.5" />
+          <path d="M19.5 19.5 15 15" />
+        </svg>
+      )
+    case 'cap':
+      return (
+        <svg {...p}>
+          <path d="M2 9 12 4l10 5-10 5-10-5Z" />
+          <path d="M6 11.5V16c0 1.5 2.7 3 6 3s6-1.5 6-3v-4.5" />
+          <path d="M21 9v6" />
+        </svg>
+      )
+    case 'bot':
+      return (
+        <svg {...p}>
+          <rect x="4.5" y="8.5" width="15" height="11" rx="3" />
+          <path d="M12 8.5V5" />
+          <circle cx="12" cy="3.5" r="1.3" fill="currentColor" stroke="none" />
+          <path d="M9 13.5v1.5M15 13.5v1.5" />
+          <path d="M2.5 12.5v3M21.5 12.5v3" />
+        </svg>
+      )
+    case 'dual':
+      return (
+        <svg {...p}>
+          <rect x="3.5" y="4" width="7.5" height="16" rx="2" />
+          <rect x="13" y="4" width="7.5" height="16" rx="2" />
+        </svg>
+      )
+    case 'sprout':
+      return (
+        <svg {...p}>
+          <path d="M12 21V12" />
+          <path d="M12 12C12 7.5 15 5 19 5c0 4.5-3 7-7 7Z" />
+          <path d="M12 14c0-3.3-2.3-5.5-6-5.5 0 3.3 2.3 5.5 6 5.5Z" />
+        </svg>
+      )
+    case 'message':
+      return (
+        <svg {...p}>
+          <path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H9l-4 3.5V17H6a2 2 0 0 1-2-2Z" />
+        </svg>
+      )
+    case 'user':
+      return (
+        <svg {...p}>
+          <circle cx="12" cy="8" r="3.5" />
+          <path d="M5 20c0-4 3.5-6.5 7-6.5s7 2.5 7 6.5" />
+        </svg>
+      )
+    case 'infinity':
+      return (
+        <svg {...p}>
+          <path d="M7 15a4 4 0 1 1 0-8c2.5 0 4 2 5 4s2.5 4 5 4a4 4 0 1 0 0-8c-2.5 0-4 2-5 4s-2.5 4-5 4Z" />
+        </svg>
+      )
+    default:
+      return null
+  }
+}
+
+const WHO_ITEMS = [
+  {
+    icon: 'sprout',
+    image: 'https://i.imgur.com/EoZmzC6.png',
+    title: 'Young children',
+    desc: 'Kids with autism or speech delays building their first words.',
+  },
+  {
+    icon: 'message',
+    image: 'https://i.imgur.com/ZzonT8E.png',
+    title: 'Apraxia of speech',
+    desc: 'People who know what to say but struggle to say it.',
+  },
+  {
+    icon: 'user',
+    image: 'https://i.imgur.com/vlATuB2.png',
+    title: 'Non-verbal teens & adults',
+    desc: 'Communicating through symbols instead of spoken words.',
+  },
+  {
+    icon: 'infinity',
+    image: 'https://i.imgur.com/4XlFqks.png',
+    title: 'Every skill level',
+    desc: 'From single symbols to full sentences, at any pace.',
   },
 ]
 
@@ -101,7 +216,7 @@ function Reveal({ children, delay = 0 }) {
   )
 }
 
-function FeatureCarousel({ items }) {
+function FeatureSlider({ items }) {
   const [index, setIndex] = useState(0)
   const [paused, setPaused] = useState(false)
 
@@ -109,7 +224,7 @@ function FeatureCarousel({ items }) {
     if (paused) return
     const id = setInterval(() => {
       setIndex(i => (i + 1) % items.length)
-    }, 4200)
+    }, 3000)
     return () => clearInterval(id)
   }, [paused, items.length])
 
@@ -117,93 +232,161 @@ function FeatureCarousel({ items }) {
   function prev() { go(index - 1) }
   function next() { go(index + 1) }
 
-  const arrowBase = {
-    position: 'absolute', top: '50%', transform: 'translateY(-50%)',
-    width: '40px', height: '40px', borderRadius: '999px',
+  const item = items[index]
+
+  const arrowBtn = {
+    width: '38px', height: '38px', borderRadius: '999px', flexShrink: 0,
     background: 'white', border: '1.5px solid #E8E6E1', color: '#6B6860',
     display: 'flex', alignItems: 'center', justifyContent: 'center',
-    cursor: 'pointer', fontSize: '20px', lineHeight: 1, zIndex: 3,
-    boxShadow: '0 4px 14px rgba(44,42,38,0.10)', transition: 'all 0.15s',
+    cursor: 'pointer', boxShadow: '0 4px 14px rgba(44,42,38,0.10)', transition: 'all 0.15s',
   }
   function arrowHover(e) { e.currentTarget.style.borderColor = '#2D9B83'; e.currentTarget.style.color = '#2D9B83' }
   function arrowLeave(e) { e.currentTarget.style.borderColor = '#E8E6E1'; e.currentTarget.style.color = '#6B6860' }
 
   return (
     <div
-      style={{ maxWidth: '880px', margin: '0 auto' }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
+      className="grid grid-cols-1 lg:grid-cols-[1.15fr_1fr]"
+      style={{ gap: 'clamp(28px, 5vw, 56px)', alignItems: 'center', maxWidth: '1160px', margin: '0 auto' }}
     >
-      <div style={{
-        position: 'relative', borderRadius: '24px', overflow: 'hidden',
-        border: '1.5px solid #E8E6E1', boxShadow: '0 12px 40px rgba(44,42,38,0.06)',
-        background: 'white',
-      }}>
+      <div key={`shot-${index}`} className="feature-slide" style={{ position: 'relative', padding: '18px 0' }}>
         <div style={{
-          display: 'flex',
-          transform: `translateX(-${index * 100}%)`,
-          transition: 'transform 0.6s cubic-bezier(0.65,0,0.35,1)',
+          position: 'absolute', inset: '-10px', zIndex: 0,
+          background: 'radial-gradient(circle at 50% 40%, rgba(45,155,131,0.28), transparent 70%)',
+          filter: 'blur(36px)',
+        }} />
+
+        <div style={{
+          position: 'relative', zIndex: 1, borderRadius: '24px', padding: '3px',
+          background: 'linear-gradient(135deg, #2D9B83, #8CE0C8)',
+          boxShadow: '0 30px 60px -14px rgba(44,42,38,0.22), 0 10px 24px rgba(44,42,38,0.10)',
         }}>
-          {items.map(({ icon, bg, border, title, desc }) => (
-            <div key={title} style={{ flex: '0 0 100%', width: '100%' }}>
-              <div
-                className="flex flex-col md:flex-row items-center text-center md:text-left"
-                style={{ background: 'white', minHeight: '260px', gap: '32px', padding: 'clamp(36px, 6vw, 56px)' }}
-              >
+          <div style={{
+            borderRadius: '21px', overflow: 'hidden', background: 'white', padding: '10px',
+          }}>
+            <div style={{
+              borderRadius: '15px', overflow: 'hidden', background: '#F5F4F0',
+              aspectRatio: '2 / 1', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              {item.screenshot ? (
+                <img
+                  src={item.screenshot} alt={item.title}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                />
+              ) : (
                 <div style={{
-                  width: '84px', height: '84px', flexShrink: 0, borderRadius: '20px',
-                  background: bg, border: `1.5px solid ${border}`,
+                  width: '72px', height: '72px', borderRadius: '18px',
+                  background: 'white', border: '1.5px solid #E8E6E1', color: '#2D9B83',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '36px',
                 }}>
-                  {icon}
+                  <FeatureIcon name={item.icon} size={32} />
                 </div>
-                <div>
-                  <div style={{
-                    fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800,
-                    fontSize: '1.5rem', color: '#2C2A26', marginBottom: '10px', letterSpacing: '-0.01em',
-                  }}>
-                    {title}
-                  </div>
-                  <div style={{ fontSize: '17px', color: '#6B6860', lineHeight: 1.6, maxWidth: '480px' }}>
-                    {desc}
-                  </div>
-                </div>
-              </div>
+              )}
             </div>
-          ))}
+          </div>
         </div>
 
         <button
           onClick={prev} aria-label="Previous feature"
-          style={{ ...arrowBase, left: '16px' }}
+          style={{ ...arrowBtn, position: 'absolute', top: '50%', left: '-19px', transform: 'translateY(-50%)', zIndex: 2 }}
           onMouseEnter={arrowHover} onMouseLeave={arrowLeave}
         >
-          ‹
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
         </button>
         <button
           onClick={next} aria-label="Next feature"
-          style={{ ...arrowBase, right: '16px' }}
+          style={{ ...arrowBtn, position: 'absolute', top: '50%', right: '-19px', transform: 'translateY(-50%)', zIndex: 2 }}
           onMouseEnter={arrowHover} onMouseLeave={arrowLeave}
         >
-          ›
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6" /></svg>
         </button>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '22px' }}>
-        {items.map((item, i) => (
-          <button
-            key={item.title}
-            onClick={() => go(i)}
-            aria-label={`Go to ${item.title}`}
-            style={{
-              width: i === index ? '28px' : '8px', height: '8px', borderRadius: '999px',
-              background: i === index ? '#2D9B83' : '#E8E6E1', border: 'none',
-              cursor: 'pointer', transition: 'all 0.3s', padding: 0,
-            }}
-          />
-        ))}
+      <div key={`text-${index}`} className="feature-slide">
+        <div style={{
+          fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 900,
+          fontSize: '1.9rem', marginBottom: '14px', letterSpacing: '-0.02em',
+          background: 'linear-gradient(100deg, #2C2A26 30%, #2D9B83 100%)',
+          WebkitBackgroundClip: 'text', backgroundClip: 'text',
+          WebkitTextFillColor: 'transparent', color: 'transparent',
+          display: 'inline-block',
+        }}>
+          {item.title}
+        </div>
+        <div style={{ fontSize: '17px', color: '#4A473F', lineHeight: 1.65, marginBottom: '28px', maxWidth: '460px' }}>
+          {item.desc}
+        </div>
+
+        <div style={{ display: 'flex', gap: '8px' }}>
+          {items.map((it, i) => (
+            <button
+              key={it.title}
+              onClick={() => go(i)}
+              aria-label={`Go to ${it.title}`}
+              style={{
+                width: i === index ? '28px' : '8px', height: '8px', borderRadius: '999px',
+                background: i === index ? '#2D9B83' : '#E8E6E1', border: 'none',
+                cursor: 'pointer', transition: 'all 0.3s', padding: 0,
+              }}
+            />
+          ))}
+        </div>
       </div>
+    </div>
+  )
+}
+
+function WhoCard({ item }) {
+  const [hover, setHover] = useState(false)
+  return (
+    <div
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        height: '100%', padding: '24px 22px', borderRadius: '16px',
+        border: `1px solid ${hover ? '#B8E8DF' : '#E8E6E1'}`, background: 'white',
+        boxShadow: hover ? '0 14px 30px rgba(44,42,38,0.09)' : '0 2px 10px rgba(44,42,38,0.04)',
+        transform: hover ? 'translateY(-4px)' : 'translateY(0)',
+        transition: 'transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease',
+      }}
+    >
+      <div style={{
+        width: '56px', height: '56px', borderRadius: '14px', overflow: 'hidden',
+        border: `1.5px solid ${hover ? '#2D9B83' : '#E8E6E1'}`,
+        background: item.image ? 'white' : (hover ? '#2D9B83' : '#F5F4F0'),
+        color: hover ? 'white' : '#2C2A26',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        marginBottom: '16px', transition: 'all 0.25s ease',
+      }}>
+        {item.image
+          ? <img src={item.image} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          : <FeatureIcon name={item.icon} size={24} />}
+      </div>
+      <div style={{
+        fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800,
+        fontSize: '17px', color: '#2C2A26', marginBottom: '8px', letterSpacing: '-0.01em',
+      }}>
+        {item.title}
+      </div>
+      <div style={{ fontSize: '16.5px', fontWeight: 500, color: '#4A473F', lineHeight: 1.65 }}>
+        {item.desc}
+      </div>
+    </div>
+  )
+}
+
+function WhoGrid({ items }) {
+  return (
+    <div
+      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+      style={{ gap: '16px', maxWidth: '1040px', margin: '0 auto' }}
+    >
+      {items.map((item, i) => (
+        <Reveal key={item.title} delay={i * 0.05}>
+          <WhoCard item={item} />
+        </Reveal>
+      ))}
     </div>
   )
 }
@@ -264,14 +447,14 @@ function TermsContent() {
       <p>Voca is provided free of charge as an accessibility tool. You may use it for personal communication assistance. You may not misuse, reverse-engineer, or attempt to disrupt the service.</p>
 
       <span style={s}>2. Data Storage</span>
-      <p>All personal data — profiles, communication logs, boards, journal entries — is stored exclusively in your browser's local storage and IndexedDB. Voca does not operate a server or database. Clearing your browser data will permanently delete your Voca data.</p>
+      <p>All personal data (profiles, communication logs, boards, journal entries) is stored exclusively in your browser's local storage and IndexedDB. Voca does not operate a server or database. Clearing your browser data will permanently delete your Voca data.</p>
 
       <span style={s}>3. Third-Party Services</span>
       <p>Voca uses the following third-party services:</p>
       <ul style={{ paddingLeft: '18px', marginTop: '6px' }}>
-        <li><strong>OpenAI API</strong> (with Google Gemini as an automatic fallback) — anonymised communication summaries are sent to generate coaching advice. No names or identifying information are included.</li>
-        <li><strong>ARASAAC</strong> — pictographic symbols are loaded from the ARASAAC open-access library under the Creative Commons BY-NC-SA licence.</li>
-        <li><strong>Web Speech API</strong> — text-to-speech runs entirely in your browser. No audio is transmitted.</li>
+        <li><strong>OpenAI API</strong> (with Google Gemini as an automatic fallback): anonymised communication summaries are sent to generate coaching advice. No names or identifying information are included.</li>
+        <li><strong>ARASAAC</strong>: pictographic symbols are loaded from the ARASAAC open-access library under the Creative Commons BY-NC-SA licence.</li>
+        <li><strong>Web Speech API</strong>: text-to-speech runs entirely in your browser. No audio is transmitted.</li>
       </ul>
 
       <span style={s}>4. No Warranty</span>
@@ -291,7 +474,7 @@ function PrivacyContent() {
   return (
     <div>
       <p style={{ marginBottom: '12px', color: '#9B9890', fontSize: '14.5px' }}>Last updated: June 2026</p>
-      <p>Your privacy matters. Voca is designed to be private by default — your data stays on your device.</p>
+      <p>Your privacy matters. Voca is designed to be private by default. Your data stays on your device.</p>
 
       <span style={s}>What we collect</span>
       <p>Voca does not collect, transmit, or store any personal data on external servers. The following data is stored <strong>only in your browser</strong>:</p>
@@ -313,7 +496,7 @@ function PrivacyContent() {
       <p>Voca uses no cookies and no analytics trackers. There is no advertising.</p>
 
       <span style={s}>Children's Privacy</span>
-      <p>Voca is designed for use by children with communication needs, under caregiver supervision. We do not knowingly collect data from children because we do not collect data at all — everything stays on the device.</p>
+      <p>Voca is designed for use by children with communication needs, under caregiver supervision. We do not knowingly collect data from children because we do not collect data at all. Everything stays on the device.</p>
 
       <span style={s}>Your Rights</span>
       <p>Because all data is stored in your browser, you have full control. You can delete your data at any time by clearing your browser's local storage, or by deleting individual profiles within the app.</p>
@@ -330,7 +513,7 @@ const FORM_LABEL = {
 }
 const FORM_INPUT = {
   width: '100%', padding: '13px 16px', borderRadius: '12px',
-  border: '1.5px solid #E8E6E1', fontSize: '16.5px', fontFamily: "'DM Sans', system-ui, sans-serif",
+  border: '1.5px solid #E8E6E1', fontSize: '15.5px', fontFamily: "'DM Sans', system-ui, sans-serif",
   color: '#2C2A26', outline: 'none', transition: 'border-color 0.15s', background: 'white',
 }
 
@@ -343,7 +526,7 @@ function ContactForm() {
   function handleSubmit(e) {
     e.preventDefault()
     const subject = `Message from ${name || 'the Voca website'}`
-    const body = `${message}\n\n— ${name} (${email})`
+    const body = `${message}\n\nFrom ${name} (${email})`
     window.location.href = `mailto:hello@voca.app?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
     setSent(true)
   }
@@ -400,23 +583,19 @@ function ContactForm() {
 const FAQ_ITEMS = [
   {
     q: 'What is an AAC board?',
-    a: "AAC stands for Augmentative and Alternative Communication. An AAC board is a grid of symbols and words that a non-verbal or minimally verbal person taps to build sentences, which are then spoken aloud — giving them a voice when speech is difficult or impossible.",
+    a: "AAC stands for Augmentative and Alternative Communication. An AAC board is a grid of symbols and words that a non-verbal or minimally verbal person taps to build sentences, which are then spoken aloud, giving them a voice when speech is difficult or impossible.",
   },
   {
     q: 'Is Voca really free?',
-    a: 'Yes — completely free, with no subscriptions, trials, or hidden costs. Voca is built as an accessibility tool, not a business.',
+    a: 'Yes, completely free, with no subscriptions, trials, or hidden costs. Voca is built as an accessibility tool, not a business.',
   },
   {
     q: 'What is the Voca Bot?',
-    a: "It's an agentic assistant built into Voca — instead of just answering questions, it takes action on its own: adding missing vocabulary, reorganising boards, and surfacing suggestions proactively, without you having to ask.",
-  },
-  {
-    q: 'What age group is Voca designed for?',
-    a: "Any age. It's used by young children with autism or apraxia of speech, as well as non-verbal or minimally verbal teens and adults.",
+    a: "It's an agentic assistant built into Voca. Instead of just answering questions, it takes action on its own: adding missing vocabulary, reorganising boards, and surfacing suggestions proactively, without you having to ask.",
   },
   {
     q: 'Can I use Voca on any device?',
-    a: 'Yes — tablet, phone, or laptop, in any modern browser. There\'s nothing to install and no app store required.',
+    a: 'Yes, tablet, phone, or laptop, in any modern browser. There\'s nothing to install and no app store required.',
   },
   {
     q: 'Can I customize the symbol boards?',
@@ -463,14 +642,6 @@ function FAQSection() {
   return (
     <section id="faq" style={{ padding: 'clamp(48px, 8vw, 72px) clamp(1.25rem, 5vw, 2rem)', maxWidth: '1100px', margin: '0 auto' }}>
       <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-        <div style={{
-          display: 'inline-block', padding: '4px 14px',
-          background: '#E8F7F4', borderRadius: '100px',
-          fontSize: '11px', fontWeight: 600, color: '#2D9B83',
-          letterSpacing: '0.06em', marginBottom: '16px',
-        }}>
-          FAQ
-        </div>
         <h2 style={{
           fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 900,
           fontSize: 'clamp(1.9rem, 5vw, 2.6rem)', color: '#2C2A26', margin: '0 0 12px',
@@ -724,29 +895,23 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
 
       {/* Features */}
       <Reveal>
-      <section id="features" style={{ padding: 'clamp(48px, 8vw, 72px) clamp(1.25rem, 5vw, 2rem)', maxWidth: '1100px', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-          <div style={{
-            display: 'inline-block', padding: '4px 14px',
-            background: '#E8F7F4', borderRadius: '100px',
-            fontSize: '11px', fontWeight: 600, color: '#2D9B83',
-            letterSpacing: '0.06em', marginBottom: '16px',
-          }}>
-            FEATURES
+      <section id="features" style={{ background: '#E8F7F4', padding: 'clamp(48px, 8vw, 72px) clamp(1.25rem, 5vw, 2rem)' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+            <h2 style={{
+              fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 900,
+              fontSize: 'clamp(1.9rem, 5vw, 2.6rem)', color: '#2C2A26', margin: '0 0 12px',
+              letterSpacing: '-0.02em',
+            }}>
+              Everything you need, built in.
+            </h2>
+            <p style={{ fontSize: '1.15rem', color: '#6B6860', margin: 0 }}>
+              No plug-ins, no upsells. Just one AAC app that keeps getting smarter.
+            </p>
           </div>
-          <h2 style={{
-            fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 900,
-            fontSize: 'clamp(1.9rem, 5vw, 2.6rem)', color: '#2C2A26', margin: '0 0 12px',
-            letterSpacing: '-0.02em',
-          }}>
-            Everything you need, built in.
-          </h2>
-          <p style={{ fontSize: '1.15rem', color: '#6B6860', margin: 0 }}>
-            No plug-ins, no upsells — just one AAC app that keeps getting smarter.
-          </p>
-        </div>
 
-        <FeatureCarousel items={FEATURE_ITEMS} />
+          <FeatureSlider items={FEATURE_ITEMS} />
+        </div>
       </section>
       </Reveal>
 
@@ -762,7 +927,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
                 <div>
                   <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800, fontSize: '15px', color: '#2C2A26' }}>My Journal</div>
-                  <div style={{ fontSize: '10px', color: '#9B9890' }}>A private space — just for you</div>
+                  <div style={{ fontSize: '10px', color: '#9B9890' }}>A private space, just for you</div>
                 </div>
                 <div style={{
                   background: '#2D9B83', borderRadius: '8px', padding: '5px 10px',
@@ -826,7 +991,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
               zIndex: 2, alignItems: 'center', gap: '6px',
             }}>
               <span style={{ fontSize: '15px' }}>🔒</span>
-              <span style={{ fontSize: '11px', fontWeight: 600, color: '#6B6860' }}>Private — only visible to you</span>
+              <span style={{ fontSize: '11px', fontWeight: 600, color: '#6B6860' }}>Private, only visible to you</span>
             </div>
           </div>
 
@@ -844,16 +1009,16 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
               fontSize: 'clamp(1.7rem, 4.5vw, 2.3rem)', color: '#2C2A26', margin: '0 0 16px',
               letterSpacing: '-0.02em', lineHeight: 1.1,
             }}>
-              A private diary — in their own words.
+              A private diary, in their own words.
             </h2>
             <p style={{ fontSize: '1.15rem', color: '#6B6860', lineHeight: 1.7, marginBottom: '28px' }}>
-              The Journal lets individuals record their day, feelings, and thoughts using the same symbols they communicate with. No text to type — just tap and save.
+              The Journal lets individuals record their day, feelings, and thoughts using the same symbols they communicate with. No text to type. Just tap and save.
             </p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               {[
                 { icon: '🌅', title: 'Mood check-in',     desc: 'Start every entry by picking a mood symbol.' },
-                { icon: '🔤', title: 'Symbol sentences',  desc: 'Build thoughts by tapping symbols — the same way they speak.' },
+                { icon: '🔤', title: 'Symbol sentences',  desc: 'Build thoughts by tapping symbols, the same way they speak.' },
               ].map(({ icon, title, desc }) => (
                 <div key={title} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
                   <div style={{
@@ -878,7 +1043,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
       </section>
       */}
 
-      {/* AI features — Voca vs. typical AAC apps */}
+      {/* AI features — Voca vs. typical AAC apps — hidden for now, keep for later
       <Reveal>
       <section id="ai-features" style={{ padding: 'clamp(48px, 8vw, 72px) clamp(1.25rem, 5vw, 2rem)', maxWidth: '1100px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '48px' }}>
@@ -902,14 +1067,12 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
           </p>
         </div>
 
-        {/* Desktop / tablet: side-by-side comparison table */}
         <div className="hidden md:grid" style={{
           maxWidth: '880px', margin: '0 auto',
           gridTemplateColumns: 'minmax(150px, 1.3fr) 1fr 1fr',
           borderRadius: '20px', overflow: 'hidden', border: '1px solid #E8E6E1',
           boxShadow: '0 4px 20px rgba(44,42,38,0.04)',
         }}>
-          {/* Header row */}
           <div style={{ background: 'white', padding: '18px 20px' }} />
           <div style={{ background: 'white', padding: '18px 16px', textAlign: 'center' }}>
             <span style={{ fontSize: '17px', fontWeight: 800, color: '#6B6860', letterSpacing: '0.02em' }}>
@@ -922,14 +1085,13 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
             </span>
           </div>
 
-          {/* Rows */}
           {COMPARISON_ROWS.map(row => (
             <Fragment key={row.feature}>
               <div style={{
                 background: 'white', padding: '20px', borderTop: '1px solid #F0EFEA',
                 display: 'flex', alignItems: 'center',
               }}>
-                <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800, fontSize: '15px', color: '#14523F' }}>
+                <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800, fontSize: '17px', color: '#14523F' }}>
                   {row.feature}
                 </span>
               </div>
@@ -937,25 +1099,23 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
                 background: 'white', padding: '20px 16px', borderTop: '1px solid #F0EFEA',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center',
               }}>
-                <span style={{ fontSize: '15px', color: '#6B6860', lineHeight: 1.5 }}>{row.typical}</span>
+                <span style={{ fontSize: '18px', fontWeight: 500, color: '#4A473F', lineHeight: 1.6 }}>{row.typical}</span>
               </div>
               <div style={{
                 background: '#14523F', padding: '20px 16px', borderTop: '1px solid rgba(255,255,255,0.1)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center',
               }}>
-                <span style={{ fontSize: '15px', fontWeight: 600, color: 'white', lineHeight: 1.5 }}>{renderWithAIEmphasis(row.voca)}</span>
+                <span style={{ fontSize: '18px', fontWeight: 600, color: 'white', lineHeight: 1.6 }}>{renderWithAIEmphasis(row.voca)}</span>
               </div>
             </Fragment>
           ))}
         </div>
 
-        {/* Mobile: compact two-column table */}
         <div className="md:hidden" style={{
           maxWidth: '480px', margin: '0 auto',
           borderRadius: '16px', overflow: 'hidden', border: '1px solid #E8E6E1',
           boxShadow: '0 2px 10px rgba(44,42,38,0.04)',
         }}>
-          {/* Header row */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
             <div style={{ background: 'white', padding: '9px 10px', textAlign: 'center', borderRight: '1px solid #F0EFEA' }}>
               <span style={{ fontSize: '13.5px', fontWeight: 800, color: '#6B6860', letterSpacing: '0.02em' }}>TYPICAL</span>
@@ -994,6 +1154,27 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
         </div>
       </section>
       </Reveal>
+      */}
+
+      {/* Who it's for */}
+      <Reveal>
+      <section style={{ padding: 'clamp(48px, 8vw, 72px) clamp(1.25rem, 5vw, 2rem)', maxWidth: '1100px', margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+          <h2 style={{
+            fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 900,
+            fontSize: 'clamp(1.9rem, 5vw, 2.6rem)', color: '#2C2A26', margin: '0 0 12px',
+            letterSpacing: '-0.02em',
+          }}>
+            Built for every communication level.
+          </h2>
+          <p style={{ fontSize: '1.15rem', color: '#6B6860', margin: 0 }}>
+            From a first word to a full sentence, Voca meets people where they are.
+          </p>
+        </div>
+
+        <WhoGrid items={WHO_ITEMS} />
+      </section>
+      </Reveal>
 
       <Reveal>
         <FAQSection />
@@ -1007,14 +1188,6 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
       }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '52px' }}>
-            <div style={{
-              display: 'inline-block', padding: '4px 14px',
-              background: '#E8F7F4', borderRadius: '100px',
-              fontSize: '11px', fontWeight: 600, color: '#2D9B83',
-              letterSpacing: '0.06em', marginBottom: '16px',
-            }}>
-              CONTACT
-            </div>
             <h2 style={{
               fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 900,
               fontSize: 'clamp(1.9rem, 5vw, 2.6rem)', color: '#2C2A26', margin: '0 0 12px',
@@ -1041,13 +1214,13 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
             fontSize: 'clamp(2rem, 6vw, 2.8rem)', color: 'white', marginBottom: '16px',
             letterSpacing: '-0.02em', lineHeight: 1.1,
           }}>
-            Free. Always.
+            Give them a voice today.
           </h2>
           <p style={{
             fontSize: '1.2rem', color: 'rgba(255,255,255,0.75)',
             marginBottom: '38px', lineHeight: 1.6,
           }}>
-            No app store. No download. No cost. Works on any device with a browser — tablet, phone, laptop.
+            Set up a profile in minutes and start building sentences right away. Everything stays private, right there on your device.
           </p>
           <button onClick={onEnter} style={{
             padding: '17px 42px', background: 'white', color: '#2D9B83',
@@ -1077,7 +1250,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
               />
               <span style={{ color: 'white', fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 900, fontSize: '20px', letterSpacing: '-0.02em' }}>Voca</span>
             </button>
-            <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '16px', margin: '0 0 18px' }}>
+            <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '17.5px', margin: '0 0 18px' }}>
               Built for every family on earth.
             </p>
 
@@ -1125,7 +1298,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
                 onClick={() => setModal('terms')}
                 style={{
                   background: 'none', border: 'none', cursor: 'pointer',
-                  fontSize: '15.5px', color: 'rgba(255,255,255,0.6)',
+                  fontSize: '16.5px', color: 'rgba(255,255,255,0.6)',
                   padding: '4px 8px', borderRadius: '6px', transition: 'color 0.15s',
                   fontFamily: "'DM Sans', system-ui, sans-serif",
                 }}
@@ -1134,12 +1307,12 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
               >
                 Terms of Service
               </button>
-              <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: '15.5px' }}>·</span>
+              <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: '16.5px' }}>·</span>
               <button
                 onClick={() => setModal('privacy')}
                 style={{
                   background: 'none', border: 'none', cursor: 'pointer',
-                  fontSize: '15.5px', color: 'rgba(255,255,255,0.6)',
+                  fontSize: '16.5px', color: 'rgba(255,255,255,0.6)',
                   padding: '4px 8px', borderRadius: '6px', transition: 'color 0.15s',
                   fontFamily: "'DM Sans', system-ui, sans-serif",
                 }}
@@ -1148,9 +1321,9 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
               >
                 Privacy Policy
               </button>
-              <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: '15.5px' }}>·</span>
+              <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: '16.5px' }}>·</span>
               <a href="#contact" style={{
-                fontSize: '15.5px', color: 'rgba(255,255,255,0.6)',
+                fontSize: '16.5px', color: 'rgba(255,255,255,0.6)',
                 textDecoration: 'none', padding: '4px 8px', borderRadius: '6px',
                 transition: 'color 0.15s',
               }}
@@ -1162,7 +1335,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
             </div>
 
             {/* Copyright — own line */}
-            <div style={{ marginTop: '10px', fontSize: '15.5px', color: 'rgba(255,255,255,0.4)' }}>
+            <div style={{ marginTop: '10px', fontSize: '16.5px', color: 'rgba(255,255,255,0.4)' }}>
               © 2026 Voca
             </div>
           </div>
