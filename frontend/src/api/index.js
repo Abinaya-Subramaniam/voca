@@ -58,6 +58,7 @@ export const removeSymbolFromBoard = (profileId, boardId, symbolId) =>
   request(`/api/profiles/${profileId}/boards/${boardId}/symbols/${symbolId}`, { method: 'DELETE' })
 export const reorderBoardSymbols = (profileId, boardId, symbols) =>
   request(`/api/profiles/${profileId}/boards/${boardId}/symbols`, { method: 'PUT', body: { symbols } })
+export const listBoardTemplates = () => request('/api/board-templates')
 
 
 export const logSentence = (profileId, boardId, symbols, sentence) =>

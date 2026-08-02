@@ -2,9 +2,10 @@ import { useState } from 'react'
 import { useApp } from '../../context/AppContext'
 import * as api from '../../api'
 import { updateProfileSettings } from '../../store/profileStore'
-import { createBoard, deleteBoard } from '../../store/boardStore'
+import { deleteBoard } from '../../store/boardStore'
 import PageHeader from '../shared/PageHeader'
 import CategoryIcon, { CATEGORY_META } from '../shared/CategoryIcon'
+import AddBoardModal from './AddBoardModal'
 
 function randomPin() {
   return String(Math.floor(Math.random() * 10000)).padStart(4, '0')
@@ -20,16 +21,15 @@ export default function BoardEditorTab() {
   const [resettingPin, setResettingPin] = useState(false)
   const [pendingPin, setPendingPin] = useState(randomPin())
   const [revealedPin, setRevealedPin] = useState(null)
+  const [addingBoard, setAddingBoard] = useState(false)
 
   async function updateSetting(key, value) {
     await updateProfileSettings(activeProfileId, { [key]: value })
     dispatch({ type: 'REFRESH_ACTIVE_PROFILE' })
   }
 
-  async function handleAddBoard() {
-    const name = prompt('Board name:')
-    if (!name?.trim()) return
-    await createBoard(activeProfileId, name.trim())
+  function handleBoardCreated() {
+    setAddingBoard(false)
     dispatch({ type: 'REFRESH_BOARDS' })
   }
 
@@ -225,7 +225,7 @@ export default function BoardEditorTab() {
           <div className="flex items-center justify-between px-5 py-3.5 border-b border-warm-100">
             <span className="font-sans font-semibold text-warm-700 text-base">Boards</span>
             <button
-              onClick={handleAddBoard}
+              onClick={() => setAddingBoard(true)}
               className="flex items-center gap-1.5 text-sm font-semibold text-teal-600 hover:text-teal-700 transition-colors"
             >
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
@@ -265,6 +265,15 @@ export default function BoardEditorTab() {
         </div>
 
       </div>
+
+      {addingBoard && (
+        <AddBoardModal
+          profileId={activeProfileId}
+          existingCategories={new Set(boards.map(b => b.category))}
+          onClose={() => setAddingBoard(false)}
+          onCreated={handleBoardCreated}
+        />
+      )}
     </div>
   )
 }

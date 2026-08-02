@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .config import get_settings
 from .database import Base, engine
-from .routers import agent, auth, board_sessions, boards, intelligence, journal, logs, profiles
+from .routers import agent, auth, board_sessions, board_templates, boards, intelligence, journal, logs, profiles
 
 settings = get_settings()
 
@@ -31,6 +31,7 @@ def health():
 app.include_router(auth.router)
 app.include_router(profiles.router)
 app.include_router(board_sessions.router)
+app.include_router(board_templates.router)
 app.include_router(boards.router)
 app.include_router(logs.router)
 app.include_router(journal.router)
