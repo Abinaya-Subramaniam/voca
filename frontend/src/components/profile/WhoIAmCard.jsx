@@ -3,23 +3,24 @@ import { useApp } from '../../context/AppContext'
 import { updateWhoIAm, updateProfileSettings } from '../../store/profileStore'
 import { getSymbolImageUrl } from '../../services/symbolService'
 
+// IDs verified against the ARASAAC API (matches VERIFIED_IDS in symbolService.js)
 const LOVE_SYMBOL_OPTIONS = [
-  { symbolId: '5517', label: 'play'     },
-  { symbolId: '5516', label: 'sleep'    },
-  { symbolId: '5515', label: 'eat'      },
-  { symbolId: '5543', label: 'book'     },
-  { symbolId: '5542', label: 'friend'   },
-  { symbolId: '5524', label: 'happy'    },
-  { symbolId: '5518', label: 'home'     },
-  { symbolId: '5536', label: 'apple'    },
-  { symbolId: '5514', label: 'drink'    },
-  { symbolId: '5544', label: 'write'    },
-  { symbolId: '5545', label: 'read'     },
-  { symbolId: '5546', label: 'draw'     },
-  { symbolId: '5510', label: 'go'       },
-  { symbolId: '5519', label: 'more'     },
-  { symbolId: '5531', label: 'good'     },
-  { symbolId: '5522', label: 'yes'      },
+  { symbolId: '23392', label: 'play'    },
+  { symbolId: '6479',  label: 'sleep'   },
+  { symbolId: '6456',  label: 'eat'     },
+  { symbolId: '25191', label: 'book'    },
+  { symbolId: '25790', label: 'friend'  },
+  { symbolId: '35533', label: 'happy'   },
+  { symbolId: '6964',  label: 'home'    },
+  { symbolId: '2462',  label: 'apple'   },
+  { symbolId: '6061',  label: 'drink'   },
+  { symbolId: '2380',  label: 'write'   },
+  { symbolId: '7141',  label: 'read'    },
+  { symbolId: '8088',  label: 'draw'    },
+  { symbolId: '8142',  label: 'go'      },
+  { symbolId: '5508',  label: 'more'    },
+  { symbolId: '4581',  label: 'good'    },
+  { symbolId: '5584',  label: 'yes'     },
 ]
 
 export default function WhoIAmCard({ onClose }) {

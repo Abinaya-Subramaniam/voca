@@ -27,3 +27,7 @@ export function removeSymbolFromBoard(profileId, boardId, symbolId) {
 export function reorderSymbols(profileId, boardId, symbols) {
   return api.reorderBoardSymbols(profileId, boardId, symbols)
 }
+
+export function getBoardTemplates() {
+  return api.listBoardTemplates()
+}

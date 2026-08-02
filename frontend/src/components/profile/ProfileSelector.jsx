@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '../../context/AppContext'
 import { createProfile } from '../../store/profileStore'
+import { logout } from '../../api'
 
 const COLORS = [
   '#2D9B83', '#E8534A', '#7B8FF5',
@@ -22,7 +23,7 @@ function suggestUsername(name) {
 }
 
 export default function ProfileSelector() {
-  const { state, dispatch } = useApp()
+  const { state, dispatch, setAuthed } = useApp()
   const navigate = useNavigate()
   const [creating, setCreating] = useState(false)
   const [name, setName]         = useState('')
@@ -80,6 +81,12 @@ export default function ProfileSelector() {
     navigate('/caregiver/overview')
   }
 
+  function handleLogoutAfterCreate() {
+    logout()
+    setAuthed(false)
+    navigate('/login')
+  }
+
   // One-time "here are the login details" confirmation — the PIN can never be
   // shown again once it leaves this screen, since only its hash is stored.
   if (createdCredentials) {
@@ -93,27 +100,33 @@ export default function ProfileSelector() {
           <h2 className="font-display font-bold text-warm-900 text-2xl mb-1">
             {createdCredentials.name} is ready
           </h2>
-          <p className="font-sans text-warm-500 text-sm mb-5">
-            Give {createdCredentials.name} these login details. The PIN won't be shown again —
+          <p className="font-sans text-warm-500 text-base mb-5">
+            Give {createdCredentials.name} these login details. The PIN won't be shown again,
             you can always reset it later from Settings.
           </p>
 
           <div className="bg-warm-50 border border-warm-200 rounded-xl p-4 mb-6 space-y-3">
             <div>
-              <div className="font-sans text-warm-400 text-xs mb-0.5">Username</div>
-              <div className="font-display font-bold text-warm-900 text-lg">{createdCredentials.username}</div>
+              <div className="font-sans text-warm-400 text-sm mb-0.5">Username</div>
+              <div className="font-display font-bold text-warm-900 text-xl">{createdCredentials.username}</div>
             </div>
             <div>
-              <div className="font-sans text-warm-400 text-xs mb-0.5">PIN</div>
-              <div className="font-display font-bold text-warm-900 text-lg tracking-[0.3em]">{createdCredentials.pin}</div>
+              <div className="font-sans text-warm-400 text-sm mb-0.5">PIN</div>
+              <div className="font-display font-bold text-warm-900 text-xl tracking-[0.3em]">{createdCredentials.pin}</div>
             </div>
           </div>
 
           <button
             onClick={finishCreating}
-            className="w-full py-3 rounded-xl bg-teal-500 text-white font-display font-bold hover:bg-teal-600 transition-colors shadow-subtle"
+            className="w-full py-3 rounded-xl bg-teal-500 text-white font-display font-bold hover:bg-teal-600 transition-colors shadow-subtle mb-2.5"
           >
             Done
+          </button>
+          <button
+            onClick={handleLogoutAfterCreate}
+            className="w-full py-3 rounded-xl border border-warm-200 font-sans font-500 text-warm-500 hover:bg-warm-50 transition-colors"
+          >
+            Log out
           </button>
         </div>
       </div>
