@@ -300,37 +300,26 @@ High-Contrast Mode to improve readability for users with visual impairments.
 Customizable interface colors and text sizes to better meet individual accessibility needs.
  2. Real-Time Caregiver Notifications
 When a caregiver adds or updates vocabulary, the communicator will receive an instant notification. This ensures that new words, phrases, and communication boards are immediately available, keeping both users synchronized.
-
 3. Personalized User Categorization
-
 VOCA will categorize communicators based on their individual profiles, including:
-
 Communication and language understanding level
-Vocabulary knowledge
-Health condition
-Age and cognitive abilities
-Communication goals and purpose
-Care requirements and caregiver preferences
-
+- Vocabulary knowledge
+- Health condition
+- Age and cognitive abilities
+- Communication goals and purpose
+- Care requirements and caregiver preferences
 This personalization will help provide a communication experience tailored to each user's abilities and needs.
-
 4. Adaptive Vocabulary Recommendations
-
 The application will recommend vocabulary based on the communicator's learning level and communication patterns.
-
 For example:
-
-Fast learners will receive a larger and more advanced vocabulary set, enabling quicker communication.
+- Fast learners will receive a larger and more advanced vocabulary set, enabling quicker communication.
 Beginning learners will be presented with simpler, high-frequency words and phrases before progressing to more complex vocabulary.
 Frequently used words will be prioritized for faster access.
 Vocabulary suggestions will adapt over time as the user's communication skills improve.
-
 5. Communication Performance Analysis
-
-Future versions of VOCA will analyze how users interact with the application to further personalize the communication experience.
+- Future versions of VOCA will analyze how users interact with the application to further personalize the communication experience.
 
 Key features include:
-
 - Word Selection Speed Analysis to measure how quickly users can locate and select words or symbols during communication.
 - Communication Efficiency Monitoring to identify areas where users experience delays or difficulties while expressing their needs.
 - Adaptive Interface Recommendations that suggest simplified communication boards, reorganized vocabulary, or larger buttons based on the user's interaction patterns.
