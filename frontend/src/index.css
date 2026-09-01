@@ -24,7 +24,16 @@ html, body, #root {
   overflow: hidden;
 }
 
+/* Mobile browsers scroll the page to keep a focused input (e.g. the Voca Bot
+   chat box) above the on-screen keyboard. Every screen already manages its
+   own internal scrolling via overflow-y-auto panels, so the page itself must
+   never move — otherwise that keyboard-triggered scroll shifts the whole
+   h-screen app shell up, and with overflow:hidden there's nothing to scroll
+   it back down with, permanently hiding the top nav bar. */
 body {
+  position: fixed;
+  inset: 0;
+  width: 100%;
   font-family: 'DM Sans', system-ui, sans-serif;
   background: var(--color-bg);
   color: var(--color-text-primary);
