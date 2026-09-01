@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useApp } from '../../context/AppContext'
 import { speak } from '../../services/speechService'
 import { logSentence } from '../../store/logStore'
@@ -8,8 +8,18 @@ export default function SentenceBar() {
   const { state, dispatch } = useApp()
   const { sentenceBuffer, activeProfileId, activeBoardId } = state
   const [speaking, setSpeaking] = useState(false)
+  const chipsRef = useRef(null)
 
   const sentenceText = sentenceBuffer.map(s => s.label).join(' ')
+
+  // Newly-tapped symbols are appended to the end of the strip — without this,
+  // once the strip fills the visible width (fast on narrow phones), each new
+  // tap lands off-screen to the right and looks like it never registered.
+  useEffect(() => {
+    if (chipsRef.current) {
+      chipsRef.current.scrollLeft = chipsRef.current.scrollWidth
+    }
+  }, [sentenceBuffer])
 
   async function handleSpeak() {
     if (!sentenceText || speaking) return
@@ -38,7 +48,7 @@ export default function SentenceBar() {
       <div className="flex items-stretch" style={{ minHeight: '80px' }}>
 
         {/* Symbol chips */}
-        <div className="flex-1 flex items-center gap-2.5 px-4 py-2.5 overflow-x-auto">
+        <div ref={chipsRef} className="flex-1 flex items-center gap-2.5 px-4 py-2.5 overflow-x-auto">
           {sentenceBuffer.length === 0 ? (
             <span className="font-sans text-warm-400 text-base select-none">
               Tap symbols to build a sentence...
