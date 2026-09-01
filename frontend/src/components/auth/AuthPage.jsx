@@ -191,7 +191,7 @@ export default function AuthPage({ onAuthed, onBackToLanding }) {
   }
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden" style={{ background: 'var(--color-bg)' }}>
+    <div className="h-screen-safe flex flex-col overflow-hidden" style={{ background: 'var(--color-bg)' }}>
       <Navbar onLogoClick={onBackToLanding}>
         {onBackToLanding && (
           <button onClick={onBackToLanding} style={{

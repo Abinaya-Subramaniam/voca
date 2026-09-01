@@ -690,7 +690,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
   return (
     <div
       ref={scrollRef}
-      className="h-screen overflow-y-auto"
+      className="h-screen-safe overflow-y-auto"
       onScroll={handleScroll}
       style={{ background: '#FAFAF8', fontFamily: "'DM Sans', system-ui, sans-serif" }}
     >

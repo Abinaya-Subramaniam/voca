@@ -24,6 +24,17 @@ html, body, #root {
   overflow: hidden;
 }
 
+/* Embedded in-app browsers (WhatsApp, Instagram, etc.) have their own native
+   toolbar that can occupy part of the screen, and 100vh is often computed
+   against the full screen rather than the space actually visible below it —
+   pushing our h-screen app shell up so its own top bar renders off-screen.
+   100dvh accounts for the real visible viewport; falls back to 100vh where
+   dvh isn't supported (this second declaration is simply ignored there). */
+.h-screen-safe {
+  height: 100vh;
+  height: 100dvh;
+}
+
 /* Mobile browsers scroll the page to keep a focused input (e.g. the Voca Bot
    chat box) above the on-screen keyboard. Every screen already manages its
    own internal scrolling via overflow-y-auto panels, so the page itself must
