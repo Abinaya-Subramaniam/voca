@@ -51,7 +51,7 @@ function GreetingBanner({ name, avatarColor }) {
 
 function MobileTopBar({ onMenuClick, label }) {
   return (
-    <div className="md:hidden flex items-center gap-3 px-4 py-2.5 bg-white border-b border-warm-200 flex-shrink-0">
+    <div className="md:hidden sticky top-0 z-30 flex items-center gap-3 px-4 py-2.5 bg-white border-b border-warm-200 flex-shrink-0">
       <button
         onClick={onMenuClick}
         className="w-9 h-9 -ml-1 rounded-lg flex items-center justify-center text-warm-600 hover:bg-warm-100 transition-colors flex-shrink-0"
