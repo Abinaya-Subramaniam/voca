@@ -586,10 +586,6 @@ const FAQ_ITEMS = [
     a: "AAC stands for Augmentative and Alternative Communication. An AAC board is a grid of symbols and words that a non-verbal or minimally verbal person taps to build sentences, which are then spoken aloud, giving them a voice when speech is difficult or impossible.",
   },
   {
-    q: 'Is Voca really free?',
-    a: 'Yes, completely free, with no subscriptions, trials, or hidden costs. Voca is built as an accessibility tool, not a business.',
-  },
-  {
     q: 'What is the Voca Bot?',
     a: "It's an agentic assistant built into Voca. Instead of just answering questions, it takes action on its own: adding missing vocabulary, reorganising boards, and surfacing suggestions proactively, without you having to ask.",
   },
