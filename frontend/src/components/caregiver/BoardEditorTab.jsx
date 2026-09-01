@@ -73,14 +73,14 @@ export default function BoardEditorTab() {
           <label className="block font-sans font-semibold text-warm-700 text-base mb-2">Username</label>
           <div className="flex gap-2 mb-1">
             <input
-              className="flex-1 border border-warm-200 rounded-xl px-4 py-2.5 font-sans text-warm-900 text-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              className="flex-1 min-w-0 border border-warm-200 rounded-xl px-4 py-2.5 font-sans text-warm-900 text-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
               value={newUsername}
               onChange={e => setNewUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
             />
             <button
               onClick={handleSaveUsername}
               disabled={!newUsername.trim() || newUsername === activeProfile?.username}
-              className="px-4 py-2.5 rounded-xl bg-teal-500 text-white font-sans font-semibold text-base hover:bg-teal-600 disabled:opacity-40 transition-colors"
+              className="flex-shrink-0 px-4 py-2.5 rounded-xl bg-teal-500 text-white font-sans font-semibold text-base hover:bg-teal-600 disabled:opacity-40 transition-colors"
             >
               Save
             </button>
@@ -96,7 +96,7 @@ export default function BoardEditorTab() {
               </div>
             )}
             {resettingPin ? (
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <input
                   className="border border-warm-200 rounded-xl px-4 py-2.5 font-sans text-warm-900 text-lg text-center tracking-[0.4em] w-32 focus:outline-none focus:ring-2 focus:ring-teal-500"
                   inputMode="numeric"
