@@ -696,11 +696,11 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
 
       {/* Full-width glass nav */}
       <Navbar scrolled={scrolled} onLogoClick={scrollToTop}>
-        <a href="#contact" style={{
+        <a href="#contact" className="hidden sm:inline-flex" style={{
           fontSize: '14px', fontWeight: 600, color: '#4A473F',
           textDecoration: 'none', padding: '9px 16px', borderRadius: '100px',
           border: '1px solid rgba(232,230,225,0.9)', background: 'rgba(255,255,255,0.55)',
-          transition: 'all 0.15s', display: 'inline-flex', alignItems: 'center', gap: '5px',
+          transition: 'all 0.15s', alignItems: 'center', gap: '5px',
         }}
           onMouseEnter={e => { e.currentTarget.style.borderColor = '#2D9B83'; e.currentTarget.style.color = '#2D9B83'; e.currentTarget.style.background = 'rgba(255,255,255,0.9)' }}
           onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(232,230,225,0.9)'; e.currentTarget.style.color = '#4A473F'; e.currentTarget.style.background = 'rgba(255,255,255,0.55)' }}
