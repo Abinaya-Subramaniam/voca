@@ -45,10 +45,13 @@ export default function SentenceBar() {
 
   return (
     <div className="bg-white border-b border-warm-200 flex-shrink-0 shadow-subtle">
-      <div className="flex items-stretch" style={{ minHeight: '80px' }}>
+      {/* Stacked on mobile so tapped symbols get their own full-width row instead
+          of competing for space with the Backspace/Clear/Speak controls — side
+          by side again from sm: up, where there's room for both. */}
+      <div className="flex flex-col sm:flex-row sm:items-stretch sm:min-h-[80px]">
 
         {/* Symbol chips */}
-        <div ref={chipsRef} className="flex-1 flex items-center gap-2.5 px-4 py-2.5 overflow-x-auto">
+        <div ref={chipsRef} className="flex items-center gap-2.5 px-4 py-2.5 overflow-x-auto min-h-[64px] sm:flex-1">
           {sentenceBuffer.length === 0 ? (
             <span className="font-sans text-warm-400 text-base select-none">
               Tap symbols to build a sentence...
@@ -85,7 +88,7 @@ export default function SentenceBar() {
         </div>
 
         {/* Controls */}
-        <div className="flex items-stretch flex-shrink-0 border-l border-warm-200">
+        <div className="flex items-stretch flex-shrink-0 border-t sm:border-t-0 sm:border-l border-warm-200">
           {sentenceBuffer.length > 0 && (
             <button
               onClick={handleBackspace}
@@ -107,8 +110,8 @@ export default function SentenceBar() {
             onClick={handleSpeak}
             disabled={!sentenceText}
             className={`
-              px-6 font-display font-bold text-base text-white
-              flex items-center gap-2 transition-all border-l border-teal-700
+              flex-1 sm:flex-none px-6 font-display font-bold text-base text-white
+              flex items-center justify-center gap-2 transition-all border-l border-teal-700
               disabled:opacity-40 disabled:cursor-not-allowed
               active:scale-95
             `}
