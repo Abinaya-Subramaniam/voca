@@ -138,7 +138,7 @@ export default function CompanionTab() {
   const hasKey = true  // the AI provider key lives on the backend now
 
   return (
-    <div className="flex-1 flex flex-col overflow-hidden bg-warm-50">
+    <div className="flex-1 min-h-0 flex flex-col overflow-hidden bg-warm-50">
 
       {/* Header */}
       <div className="px-4 py-3 bg-white border-b border-warm-200 flex-shrink-0">
@@ -156,7 +156,7 @@ export default function CompanionTab() {
       </div>
 
       {/* Message area */}
-      <div className="flex-1 overflow-y-auto px-4 py-4">
+      <div className="flex-1 min-h-0 overflow-y-auto px-4 py-4">
         <div className="max-w-2xl mx-auto space-y-4">
 
         {/* History loading */}
