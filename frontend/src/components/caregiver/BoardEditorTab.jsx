@@ -57,7 +57,7 @@ export default function BoardEditorTab() {
 
   return (
     <div className="flex-1 overflow-y-auto bg-warm-50">
-      <div className="max-w-5xl mx-auto px-8 py-8">
+      <div className="max-w-5xl mx-auto px-4 sm:px-8 py-6 sm:py-8">
 
         <PageHeader
           title="Settings"
@@ -130,8 +130,8 @@ export default function BoardEditorTab() {
           </div>
         </div>
 
-        {/* Symbol size + Font size — side by side */}
-        <div className="grid grid-cols-2 gap-5 mb-5">
+        {/* Symbol size + Font size — side by side on larger screens, stacked on mobile */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
           <div className="bg-white rounded-2xl p-5 border border-warm-200 shadow-subtle">
             <label className="block font-sans font-semibold text-warm-700 text-base mb-3">
               Symbol size
