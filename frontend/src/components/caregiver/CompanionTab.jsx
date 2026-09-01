@@ -142,7 +142,7 @@ export default function CompanionTab() {
 
       {/* Header */}
       <div className="px-4 py-3 bg-white border-b border-warm-200 flex-shrink-0">
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2.5 max-w-2xl mx-auto">
           <div className="w-10 h-10 rounded-xl bg-teal-500 flex items-center justify-center flex-shrink-0 shadow-subtle">
             <BotIcon className="w-6 h-6 text-white" />
           </div>
@@ -156,7 +156,8 @@ export default function CompanionTab() {
       </div>
 
       {/* Message area */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
+      <div className="flex-1 overflow-y-auto px-4 py-4">
+        <div className="max-w-2xl mx-auto space-y-4">
 
         {/* History loading */}
         {historyLoading && (
@@ -327,28 +328,31 @@ export default function CompanionTab() {
           </div>
         )}
 
-        <div ref={bottomRef} />
+          <div ref={bottomRef} />
+        </div>
       </div>
 
       {/* Suggested chips */}
       {!historyLoading && messages.length === 0 && (
-        <div className="px-4 pb-2 flex gap-2 overflow-x-auto flex-shrink-0 scrollbar-none">
-          {SUGGESTED.map(q => (
-            <button
-              key={q}
-              onClick={() => handleSend(q)}
-              disabled={!hasKey || loading}
-              className="flex-shrink-0 px-3 py-2 bg-white border border-warm-200 rounded-xl text-sm font-sans text-warm-600 hover:border-teal-300 hover:text-teal-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-            >
-              {q}
-            </button>
-          ))}
+        <div className="px-4 pb-2 flex-shrink-0">
+          <div className="flex gap-2 overflow-x-auto scrollbar-none max-w-2xl mx-auto">
+            {SUGGESTED.map(q => (
+              <button
+                key={q}
+                onClick={() => handleSend(q)}
+                disabled={!hasKey || loading}
+                className="flex-shrink-0 px-3 py-2 bg-white border border-warm-200 rounded-xl text-sm font-sans text-warm-600 hover:border-teal-300 hover:text-teal-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                {q}
+              </button>
+            ))}
+          </div>
         </div>
       )}
 
       {/* Input bar */}
       <div className="px-4 py-3 bg-white border-t border-warm-200 flex-shrink-0">
-        <div className="flex gap-2">
+        <div className="flex gap-2 max-w-2xl mx-auto">
           <input
             type="text"
             value={input}
