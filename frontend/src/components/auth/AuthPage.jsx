@@ -191,7 +191,7 @@ export default function AuthPage({ onAuthed, onBackToLanding }) {
   }
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: 'var(--color-bg)' }}>
+    <div className="h-screen-safe flex flex-col overflow-hidden" style={{ background: 'var(--color-bg)' }}>
       <Navbar onLogoClick={onBackToLanding}>
         {onBackToLanding && (
           <button onClick={onBackToLanding} style={{
@@ -209,13 +209,13 @@ export default function AuthPage({ onAuthed, onBackToLanding }) {
         )}
       </Navbar>
 
-      <div className="flex-1 overflow-y-auto flex items-center justify-center p-4 py-8">
-      <div className="bg-white rounded-2xl shadow-raised p-8 w-full max-w-md border border-warm-200 my-auto">
+      <div className="flex-1 overflow-y-auto flex items-center justify-center p-3 sm:p-4 py-6 sm:py-8">
+      <div className="bg-white rounded-2xl shadow-raised p-5 sm:p-8 w-full max-w-md border border-warm-200 my-auto">
 
         <img src="https://i.imgur.com/3vT9jwF.jpeg" alt="Voca" className="w-12 h-12 rounded-xl object-cover mb-4 shadow-subtle" />
 
         {/* I'm a caregiver / I'm a communicator */}
-        <div className="flex gap-2 p-2 mb-7 bg-warm-100 rounded-xl">
+        <div className="flex gap-1.5 sm:gap-2 p-1.5 sm:p-2 mb-7 bg-warm-100 rounded-xl">
           {[
             { id: 'caregiver', label: "I'm a caregiver" },
             { id: 'kid', label: "I'm a communicator" },
@@ -224,7 +224,7 @@ export default function AuthPage({ onAuthed, onBackToLanding }) {
               key={opt.id}
               type="button"
               onClick={() => switchLoginAs(opt.id)}
-              className={`flex-1 py-3 px-3 rounded-lg font-sans text-base font-semibold text-center whitespace-nowrap transition-colors ${
+              className={`flex-1 py-3 px-1.5 sm:px-3 rounded-lg font-sans text-[13px] sm:text-base font-semibold text-center leading-tight transition-colors ${
                 loginAs === opt.id
                   ? 'bg-white text-teal-600 shadow-subtle'
                   : 'text-warm-500 hover:text-warm-700'

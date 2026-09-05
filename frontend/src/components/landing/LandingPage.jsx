@@ -586,10 +586,6 @@ const FAQ_ITEMS = [
     a: "AAC stands for Augmentative and Alternative Communication. An AAC board is a grid of symbols and words that a non-verbal or minimally verbal person taps to build sentences, which are then spoken aloud, giving them a voice when speech is difficult or impossible.",
   },
   {
-    q: 'Is Voca really free?',
-    a: 'Yes, completely free, with no subscriptions, trials, or hidden costs. Voca is built as an accessibility tool, not a business.',
-  },
-  {
     q: 'What is the Voca Bot?',
     a: "It's an agentic assistant built into Voca. Instead of just answering questions, it takes action on its own: adding missing vocabulary, reorganising boards, and surfacing suggestions proactively, without you having to ask.",
   },
@@ -690,7 +686,7 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
   return (
     <div
       ref={scrollRef}
-      className="h-screen overflow-y-auto"
+      className="h-screen-safe overflow-y-auto"
       onScroll={handleScroll}
       style={{ background: '#FAFAF8', fontFamily: "'DM Sans', system-ui, sans-serif" }}
     >
@@ -700,11 +696,11 @@ export default function LandingPage({ onEnter, authed, userName, userEmail, onLo
 
       {/* Full-width glass nav */}
       <Navbar scrolled={scrolled} onLogoClick={scrollToTop}>
-        <a href="#contact" style={{
+        <a href="#contact" className="hidden sm:inline-flex" style={{
           fontSize: '14px', fontWeight: 600, color: '#4A473F',
           textDecoration: 'none', padding: '9px 16px', borderRadius: '100px',
           border: '1px solid rgba(232,230,225,0.9)', background: 'rgba(255,255,255,0.55)',
-          transition: 'all 0.15s', display: 'inline-flex', alignItems: 'center', gap: '5px',
+          transition: 'all 0.15s', alignItems: 'center', gap: '5px',
         }}
           onMouseEnter={e => { e.currentTarget.style.borderColor = '#2D9B83'; e.currentTarget.style.color = '#2D9B83'; e.currentTarget.style.background = 'rgba(255,255,255,0.9)' }}
           onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(232,230,225,0.9)'; e.currentTarget.style.color = '#4A473F'; e.currentTarget.style.background = 'rgba(255,255,255,0.55)' }}

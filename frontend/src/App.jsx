@@ -51,7 +51,7 @@ function GreetingBanner({ name, avatarColor }) {
 
 function MobileTopBar({ onMenuClick, label }) {
   return (
-    <div className="md:hidden flex items-center gap-3 px-4 py-2.5 bg-white border-b border-warm-200 flex-shrink-0">
+    <div className="md:hidden sticky top-0 z-30 flex items-center gap-3 px-4 py-2.5 bg-white border-b border-warm-200 flex-shrink-0">
       <button
         onClick={onMenuClick}
         className="w-9 h-9 -ml-1 rounded-lg flex items-center justify-center text-warm-600 hover:bg-warm-100 transition-colors flex-shrink-0"
@@ -69,7 +69,7 @@ function MobileTopBar({ onMenuClick, label }) {
 
 function LoadingScreen() {
   return (
-    <div className="h-screen flex items-center justify-center" style={{ background: 'var(--color-bg)' }}>
+    <div className="h-screen-safe flex items-center justify-center" style={{ background: 'var(--color-bg)' }}>
       <div className="text-warm-400 text-sm font-sans">Loading...</div>
     </div>
   )
@@ -163,7 +163,7 @@ function ProfilesRoute() {
   }
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden" style={{ background: 'var(--color-bg)' }}>
+    <div className="h-screen-safe flex flex-col overflow-hidden" style={{ background: 'var(--color-bg)' }}>
       <header className="flex items-center justify-between px-4 py-3 bg-white border-b border-warm-200 flex-shrink-0 shadow-subtle">
         <button onClick={() => navigate('/')} className="flex items-center gap-2 hover:opacity-75 transition-opacity">
           <img src="https://i.imgur.com/3vT9jwF.jpeg" alt="Voca" className="w-8 h-8 rounded-lg object-cover" />
@@ -228,7 +228,7 @@ function BoardRoute() {
   }
 
   return (
-    <div className="h-screen flex overflow-hidden bg-warm-50">
+    <div className="h-screen-safe flex overflow-hidden bg-warm-50">
       <Sidebar
         activeProfile={activeProfile}
         boards={boards}
@@ -288,7 +288,7 @@ function CaregiverRoute() {
   }
 
   return (
-    <div className="h-screen flex overflow-hidden bg-warm-50">
+    <div className="h-screen-safe flex overflow-hidden bg-warm-50">
       <CaregiverSidebar
         activeProfile={activeProfile}
         activeTab={tab}
