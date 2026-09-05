@@ -6,6 +6,8 @@ import { deleteBoard } from '../../store/boardStore'
 import PageHeader from '../shared/PageHeader'
 import CategoryIcon, { CATEGORY_META } from '../shared/CategoryIcon'
 import AddBoardModal from './AddBoardModal'
+import EditBoardModal from './EditBoardModal'
+import ConfirmDialog from '../shared/ConfirmDialog'
 
 function randomPin() {
   return String(Math.floor(Math.random() * 10000)).padStart(4, '0')
@@ -22,6 +24,9 @@ export default function BoardEditorTab() {
   const [pendingPin, setPendingPin] = useState(randomPin())
   const [revealedPin, setRevealedPin] = useState(null)
   const [addingBoard, setAddingBoard] = useState(false)
+  const [editingBoard, setEditingBoard] = useState(null)
+  const [deletingBoard, setDeletingBoard] = useState(null)
+  const [deleting, setDeleting] = useState(false)
 
   async function updateSetting(key, value) {
     await updateProfileSettings(activeProfileId, { [key]: value })
@@ -33,10 +38,20 @@ export default function BoardEditorTab() {
     dispatch({ type: 'REFRESH_BOARDS' })
   }
 
-  async function handleDeleteBoard(boardId) {
-    if (!confirm('Delete this board?')) return
-    await deleteBoard(activeProfileId, boardId)
+  function handleBoardEdited() {
+    setEditingBoard(null)
     dispatch({ type: 'REFRESH_BOARDS' })
+  }
+
+  async function confirmDeleteBoard() {
+    setDeleting(true)
+    try {
+      await deleteBoard(activeProfileId, deletingBoard.id)
+      dispatch({ type: 'REFRESH_BOARDS' })
+      setDeletingBoard(null)
+    } finally {
+      setDeleting(false)
+    }
   }
 
   async function handleSaveUsername() {
@@ -242,23 +257,44 @@ export default function BoardEditorTab() {
               key={board.id}
               className={`flex items-center justify-between px-5 py-3.5 hover:bg-warm-50 transition-colors ${i < boards.length - 1 ? 'border-b border-warm-100' : ''}`}
             >
-              <div className="flex items-center gap-3">
+              <button
+                onClick={() => setEditingBoard(board)}
+                className="flex items-center gap-3 min-w-0 flex-1 text-left"
+              >
                 <div
                   className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
                   style={{ background: meta.bg }}
                 >
                   <CategoryIcon category={board.category} className="w-[18px] h-[18px]" />
                 </div>
-                <span className="font-sans font-medium text-warm-800 text-base">{board.name}</span>
-              </div>
-              {board.category !== 'emergency' && (
+                <span className="font-sans font-medium text-warm-800 text-base truncate">{board.name}</span>
+                <span className="font-sans text-warm-400 text-xs flex-shrink-0">{board.symbols.length} symbols</span>
+              </button>
+              <div className="flex items-center gap-1 flex-shrink-0 ml-3">
                 <button
-                  onClick={() => handleDeleteBoard(board.id)}
-                  className="text-sm text-warm-400 hover:text-red-500 transition-colors font-medium"
+                  onClick={() => setEditingBoard(board)}
+                  aria-label={`Edit ${board.name}`}
+                  title="Edit board"
+                  className="w-8 h-8 flex items-center justify-center rounded-lg text-warm-400 hover:bg-teal-50 hover:text-teal-600 transition-colors"
                 >
-                  Delete
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
+                  </svg>
                 </button>
-              )}
+                {board.category !== 'emergency' && (
+                  <button
+                    onClick={() => setDeletingBoard(board)}
+                    aria-label={`Delete ${board.name}`}
+                    title="Delete board"
+                    className="w-8 h-8 flex items-center justify-center rounded-lg text-warm-400 hover:bg-red-50 hover:text-red-500 transition-colors"
+                  >
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="3 6 5 6 21 6" />
+                      <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                    </svg>
+                  </button>
+                )}
+              </div>
             </div>
             )
           })}
@@ -272,6 +308,26 @@ export default function BoardEditorTab() {
           existingCategories={new Set(boards.map(b => b.category))}
           onClose={() => setAddingBoard(false)}
           onCreated={handleBoardCreated}
+        />
+      )}
+
+      {editingBoard && (
+        <EditBoardModal
+          profileId={activeProfileId}
+          board={editingBoard}
+          onClose={() => setEditingBoard(null)}
+          onSaved={handleBoardEdited}
+        />
+      )}
+
+      {deletingBoard && (
+        <ConfirmDialog
+          title="Delete this board?"
+          message={`"${deletingBoard.name}" and all ${deletingBoard.symbols.length} of its symbols will be permanently deleted. This can't be undone.`}
+          confirmLabel="Delete board"
+          busy={deleting}
+          onConfirm={confirmDeleteBoard}
+          onCancel={() => setDeletingBoard(null)}
         />
       )}
     </div>
