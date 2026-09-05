@@ -32,6 +32,15 @@ export default function Sidebar({
   const activeBoard = boards.find(b => b.id === activeBoardId)
   const isHome      = !showJournal && activeBoard?.id === rootBoard?.id
 
+  // Boards whose category isn't one of the fixed CATEGORY_CARDS (e.g. a
+  // caregiver-created custom board) would otherwise have no nav entry at
+  // all — every standard category already exists on every profile by
+  // default, so any board added later is almost always one of these.
+  const knownCategories = new Set(CATEGORY_CARDS.map(c => c.category))
+  const extraBoards = boards.filter(
+    b => b.id !== rootBoard?.id && !knownCategories.has(b.category)
+  )
+
   function withClose(fn) {
     return (...args) => { fn?.(...args); onMobileClose?.() }
   }
@@ -115,6 +124,16 @@ export default function Sidebar({
               />
             )
           })}
+          {extraBoards.map(board => (
+            <SidebarItem
+              key={board.id}
+              icon={<CategoryIcon category={board.category} className="w-4 h-4" />}
+              label={board.name}
+              active={!showJournal && activeBoard?.id === board.id}
+              onClick={withClose(() => onSelectBoard(board.id))}
+              tint="bg-warm-100"
+            />
+          ))}
         </div>
 
         <div className="text-[10.5px] font-sans font-bold text-warm-400 uppercase tracking-wider px-2.5 mb-2">
