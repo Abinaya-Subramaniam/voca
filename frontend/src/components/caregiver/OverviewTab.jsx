@@ -3,16 +3,6 @@ import { useApp } from '../../context/AppContext'
 import * as api from '../../api'
 import PageHeader from '../shared/PageHeader'
 
-function SproutIcon(p) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}>
-      <path d="M7 20h10" />
-      <path d="M12 20v-8" />
-      <path d="M12 12c0-3 2-5 6-5 0 4-2 6-6 6" />
-      <path d="M12 12c0-2.5-1.7-4.2-5-4.2 0 3.3 1.7 5 5 5" />
-    </svg>
-  )
-}
 function ClipboardIcon(p) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}>
@@ -150,27 +140,6 @@ export default function OverviewTab() {
             note={lastMood?.label || 'no mood yet'}
           />
         </div>
-
-        {/* ── New vocab ── */}
-        {insights.newVocab.length > 0 && (
-          <div className="bg-white rounded-2xl p-4 sm:p-5 border border-warm-200 shadow-subtle mb-6 lg:mb-8">
-            <div className="flex items-center gap-2 mb-3">
-              <SproutIcon className="w-4 h-4 text-teal-600" />
-              <span className="font-sans font-semibold text-warm-700 text-sm sm:text-base">New words this week</span>
-              <span className="ml-auto font-mono text-teal-500 font-bold text-base">{insights.newVocab.length}</span>
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              {insights.newVocab.slice(0, 10).map((word, i) => (
-                <span key={word + i} className="inline-flex items-center px-2.5 py-1 bg-teal-50 text-teal-700 rounded-lg text-sm font-medium border border-teal-100">
-                  {word}
-                </span>
-              ))}
-              {insights.newVocab.length > 10 && (
-                <span className="text-sm text-warm-400 self-center">+{insights.newVocab.length - 10} more</span>
-              )}
-            </div>
-          </div>
-        )}
 
         {/* ── How to get the most from Voca ── */}
         <div>
